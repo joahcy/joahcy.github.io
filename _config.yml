@@ -1,0 +1,149 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: Joahcy
+subtitle: 天下事有难易乎?为之,则难者亦易矣;不为,则易者亦难矣.
+description: Joahcy's blog.
+author: Joahcy
+language: zh-CN
+timezone:
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://www.joahcy.com
+root: /
+permalink: :title/
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render: README.md
+
+# Writing 设置生成博文的默认格式
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: false
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+  博客折腾: Buildblog
+  生活感悟: Life
+  算法: Algorithm
+  设计模式: DesignPatterns
+  其他: Other
+
+tag_map:
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 5
+pagination_dir: page
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+
+# theme: BlueLake
+theme: next5.1.1
+
+# ---------------------------------------------------------------
+# 博客部署地址的配置
+# Deployment
+# ---------------------------------------------------------------
+deploy: 
+  type: git
+  repo:
+    github: git@github.com:joahcy/joahcy.github.io.git
+    coding: git@git.coding.net:joahcy/joahcy.git
+    #oschina: git@git.oschina.net:joachy/joahcybolg.git
+
+# ---------------------------------------------------------------
+# 站内搜索配置 1.algolia  2. local_search
+# ---------------------------------------------------------------
+
+# algolia 站内搜索配置
+# algolia:
+#   applicationID: 'F2JWQOO3ZC'
+#   apiKey: '994f2214aaa41d9b7fe6c34d79b6ebce'
+#   adminApiKey: 'c9b9e34b2698b6fb6650a0e0f954ac9f'
+#   indexName: 'joahcy'
+#   chunkSize: 5000
+#   fields:
+#     - title
+#     - slug
+#     - content: strip
+
+#local_search  添加站内搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+
+# ---------------------------------------------------------------
+# 添加RSS  订阅
+# ---------------------------------------------------------------
+## Plugins: http://hexo.io/plugins/
+plugins: hexo-generate-feed
+
+
+# ---------------------------------------------------------------
+# 配置百度网站url收录
+# ---------------------------------------------------------------
+baidu_url_submit:
+  count: 100 # 提交最新的一个链接
+  host: www.joahcy.me # 在百度站长平台中注册的域名
+  token: nBkhDc5OfddiNof4 # 请注意这是您的秘钥， 所以请不要把博客源代码发布在公众仓库里!
+  path: baidu_urls.txt # 文本文档的地址,新链接会保存在此文本文档里
+  deploy:
+    - type: baidu_url_submitter
+
+# ---------------------------------------------------------------
+# BlueLake 主题的配置
+# ---------------------------------------------------------------
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: true
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: true
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true
