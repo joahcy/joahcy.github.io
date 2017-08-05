@@ -1,6 +1,7 @@
 ---
 title: nginx配置虚拟主机
 date: 2017-06-01
+comments: false
 categories: Nginx
 tags: [Nginx,虚拟主机]
 

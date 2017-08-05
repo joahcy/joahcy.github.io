@@ -1,6 +1,7 @@
 ---
 title: 单例模式与多线程
 date: 2017-06-05
+comments: false
 categories: 设计模式
 tags: [设计模式,多线程]
 

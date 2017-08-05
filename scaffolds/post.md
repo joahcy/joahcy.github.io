@@ -1,10 +1,8 @@
 ---
 title: {{ title }}
 date: {{ date }}
+comments: false
 categories:
 tags:
-photos:
-copyright: 
-password: 
-top: 
+
 ---

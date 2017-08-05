@@ -1,6 +1,7 @@
 ---
 title: Hexo+GitHubPages搭建个人博客
 date: 2017-07-12 16:00:04
+comments: false
 categories: 博客折腾
 tags:
 - Hexo

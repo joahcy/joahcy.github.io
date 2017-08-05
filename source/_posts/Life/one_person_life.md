@@ -1,6 +1,7 @@
 ---
 title: 一个人的生活
 date: 2017-07-23
+comments: false
 categories: 生活感悟
 tags: [一个人,成长]
 copyright:

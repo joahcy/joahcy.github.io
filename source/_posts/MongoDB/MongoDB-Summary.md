@@ -1,6 +1,7 @@
 ---
 title: MongoDB总结
 date: 2017-06-01
+comments: false
 categories: MongoDB
 tags: MongoDB
 ---

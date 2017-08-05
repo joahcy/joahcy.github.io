@@ -2,6 +2,7 @@
 
 title: hexo 多终端同步博客
 date: 2017-07-27
+comments: false
 categories: 博客折腾
 tags: Hexo
 

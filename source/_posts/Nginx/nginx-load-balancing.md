@@ -1,6 +1,7 @@
 ---
 title: nginx负载均衡配置
 date: 2017-06-01
+comments: false
 categories: Nginx
 tags: [Nginx,负载均衡]
 ---

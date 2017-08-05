@@ -1,6 +1,7 @@
 ---
 title: nginx反向代理配置
 date: 2017-06-01
+comments: false
 categories: Nginx
 tags: [Nginx,反向代理]
 

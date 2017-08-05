@@ -1,6 +1,7 @@
 ---
 title: Linux下安装JDK
 date: 2017-06-02
+comments: false
 categories: Java
 tags: [JDK,Java]
 ---

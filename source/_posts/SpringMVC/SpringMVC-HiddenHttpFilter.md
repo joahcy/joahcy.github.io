@@ -1,9 +1,10 @@
 ---
 title: SpringMVC发送DELETE和PUT请求
 date: 2017-06-05
+comments: false
 categories: SpringMVC
 tags: SpringMVC
-
+comments: false
 ---
 
 ## 了解Restful

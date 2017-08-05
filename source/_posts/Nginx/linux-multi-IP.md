@@ -1,6 +1,7 @@
 ---
 title: linux配置多IP
 date: 2017-06-01
+comments: false
 categories: Linux
 tags: Linux
 

@@ -1,6 +1,7 @@
 ---
 title: CentOS桌面切换及配置
 date: 2017-06-05
+comments: false
 categories: Linux
 tags: [Linux,CentOS]
 
