@@ -4,7 +4,6 @@ date: 2017-06-05
 comments: false
 categories: SpringMVC
 tags: SpringMVC
-comments: false
 ---
 
 ## 了解Restful
