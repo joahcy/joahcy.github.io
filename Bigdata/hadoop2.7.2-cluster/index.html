@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="bigdata,hadoop,cluster," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Joahcy" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言搭建hadoo集群是学习大数据不可或缺的一步,然而自己练习又没有那么多台主机,只能在虚拟机上搭建了,自己也是第一次搭建,所以在这进行一些必要步骤的记录,下面开始吧.官网下载软件很慢,所以下面提供的都是我的百度云盘下载地址 环境 CentOS6.8 java1.7 hadoop2.7.2  安装vmwarevmware10.0下载地址,然后就是傻瓜式安装,这里就不详细说了. 安装linux(我用">
+<meta name="keywords" content="bigdata,hadoop,cluster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop2.7.2集群搭建">
+<meta property="og:url" content="http://www.joahcy.com/Bigdata/hadoop2.7.2-cluster/index.html">
+<meta property="og:site_name" content="Joahcy">
+<meta property="og:description" content="前言搭建hadoo集群是学习大数据不可或缺的一步,然而自己练习又没有那么多台主机,只能在虚拟机上搭建了,自己也是第一次搭建,所以在这进行一些必要步骤的记录,下面开始吧.官网下载软件很慢,所以下面提供的都是我的百度云盘下载地址 环境 CentOS6.8 java1.7 hadoop2.7.2  安装vmwarevmware10.0下载地址,然后就是傻瓜式安装,这里就不详细说了. 安装linux(我用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-14T09:43:54.773Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hadoop2.7.2集群搭建">
+<meta name="twitter:description" content="前言搭建hadoo集群是学习大数据不可或缺的一步,然而自己练习又没有那么多台主机,只能在虚拟机上搭建了,自己也是第一次搭建,所以在这进行一些必要步骤的记录,下面开始吧.官网下载软件很慢,所以下面提供的都是我的百度云盘下载地址 环境 CentOS6.8 java1.7 hadoop2.7.2  安装vmwarevmware10.0下载地址,然后就是傻瓜式安装,这里就不详细说了. 安装linux(我用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索...","hits_empty":"( >﹏<。)～呜呜呜,找不到: ${query}","hits_stats":"找到 ${hits} 条结果,用时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.joahcy.com/Bigdata/hadoop2.7.2-cluster/"/>
+
+
+
+
+
+  <title>hadoop2.7.2集群搭建 | Joahcy</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8ea8e321305c0ebf664df5e02f30428f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+	<a href="https://github.com/joahcy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Joahcy</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">天下事有难易乎?为之,则难者亦易矣;不为,则易者亦难矣.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-envelope"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Bigdata/hadoop2.7.2-cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Joahcy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oqwn6kueb.bkt.clouddn.com/kobe1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joahcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">hadoop2.7.2集群搭建</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-20T00:00:00+08:00">
+                2017-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 热度
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>℃
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>搭建hadoo集群是学习大数据不可或缺的一步,然而自己练习又没有那么多台主机,只能在虚拟机上搭建了,自己也是第一次搭建,所以在这进行一些必要步骤的记录,下面开始吧.<br><strong>官网下载软件很慢,所以下面提供的都是我的百度云盘下载地址</strong></p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>CentOS6.8</li>
+<li>java1.7</li>
+<li>hadoop2.7.2</li>
+</ul>
+<h2 id="安装vmware"><a href="#安装vmware" class="headerlink" title="安装vmware"></a>安装vmware</h2><p><a href="http://pan.baidu.com/s/1nvgb2bv" target="_blank" rel="external">vmware10.0下载地址</a>,然后就是傻瓜式安装,这里就不详细说了.</p>
+<h2 id="安装linux-我用的是CentOS6-8"><a href="#安装linux-我用的是CentOS6-8" class="headerlink" title="安装linux(我用的是CentOS6.8)"></a>安装linux(我用的是CentOS6.8)</h2><p><a href="http://pan.baidu.com/s/1o7TimL0" target="_blank" rel="external">CentOS6.8下载地址</a>, 如果自己不需要设置分区的话,基本就是下一步下一步完成安装.具体google,百度也有很多教程.<br>安装完成后对网络进行设置,使用nat模式,点击安装好的虚拟机,右键设置,选择网络适配器,然后选择nat模式.启动虚拟机进行登录.<br>查看IP并验证是否能上网,分别执行以下操作:<br><code>ifconfig</code>  eth0 那块网卡的addr就是nat模式下的ip<br><code>ping www.baidu.com</code>  虽然百度害人不浅,但在验证网络上还是有一点用处的,哈哈~~~<br>系统默认DHCP动态分配IP,当系统每次重启,IP可能会变,所以我们要手动设置静态ip.<br>编辑网卡文件:<br><code>vim /etc/sysconfig/network-scripts/ifcfg-eth0</code><br>我的设置如下:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">DEVICE=eth0  ## 网卡名</div><div class="line">TYPE=Ethernet</div><div class="line">ONBOOT=yes  ## 设置为开机启动</div><div class="line">BOOTPROTO=static</div><div class="line">HWADDR=00:0C:29:65:9C:41 </div><div class="line">IPADDR=192.168.170.170  ## NAT模式下静态IP</div><div class="line">PREFIX=24  ## 和子网掩码对应</div><div class="line">GATEWAY=192.168.170.2  ## 网关</div><div class="line">DNS1=192.168.170.2  ## DNS</div></pre></td></tr></table></figure>
+<p>设置完成后重启网络:<br><code>service network restart</code><br>然后查看IP,并ping一下百度验证是否能上网.若不行,仔细查看配置信息是否正确.</p>
+<h2 id="添加hadoop用户"><a href="#添加hadoop用户" class="headerlink" title="添加hadoop用户"></a>添加hadoop用户</h2><ol>
+<li><code>user add hadoop</code></li>
+<li><code>passwd hadoop</code></li>
+<li>登录: <code>su hadoop</code></li>
+</ol>
+<h2 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h2><p>hadoop的运行依赖java所以得先安装JDK.</p>
+<h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>CentOS6.8自带OpenJDK,安装之前先卸载OpenJDK.  </p>
+<ul>
+<li>查看当前安装的OpenJDK<br><code>rpm -qa | grep jdk</code><br>得到以下信息<br><code>java-1.7.0-openjdk.x86_64 1:1.7.0.99-2.6.5.1.el6</code>  </li>
+<li>使用yum命令卸载<br><code>yum -y remove java-1.7.0-openjdk.x86_64 1:1.7.0.99-2.6.5.1.el6</code></li>
+</ul>
+<h3 id="安装SunJDK"><a href="#安装SunJDK" class="headerlink" title="安装SunJDK"></a>安装SunJDK</h3><ul>
+<li><a href="http://pan.baidu.com/s/1qXCjosO" target="_blank" rel="external">JDK1.7下载地址</a></li>
+<li>在linux上下载或从windows上传到linux上.<a href="http://pan.baidu.com/s/1hs3Spb2" target="_blank" rel="external">FTP工具</a></li>
+<li>解压jdk<br><code>tar -zxvf jdk-7u79-linux-x64.tar.gz</code></li>
+<li>将解压的得到的jdk1.7.0_79目录移动到<code>/usr/local</code>目录下并重命名为java1.7<br><code>mv jdk1.7.0_79 /usr/local/java1.7</code></li>
+<li><p>配置环境变量<br>在当前用户家目录执行: <code>vim .bashrc</code><br>添加以下内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/usr/local/java1.7</div><div class="line">export CLASSPATH=.:$JAVA_HOME/lib/</div><div class="line">export PATH=$PATH:$JAVA_HOME/bin</div></pre></td></tr></table></figure>
+</li>
+<li><p>让环境变量生效<br><code>source .bashrc</code></p>
+</li>
+<li>验证是否配置成功<br><code>java -version</code><br>得到以下信息说明配置成功了<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java version &quot;1.7.0_79&quot;</div><div class="line">Java(TM) SE Runtime Environment (build 1.7.0_79-b15)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="安装hadoop"><a href="#安装hadoop" class="headerlink" title="安装hadoop"></a>安装hadoop</h2><ul>
+<li><a href="http://pan.baidu.com/s/1jHDbyiq" target="_blank" rel="external">hadoop2.7.2下载地址</a></li>
+<li>解压并移动到/usr/local目录下<br><code>tar -zxvf hadoop-2.7.2.tar.gz</code><br><code>mv hadoop-2.7.2 /usr/local/hadoop</code></li>
+<li>配置环境变量<br><code>vim .bashrc</code><br>java和hadoop最终配置如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/usr/local/java1.7</div><div class="line">export CLASSPATH=$JAVA_HOME/lib/</div><div class="line">export HADOOP_HOME=/usr/local/hadoop</div><div class="line">export PATH=$PATH:$JAVA_HOME/bin/:$HADOOP_HOME/sbin:$HADOOP_HOME/bin</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>然后 <code>source .bashrc</code></p>
+<ul>
+<li>查看是否配置成功<br><code>hadoop version</code><br>得到以下信息说明配置成功<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Hadoop 2.7.2</div><div class="line">Subversion https://git-wip-us.apache.org/repos/asf/hadoop.git -r b165c4fe8a74265c792ce23f546c64604acf0e41</div><div class="line">Compiled by jenkins on 2016-01-26T00:08Z</div><div class="line">Compiled with protoc 2.5.0</div><div class="line">From source with checksum d0fda26633fa762bff87ec759ebe689c</div><div class="line">This command was run using /usr/local/hadoop/share/hadoop/common/hadoop-common-2.7.2.jar</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="配置Hadoop分布式集群"><a href="#配置Hadoop分布式集群" class="headerlink" title="配置Hadoop分布式集群"></a>配置Hadoop分布式集群</h2><h3 id="修改hostname为master"><a href="#修改hostname为master" class="headerlink" title="修改hostname为master"></a>修改hostname为master</h3><p><code>vim /etc/sysconfig/network</code><br>改为: <code>HOSTNAME=master</code></p>
+<h3 id="设置hosts文件使主机名和IP地址相对应"><a href="#设置hosts文件使主机名和IP地址相对应" class="headerlink" title="设置hosts文件使主机名和IP地址相对应"></a>设置hosts文件使主机名和IP地址相对应</h3><p><code>vim /etc/hosts</code><br>添加以下信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.168.170.170 master  ## 本机IP</div><div class="line">192.168.170.171 slave1  ## 一会要设置的从节点IP</div><div class="line">192.168.170.172 slave2</div></pre></td></tr></table></figure></p>
+<p><strong>其他两台slave的主机也修改对应的slave, slave2.如果修改完主机名后没有生效.那么重启系统便可以.三台机子的主机名与hosts均要修改</strong></p>
+<h3 id="在hadoop文件夹下建立如下四个文件夹"><a href="#在hadoop文件夹下建立如下四个文件夹" class="headerlink" title="在hadoop文件夹下建立如下四个文件夹"></a>在hadoop文件夹下建立如下四个文件夹</h3><ul>
+<li>目录/tmp, 用来存储临时生成的文件</li>
+<li>目录/hdfs, 用来存储集群数据</li>
+<li>目录hdfs/data, 用来存储真正的数据</li>
+<li>目录hdfs/name, 用来存储文件系统元数据<br><code>mkdir tmp hdfs hdfs/data hdfs/name</code></li>
+</ul>
+<h3 id="配置hadoop文件"><a href="#配置hadoop文件" class="headerlink" title="配置hadoop文件"></a>配置hadoop文件</h3><p>在hadoop/etc/hadoop目录下,主要配置以下7个文件:</p>
+<ul>
+<li>slaves </li>
+<li>hadoop-env.sh</li>
+<li>yarn-env.sh</li>
+<li>core-site.xml</li>
+<li>mapred-site.xml</li>
+<li>hdfs-site.xml</li>
+<li>yarn-site.xml</li>
+</ul>
+<h4 id="修改slaves文件"><a href="#修改slaves文件" class="headerlink" title="修改slaves文件"></a>修改slaves文件</h4><p>修改为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">slave1</div><div class="line">slave2</div></pre></td></tr></table></figure>
+<h4 id="修改hadoop-env-sh文件"><a href="#修改hadoop-env-sh文件" class="headerlink" title="修改hadoop-env.sh文件"></a>修改hadoop-env.sh文件</h4><p>将 <code>export JAVA_HOME=${JAVA_HOME}</code> 那一行改为 <code>export JAVA_HOME=/usr/local/java1.7</code> </p>
+<h4 id="修改yarn-env-sh文件"><a href="#修改yarn-env-sh文件" class="headerlink" title="修改yarn-env.sh文件"></a>修改yarn-env.sh文件</h4><p>同样将 <code>export JAVA_HOME=${JAVA_HOME}</code> 那一行改为 <code>export JAVA_HOME=/usr/local/java1.7</code> </p>
+<h4 id="修改core-site-xml文件"><a href="#修改core-site-xml文件" class="headerlink" title="修改core-site.xml文件"></a>修改core-site.xml文件</h4><p>配置为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">        &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</div><div class="line">        &lt;value&gt;file:/usr/local/hadoop/tmp&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;io.file.buffer.size&lt;/name&gt;</div><div class="line">        &lt;value&gt;131072&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="修改mapred-site-xml文件"><a href="#修改mapred-site-xml文件" class="headerlink" title="修改mapred-site.xml文件"></a>修改mapred-site.xml文件</h4><p>先把mapred-site.xml.template文件复制一份为mapred-site.xml再修改.<br>配置为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">        &lt;value&gt;yarn&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:10020&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:19888&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="修改hdfs-site-xml文件"><a href="#修改hdfs-site-xml文件" class="headerlink" title="修改hdfs-site.xml文件"></a>修改hdfs-site.xml文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</div><div class="line">        &lt;value&gt;file:/usr/local/hadoop/hdfs/name&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</div><div class="line">        &lt;value&gt;file:/usr/local/hadoop/hdfs/data&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">        &lt;value&gt;2&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:9001&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</div><div class="line">        &lt;value&gt;true&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="修改yarn-site-xml文件"><a href="#修改yarn-site-xml文件" class="headerlink" title="修改yarn-site.xml文件"></a>修改yarn-site.xml文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">		&lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</div><div class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;</div><div class="line">        &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:8032&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:8030&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:8031&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:8033&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;master:8088&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h2 id="关闭防火墙和SELinux"><a href="#关闭防火墙和SELinux" class="headerlink" title="关闭防火墙和SELinux"></a>关闭防火墙和SELinux</h2><p>切记一定要关闭,否则Hadoop启动会出错.</p>
+<ul>
+<li>关闭防火墙<br>查看防火墙状态: <code>service iptables status</code><br>若未关闭,则执行: <code>service iptables stop</code></li>
+<li>关闭SELinux<br>查看SELinux状态: <code>getenforce</code><br>关闭SELinux: <code>setenforce 0</code>  <strong>系统重启后还会生效</strong><br>永久关闭: <code>vim /etc/selinux/config</code>  将selinux状态改为<code>disabled</code></li>
+</ul>
+<h2 id="安装并配置从节点"><a href="#安装并配置从节点" class="headerlink" title="安装并配置从节点"></a>安装并配置从节点</h2><ol>
+<li>再安装两个虚拟机,重复以上步骤进行配置,这样有点麻烦也浪费时间,所以我们可以直接复制master节点的文件为两份,分别为slave1和slave2,这样就不用重复配置了,省事不少,然后在vmware里面打开.</li>
+<li>因为从节点是复制的,所以网卡信息也复制了,将会导致从节点上不了网.因此,我们要在vmware里面点击打开的slave1节点,点击设置,选中网络适配器将其移除,然后再添加一块新的网络适配器(网卡).<strong>注意也要选择nat模式</strong>, slave2同理.然后同时启动slave1和slave2.  </li>
+<li>启动后设置slave1节点IP为之前master设定好的IP: <code>192.168.170.171</code><br>slave2节点IP为: <code>192.168.170.172</code></li>
+<li>修改hostname,将slave1和slave2节点的hostname分别改为slave1和slave2,参考master修改hostname.</li>
+</ol>
+<h2 id="实现免密码登陆"><a href="#实现免密码登陆" class="headerlink" title="实现免密码登陆"></a>实现免密码登陆</h2><p>hadoop各个节点之间需要数据通信,为了方便操作,在数据通信时,不要我们再逐台输入密码.我们需要配置免密码登录的ssh.</p>
+<ol>
+<li>使用以下命令在三台虚拟机上分别生成各自的公钥,私钥.<br><code>ssh-keygen -t rsa</code><br><strong>全部按回车进行生成,默认生成位置在家目录下的.ssh文件夹</strong></li>
+<li>将master的公钥追加到authorized_keys中.<br><code>cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys</code></li>
+<li>将slave1和slave2公钥追加到master的authorized_keys文件中.<br>在两台从节点都执行: <code>ssh-copy-id -i .ssh/id_rsa.pub master</code></li>
+<li>将master的authorized_keys复制到两个从节点上<br><code>scp .ssh/authorized_keys slave1:~/.ssh/</code><br><code>scp .ssh/authorized_keys slave2:~/.ssh/</code></li>
+<li>测试<br>在三台虚拟机上用ssh命令进行互相测试：ssh master, ssh slave1, ssh slave2.<br>以slave1为例:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@slave1 ~]$ ssh master</div><div class="line">Last login: Thur Jul 20 13:16:39 2017 from slave2</div><div class="line">[hadoop@slave1 ~]$ ssh slave2</div><div class="line">Last login: Thur Jul 20 13:17:21 2017 from slave1</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>不需要密码,是不是方便多了呢。</p>
+<h2 id="格式化hdfs文件系统"><a href="#格式化hdfs文件系统" class="headerlink" title="格式化hdfs文件系统"></a>格式化hdfs文件系统</h2><p>OK,到这,我们就算配置完成了.不过,我们要想使用hadoop,还需要格式化hdfs文件系统.<br>hadoop2.7.2版本的格式化命令也有变化,之前用hadoop namenode -format,现在是hdfs.<br>执行: <code>hdfs namenode -format</code><br>执行上面的命令后,在后面的提示中如果看到successfully formatted的字样,说明hdfs格式化成功! </p>
+<h2 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h2><p><strong>所有启动关闭脚本在<code>/usr/local/hadoop/sbin</code>目录下</strong><br>之前版本使用 <code>start-all.sh</code> 一个脚本启动,但是我想看看它到底启动了什么,查看源代码后发现脚本里有这么一句话: “This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh”,表明已经过时了,要分别用start-dfs.sh 和 start-yarn.sh来启动.  </p>
+<ul>
+<li>启动dfs并查看进程<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[hadoop@master ~]$ start-dfs.sh</div><div class="line">17/07/20 13:42:52 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</div><div class="line">Starting namenodes on [master]</div><div class="line">master: starting namenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-namenode-master.out</div><div class="line">slave1: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hadoop-datanode-slave1.out</div><div class="line">slave2: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hadoop-datanode-slave2.out</div><div class="line">Starting secondary namenodes [master]</div><div class="line">master: starting secondarynamenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-secondarynamenode-master.out</div><div class="line">17/07/20 13:45:34 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</div><div class="line">[hadoop@master ~]$ jps</div><div class="line">27742 SecondaryNameNode</div><div class="line">27885 Jps</div><div class="line">27574 NameNode</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>出现的警告由于glibc版本(系统的是2.12, hadoop需要的是2.14)问题引起的,解决办法:<br>在<code>/usr/local/hadoop/etc/hadoop/log4j.properties</code> 文件最后添加: <code>log4j.logger.org.apache.hadoop.util.NativeCodeLoader=ERROR</code> 即可解决.</p>
+<ul>
+<li><p>启动yarn并查看进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[hadoop@master ~]$ start-yarn.sh</div><div class="line">starting yarn daemons</div><div class="line">starting resourcemanager, logging to /usr/local/hadoop/logs/yarn-hadoop-resourcemanager-master.out</div><div class="line">slave2: starting nodemanager, logging to /usr/local/hadoop/logs/yarn-hadoop-nodemanager-slave2.out</div><div class="line">slave1: starting nodemanager, logging to /usr/local/hadoop/logs/yarn-hadoop-nodemanager-slave1.out</div><div class="line">[hadoop@master ~]$ jps</div><div class="line">28053 ResourceManager</div><div class="line">27742 SecondaryNameNode</div><div class="line">28122 Jps</div><div class="line">27574 NameNode</div></pre></td></tr></table></figure>
+</li>
+<li><p>在从节点查看进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@slave1 ~]$ jps</div><div class="line">4603 DataNode</div><div class="line">4932 Jps</div><div class="line">4785 NodeManager</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@slave2 ~]$ jps</div><div class="line">5962 Jps</div><div class="line">5674 DataNode</div><div class="line">5830 NodeManager</div></pre></td></tr></table></figure>
+<p>三台虚拟机状态都正常.</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><h3 id="在浏览器输入网址查看"><a href="#在浏览器输入网址查看" class="headerlink" title="在浏览器输入网址查看"></a>在浏览器输入网址查看</h3><p>输入 <code>192.168.170.170:8088</code> 或者 <code>192.168.170.170:50070</code> 能看到网页信息说明启动成功,可以查看节点信息.</p>
+<h3 id="检验hadoop可用性"><a href="#检验hadoop可用性" class="headerlink" title="检验hadoop可用性"></a>检验hadoop可用性</h3><p>单纯的看进程和网页信息还不能完全的说明hadoop可用,我们要使用hadoop提供的 <code>hadoop-mapreduce-examples-2.7.2.jar</code> 包的wordcount功能检验一下hadoop是不是真的可以进行数据的分析.</p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><ul>
+<li>在hdfs文件系统创建input文件夹: <code>hdfs dfs -mkdir /input</code></li>
+<li>上传需要分析处理的数据文件: <code>hdfs dfs -put /usr/local/hadoop/*.txt /input</code></li>
+<li>启动historyserver,不然下一步会报以下错误信息:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Caused by: java.net.ConnectException: 拒绝连接</div><div class="line">    at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)</div><div class="line">    at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)</div><div class="line">    at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)</div><div class="line">    at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:531)</div><div class="line">    at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:495)</div><div class="line">    at org.apache.hadoop.ipc.Client$Connection.setupConnection(Client.java:614)</div><div class="line">    at org.apache.hadoop.ipc.Client$Connection.setupIOstreams(Client.java:712)</div><div class="line">    at org.apache.hadoop.ipc.Client$Connection.access$2900(Client.java:375)</div><div class="line">    at org.apache.hadoop.ipc.Client.getConnection(Client.java:1528)</div><div class="line">    at org.apache.hadoop.ipc.Client.call(Client.java:1451)</div><div class="line">    ... 33 more</div></pre></td></tr></table></figure>
+<p>启动: <code>mr-jobhistory-daemon.sh start historyserver</code></p>
+<h4 id="开始运行mapreduce"><a href="#开始运行mapreduce" class="headerlink" title="开始运行mapreduce"></a>开始运行mapreduce</h4><p>执行: <code>hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /input /output</code><br>具体如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">[hadoop@master ~]$ hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /test/input /test/output</div><div class="line">17/07/20 15:35:55 INFO client.RMProxy: Connecting to ResourceManager at master/192.168.170.170:8032</div><div class="line">17/07/20 15:36:05 INFO input.FileInputFormat: Total input paths to process : 3</div><div class="line">17/07/20 15:36:06 INFO mapreduce.JobSubmitter: number of splits:3</div><div class="line">17/07/20 15:36:09 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1502431075552_0003</div><div class="line">17/07/20 15:36:13 INFO impl.YarnClientImpl: Submitted application application_1502431075552_0003</div><div class="line">17/07/20 15:36:13 INFO mapreduce.Job: The url to track the job: http://master:8088/proxy/application_1502431075552_0003/</div><div class="line">17/07/20 15:36:13 INFO mapreduce.Job: Running job: job_1502431075552_0003</div><div class="line">17/07/20 15:38:39 INFO mapreduce.Job: Job job_1502431075552_0003 running in uber mode : false</div><div class="line">17/07/20 15:38:39 INFO mapreduce.Job:  map 0% reduce 0%</div><div class="line">17/07/20 15:42:34 INFO mapreduce.Job:  map 44% reduce 0%</div><div class="line">17/07/20 15:42:39 INFO mapreduce.Job:  map 78% reduce 0%</div><div class="line">17/07/20 15:42:40 INFO mapreduce.Job:  map 89% reduce 0%</div><div class="line">17/07/20 15:42:42 INFO mapreduce.Job:  map 100% reduce 0%</div><div class="line">17/07/20 15:44:08 INFO mapreduce.Job:  map 100% reduce 100%</div><div class="line">17/07/20 15:44:18 INFO mapreduce.Job: Job job_1502431075552_0003 completed successfully</div><div class="line">17/07/20 15:44:20 INFO mapreduce.Job: Counters: 49</div><div class="line">        File System Counters</div><div class="line">                FILE: Number of bytes read=12989</div><div class="line">                FILE: Number of bytes written=495819</div><div class="line">                FILE: Number of read operations=0</div><div class="line">                FILE: Number of large read operations=0</div><div class="line">                FILE: Number of write operations=0</div><div class="line">                HDFS: Number of bytes read=17212</div><div class="line">                HDFS: Number of bytes written=8983</div><div class="line">                HDFS: Number of read operations=12</div><div class="line">                HDFS: Number of large read operations=0</div><div class="line">                HDFS: Number of write operations=2</div><div class="line">        Job Counters</div><div class="line">                Launched map tasks=3</div><div class="line">                Launched reduce tasks=1</div><div class="line">                Data-local map tasks=3</div><div class="line">                Total time spent by all maps in occupied slots (ms)=781665</div><div class="line">                Total time spent by all reduces in occupied slots (ms)=59106</div><div class="line">                Total time spent by all map tasks (ms)=781665</div><div class="line">                Total time spent by all reduce tasks (ms)=59106</div><div class="line">                Total vcore-milliseconds taken by all map tasks=781665</div><div class="line">                Total vcore-milliseconds taken by all reduce tasks=59106</div><div class="line">                Total megabyte-milliseconds taken by all map tasks=800424960</div><div class="line">                Total megabyte-milliseconds taken by all reduce tasks=60524544</div><div class="line">        Map-Reduce Framework</div><div class="line">                Map input records=322</div><div class="line">                Map output records=2347</div><div class="line">                Map output bytes=24935</div><div class="line">                Map output materialized bytes=13001</div><div class="line">                Input split bytes=316</div><div class="line">                Combine input records=2347</div><div class="line">                Combine output records=897</div><div class="line">                Reduce input groups=840</div><div class="line">                Reduce shuffle bytes=13001</div><div class="line">                Reduce input records=897</div><div class="line">                Reduce output records=840</div><div class="line">                Spilled Records=1794</div><div class="line">                Shuffled Maps =3</div><div class="line">                Failed Shuffles=0</div><div class="line">                Merged Map outputs=3</div><div class="line">                GC time elapsed (ms)=31699</div><div class="line">                CPU time spent (ms)=34140</div><div class="line">                Physical memory (bytes) snapshot=413155328</div><div class="line">                Virtual memory (bytes) snapshot=3358351360</div><div class="line">                Total committed heap usage (bytes)=364929024</div><div class="line">        Shuffle Errors</div><div class="line">                BAD_ID=0</div><div class="line">                CONNECTION=0</div><div class="line">                IO_ERROR=0</div><div class="line">                WRONG_LENGTH=0</div><div class="line">                WRONG_MAP=0</div><div class="line">                WRONG_REDUCE=0</div><div class="line">        File Input Format Counters</div><div class="line">                Bytes Read=16896</div><div class="line">        File Output Format Counters</div><div class="line">                Bytes Written=8983</div></pre></td></tr></table></figure>
+<p>查看处理后的数据:<br><code>hdfs dfs -cat /output/part-r-00000</code><br>大概如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">only    4</div><div class="line">or      67</div><div class="line">or,     1</div><div class="line">org.apache.hadoop.util.bloom.*  1</div><div class="line">origin  1</div><div class="line">original        2</div><div class="line">other   9</div><div class="line">otherwise       3</div><div class="line">otherwise,      3</div><div class="line">our     2</div><div class="line">out     1</div><div class="line">outstanding     1</div><div class="line">own     4</div><div class="line">owner   4</div><div class="line">owner.  1</div><div class="line">owner]  1</div><div class="line">ownership       2</div><div class="line">page&quot;   1</div><div class="line">part    4</div><div class="line">patent  5</div><div class="line">patent, 1</div><div class="line">percent 1</div><div class="line">perform,        1</div><div class="line">performing      1</div><div class="line">permission      1</div><div class="line">permission.     1</div><div class="line">permissions     3</div><div class="line">permitted       2</div><div class="line">permitted.      1</div><div class="line">perpetual,      2</div><div class="line">......</div></pre></td></tr></table></figure>
+<p>数据有点多…<br>也可以在浏览器访问<code>192.168.170.170:50070</code>,点击<code>Utilities</code>下面的<code>Browse the file system</code>.在里面查看文件,也可以下载后查看.</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>至此,hadoop集群搭建完成,wordcount小例子完美运行.该休息下了 -_-||</p>
+
+      
+    </div>
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+    
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="http://oqwn6kueb.bkt.clouddn.com/wechat-pay.jpg" alt="Joahcy WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="http://oqwn6kueb.bkt.clouddn.com/ali_pay.jpg" alt="Joahcy Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      Joahcy
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.joahcy.com/Bigdata/hadoop2.7.2-cluster/" title="hadoop2.7.2集群搭建">http://www.joahcy.com/Bigdata/hadoop2.7.2-cluster/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bigdata/" rel="tag"><i class="fa fa-tag"></i> bigdata</a>
+          
+            <a href="/tags/hadoop/" rel="tag"><i class="fa fa-tag"></i> hadoop</a>
+          
+            <a href="/tags/cluster/" rel="tag"><i class="fa fa-tag"></i> cluster</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BuildBlog/buildBlog_Hexo_GitHub/" rel="next" title="Hexo+GitHubPages搭建个人博客">
+                <i class="fa fa-chevron-left"></i> Hexo+GitHubPages搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Bigdata/hive-install/" rel="prev" title="hadoop之hive安装">
+                hadoop之hive安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://oqwn6kueb.bkt.clouddn.com/kobe1.jpg"
+               alt="Joahcy" />
+          <p class="site-author-name" itemprop="name">Joahcy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/joahcy" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/874e90fe16c4" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="joahcy915@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-envelope-o"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lusongsong.com" title="卢松松博客" target="_blank">卢松松博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.williamlong.info" title="月光博客" target="_blank">月光博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.matrix67.com/blog" title="Matrix67" target="_blank">Matrix67</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://skymz.cc" title="天空博客" target="_blank">天空博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://mindhacks.cn" title="MindHacks" target="_blank">MindHacks</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iamwater.top" title="waterblog" target="_blank">waterblog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.xizirumeng.com" title="今生唯梦" target="_blank">今生唯梦</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.xwblog.net" title="魏义齐博客" target="_blank">魏义齐博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.rxwcv.cn" title="Hewie博客" target="_blank">Hewie博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装vmware"><span class="nav-number">3.</span> <span class="nav-text">安装vmware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装linux-我用的是CentOS6-8"><span class="nav-number">4.</span> <span class="nav-text">安装linux(我用的是CentOS6.8)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加hadoop用户"><span class="nav-number">5.</span> <span class="nav-text">添加hadoop用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装JDK"><span class="nav-number">6.</span> <span class="nav-text">安装JDK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#卸载OpenJDK"><span class="nav-number">6.1.</span> <span class="nav-text">卸载OpenJDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装SunJDK"><span class="nav-number">6.2.</span> <span class="nav-text">安装SunJDK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hadoop"><span class="nav-number">7.</span> <span class="nav-text">安装hadoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Hadoop分布式集群"><span class="nav-number">8.</span> <span class="nav-text">配置Hadoop分布式集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改hostname为master"><span class="nav-number">8.1.</span> <span class="nav-text">修改hostname为master</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置hosts文件使主机名和IP地址相对应"><span class="nav-number">8.2.</span> <span class="nav-text">设置hosts文件使主机名和IP地址相对应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在hadoop文件夹下建立如下四个文件夹"><span class="nav-number">8.3.</span> <span class="nav-text">在hadoop文件夹下建立如下四个文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置hadoop文件"><span class="nav-number">8.4.</span> <span class="nav-text">配置hadoop文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改slaves文件"><span class="nav-number">8.4.1.</span> <span class="nav-text">修改slaves文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改hadoop-env-sh文件"><span class="nav-number">8.4.2.</span> <span class="nav-text">修改hadoop-env.sh文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改yarn-env-sh文件"><span class="nav-number">8.4.3.</span> <span class="nav-text">修改yarn-env.sh文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改core-site-xml文件"><span class="nav-number">8.4.4.</span> <span class="nav-text">修改core-site.xml文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改mapred-site-xml文件"><span class="nav-number">8.4.5.</span> <span class="nav-text">修改mapred-site.xml文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改hdfs-site-xml文件"><span class="nav-number">8.4.6.</span> <span class="nav-text">修改hdfs-site.xml文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改yarn-site-xml文件"><span class="nav-number">8.4.7.</span> <span class="nav-text">修改yarn-site.xml文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭防火墙和SELinux"><span class="nav-number">9.</span> <span class="nav-text">关闭防火墙和SELinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装并配置从节点"><span class="nav-number">10.</span> <span class="nav-text">安装并配置从节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现免密码登陆"><span class="nav-number">11.</span> <span class="nav-text">实现免密码登陆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式化hdfs文件系统"><span class="nav-number">12.</span> <span class="nav-text">格式化hdfs文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动集群"><span class="nav-number">13.</span> <span class="nav-text">启动集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">14.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在浏览器输入网址查看"><span class="nav-number">14.1.</span> <span class="nav-text">在浏览器输入网址查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检验hadoop可用性"><span class="nav-number">14.2.</span> <span class="nav-text">检验hadoop可用性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">14.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开始运行mapreduce"><span class="nav-number">14.2.2.</span> <span class="nav-text">开始运行mapreduce</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">15.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Joahcy</span>
+  <span>&nbsp;|&nbsp;</span>
+  <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+</div>
+
+
+<!-- 
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <div class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 您是来访第
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      个小伙伴
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总浏览量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt8JOpFD';
+      var conf = 'faf3f31ee5d4ea87d3690e2b91595dbd';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
