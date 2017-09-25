@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.joahcy.com/"/>
-  <updated>2017-08-05T03:46:37.619Z</updated>
+  <updated>2017-09-25T04:07:51.616Z</updated>
   <id>http://www.joahcy.com/</id>
   
   <author>
@@ -14,6 +14,512 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL高级知识点总结</title>
+    <link href="http://www.joahcy.com/MySQL/mysql_advance/"/>
+    <id>http://www.joahcy.com/MySQL/mysql_advance/</id>
+    <published>2017-09-23T16:00:00.000Z</published>
+    <updated>2017-09-25T04:07:51.616Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="MySQL系统架构介绍"><a href="#MySQL系统架构介绍" class="headerlink" title="MySQL系统架构介绍"></a>MySQL系统架构介绍</h2><h3 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h3><h3 id="修改mysql字符集编码"><a href="#修改mysql字符集编码" class="headerlink" title="修改mysql字符集编码"></a>修改mysql字符集编码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[clinet]</div><div class="line">default-character-set=utf8</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">character_set_server=utf8</div><div class="line">character_set_client=utf8</div><div class="line">collation-server=utf8_general_ci</div><div class="line"></div><div class="line">[mysql]</div><div class="line">default-character-set=utf8</div></pre></td></tr></table></figure>
+<h3 id="MySQL文件"><a href="#MySQL文件" class="headerlink" title="MySQL文件"></a>MySQL文件</h3><ul>
+<li>二进制日志log-bin: 用于主从复制</li>
+<li>错误日志log-error: 默认关闭的，记录严重的错误和警告信息、每次启动和关闭的详细信息。</li>
+<li>查询日志log: 默认关闭，记录查询的sql语句，如果开启会降低mysql的整体性能，因为记录日志也会消耗系统资源。</li>
+<li>数据文件：<ol>
+<li>主目录: Windows：D:/MySQL_HOME/data; Linux: 默认为 /var/lib/mysql</li>
+<li>frm文件: 存放表结构</li>
+<li>myd文件: 存放表数据</li>
+<li>myi文件: 存放表索引</li>
+</ol>
+</li>
+<li>配置<ol>
+<li>windows: my.ini文件</li>
+<li>linux: my.cnf文件(默认位置: /usr/my.cnf)<br>扫描顺序: /etc/my.cnf,/etc/mysql/my.cnf,/usr/local/mysql/etc/my.cnf,~/.my.cnf</li>
+</ol>
+</li>
+</ul>
+<h3 id="MySQL总体概览"><a href="#MySQL总体概览" class="headerlink" title="MySQL总体概览"></a>MySQL总体概览</h3><p>Mysql和其他数据库相比,MySQl有点与众不同，他的架构可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构将查询处理和其他的系统任务以及数据的存储提取相分离</strong>。这种可以根据业务需求和实际需求需要选择合适的存储引擎。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170918/a7FfFi4mC8.jpg?imageslim" alt="MySQL总体架构图"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170918/5Jjg14KfCB.jpg?imageslim" alt="各层作用"></p>
+<h3 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h3><ul>
+<li>查看命令: <code>show engines</code> , <code>show variables like &quot;%storage_engine%&quot;</code></li>
+<li>主要有InnoDB和MYISAM<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170918/fBLbIcaF58.jpg?imageslim" alt="InnoDB和MYISAM对比"></li>
+</ul>
+<h2 id="MySQL索引优化分析"><a href="#MySQL索引优化分析" class="headerlink" title="MySQL索引优化分析"></a>MySQL索引优化分析</h2><h3 id="性能下降SQL慢，执行时间长，等待时间长原因"><a href="#性能下降SQL慢，执行时间长，等待时间长原因" class="headerlink" title="性能下降SQL慢，执行时间长，等待时间长原因"></a>性能下降SQL慢，执行时间长，等待时间长原因</h3><ul>
+<li>查询语句写的烂</li>
+<li>索引失效<ol>
+<li>单值—create index idxName on tableName(feild)</li>
+<li>复合—create index idxName on tableName(feild1,feild2)</li>
+</ol>
+</li>
+<li>关联查询太多join</li>
+<li>服务器调优及各个参数的设置（缓冲、线程数等）</li>
+</ul>
+<h3 id="常用的通用join查询"><a href="#常用的通用join查询" class="headerlink" title="常用的通用join查询"></a>常用的通用join查询</h3><ul>
+<li><p>SQL执行顺序<br>手写:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/meBfALCB4d.jpg?imageslim" alt="手写"><br>机读:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170918/C5l1EE2lKk.jpg?imageslim" alt="机读"><br>总结:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170918/hL8Dcfa0A1.jpg?imageslim" alt="总结"></p>
+</li>
+<li><p>7种join理论图</p>
+<ol>
+<li>内连接: <code>select * from tableA A inner join tableB B on A.key=B.key</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/16977mc995.jpg?imageslim" alt="内连接"></li>
+<li>左连接: <code>select * from tableA A left join tableB B on A.key=B.key</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/mbmJl1Ff7E.jpg?imageslim" alt="左连接"></li>
+<li>左外连接: <code>select * from tableA A left join tableB B on A.key=B.key where B.key is NULL</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/3hHdj1h0aL.jpg?imageslim" alt="左外连接"></li>
+<li>右连接: <code>select * from tableA A right join tableB B on A.key=B.key</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/cH8ciLKkeA.jpg?imageslim" alt="右连接"></li>
+<li>右外连接: : <code>select * from tableA A right join tableB B on A.key=B.key where A.key is NULL</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/jcIg646ffF.jpg?imageslim" alt="右外连接"></li>
+<li>全连接: <strong>Oracle: </strong> <code>select * from tableA A full outer join tableB B on A.key=B.key</code><br><strong>MySQL: </strong> <code>select * from tableA A left join tableB B on A.key=B.key union select * from tableA A right join tableB B on A.key=B.key</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/8hFLG9269A.jpg?imageslim" alt="全连接"></li>
+<li>两表的独立数据: <strong>Oracle: </strong> <code>select * from tableA A full outer join tableB B on A.key=B.key where A.key is NULL or B.key is NULL</code><br><strong>MySQL: </strong> <code>select * from tableA A left join tableB B on A.key=B.key where b.key is NULL union select * from tableA A right join tableB B on A.key=B.key where a.key is NULL</code><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/4aHKB5A5E3.jpg?imageslim" alt="两表的独立数据"></li>
+</ol>
+</li>
+</ul>
+<h3 id="索引简介"><a href="#索引简介" class="headerlink" title="索引简介"></a>索引简介</h3><h4 id="索引是什么？"><a href="#索引是什么？" class="headerlink" title="索引是什么？"></a>索引是什么？</h4><p>官方定义为索引是数据结构，目的在于提高查询效率，可以类比字典，简单理解为<strong>排好序的快速查找数据结构</strong>。<br>数据本身之外，数据库还维护着一个满足特定查找算法的数据结构，这些数据结构以某种方式指向数据，这样就可以在这些数据结构的基础上实现高级查找算法，这种数据结构就是索引。<br>我们平常说的索引，一般都是B树(多路查找搜索树，并不一定是二叉树)结构组织的索引。其中聚集索引、次要索引、覆盖索引、复合索引、前缀索引、唯一索引默认都使用B+树索引，统称索引。除了B+树这种索引，还有哈希索引。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/l9bbGBE4gI.jpg?imageslim" alt="B树索引"></p>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ol>
+<li>提高数据检索的效率，降低数据库的IO成本</li>
+<li>通过索引对数据进行排序，降低数据排序的成本，降低CPU的消耗</li>
+</ol>
+<h4 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h4><p>索引也是一张表，保存了主键与索引字段，并指向实体表的数据，所以索引列也占空间。虽然索引提高可产讯速度，同时却会降低更新表的速度。因为更新表时，MySQL不仅要保存数据，还要更新索引信息。<br>索引只是提高效率的一个因素，如果MySQL有大量数据，就需要花时间研究建立最优秀的索引，或优化查询语句。</p>
+<h4 id="MySQL索引分类"><a href="#MySQL索引分类" class="headerlink" title="MySQL索引分类"></a>MySQL索引分类</h4><ul>
+<li>单值索引：一个索引只包含单个列，一个表可以有多个单列索引</li>
+<li>唯一索引：索引列的值必须唯一，但允许有空值</li>
+<li>复合索引：一个索引包含多个列  </li>
+</ul>
+<p>基本语法：</p>
+<ul>
+<li>创建: create [unique] index indexName on tableName(columnName);</li>
+<li>删除: drop index indexName on tableName;</li>
+<li>查看: show index from tableName;</li>
+<li>使用alter命令(四中方式添加数据库索引)：<ol>
+<li>alter table tableName add primary key(column_list) ;// 添加一个主键，索引值必须唯一，且不能为NULL</li>
+<li>alter table tableName add unique indexName (column_list); //创建唯一索引</li>
+<li>alter table tableName add index indexName (column_list); //添加普通索引</li>
+<li>alter table tableName add fulltext indexName (column_list); //创建全文索引</li>
+</ol>
+</li>
+</ul>
+<h4 id="MySQL索引结构"><a href="#MySQL索引结构" class="headerlink" title="MySQL索引结构"></a>MySQL索引结构</h4><p>包括四中：BTree索引、Hash索引、full-text索引、R-Tree索引。<br>BTree的检索原理:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/bli2HA1lJ4.jpg?imageslim" alt="BTree的检索原理"><br>真是的数据存在于叶子节点，非叶子节点不存储真实的数据，只存储指引搜索方向的数据项。<br>如查询29，总共需要三次IO，效率非常高。3层的B+树可以表示上百万的数据，只需要查找3次，性能的提高将是巨大的。</p>
+<h4 id="哪些情况需要创建索引"><a href="#哪些情况需要创建索引" class="headerlink" title="哪些情况需要创建索引?"></a>哪些情况需要创建索引?</h4><ol>
+<li>主键自动建立唯一索引</li>
+<li>频繁作为查询条件的字段应该创建索引</li>
+<li>外键关系建立索引</li>
+<li>频繁更新的字段不适合建立索引</li>
+<li>where条件里用不到的字段不创建索引</li>
+<li>单值/复合索引的选择,who?(高并发建议复合索引)</li>
+<li>查询中排序的字段，排序字段若通过索引访问将大大提高排序速度</li>
+<li>查询中统计或者分组的字段</li>
+</ol>
+<h4 id="哪些情况不要建立索引"><a href="#哪些情况不要建立索引" class="headerlink" title="哪些情况不要建立索引"></a>哪些情况不要建立索引</h4><ol>
+<li>表记录太少</li>
+<li>经常增删改的表</li>
+<li>数据重复且分布平均的字段<br>建立索引的选择性？索引的选择性是指索引列中不同值的树木与表中记录数的比。比值越大，建立的索引效率越大。</li>
+</ol>
+<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><h4 id="MySQL-Query-Optimizer"><a href="#MySQL-Query-Optimizer" class="headerlink" title="MySQL Query Optimizer"></a>MySQL Query Optimizer</h4><p>MySQL中有专门负责优化SELECT语句的优化器模块，主要功能：通过计算分析系统中的收集到的统计信息，为客户端请求的Query提供它认为最优的执行计划。<br>步骤：<br>1.客户端发送一条Query<br>2.命令解析器模块完成请求分类，区别出是SELECT并转发给MySQL Query Optimizer<br>3.MySQL Query Optimizer 对整条Query进行优化，处理掉常量表达式的预算，直接换算成常量值。<br>4.对Query中的查询条件进行简化和转化，如去掉无用或显而易见的条件、结构调整等。<br>5.分析Query中的hint信息(如果有)，看显示Hint信息是否完全可以确定该Query的执行计划。<br>6.若没有hint或hint信息不足以完全确定执行计划，则会读取所涉及对象的统计信息，根据query写相应的计算分析<br>7.得出最后传动侧执行计划</p>
+<h4 id="MySQL常见瓶颈"><a href="#MySQL常见瓶颈" class="headerlink" title="MySQL常见瓶颈"></a>MySQL常见瓶颈</h4><ul>
+<li>CPU：CPU在饱和的时候一般发生在装入内存或从磁盘上读取数据的时候</li>
+<li>IO：磁盘I/O瓶颈发生在数据远大于内存容量的时候</li>
+<li>服务器硬件的性能瓶颈：top、free、iostat、vmstat来查看系统的性能状态</li>
+</ul>
+<h4 id="Explain"><a href="#Explain" class="headerlink" title="Explain"></a>Explain</h4><ul>
+<li>是什么(查看执行计划)？<br>使用explain关键字可以模拟优化器执行SQL查询语句，从而知道MySQL是如何执行SQL语句的。分析查询语句或表结构是否存在性能瓶颈。</li>
+<li>能干嘛？<ul>
+<li>表的读取顺序</li>
+<li>数据读取操作的操作类型</li>
+<li>哪些索引可以使用</li>
+<li>哪些索引被实际使用</li>
+<li>表之间的引用</li>
+<li>每张表有多少行被优化器查询</li>
+</ul>
+</li>
+<li>怎么玩？ explain+SQL语句<br>执行计划包含的信息: <strong>id、type、key、rows、extar重要</strong><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170920/25Fah4je5c.jpg?imageslim" alt="执行计划各字段"></li>
+<li><p>各字段解释</p>
+<ol>
+<li>id<br>select 查询的序列号，包含一组数字，表时执行查询select子句或操作表的顺序。<br>三种情况: <ul>
+<li>id相同，执行顺序由上至下<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/4Dmk40l57I.jpg?imageslim" alt="ID顺序1"></li>
+<li>id不同，如果是子查询，id的序号会递增，id越大优先级越高，越先被执行<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/ccg1CfKhca.jpg?imageslim" alt="ID顺序2"></li>
+<li>id相同不同同时存在，id相同的认为十一组，由上至下执行，所有id中id越大越先执行<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/e98m9cJBmA.jpg?imageslim" alt="ID顺序2"></li>
+</ul>
+</li>
+<li><p>select type<br>有哪些？SIMPLE、PRIMARY、SUBQUERY、DERIVED、UNION、UNION RESULT，查询的类型主要是用于区别普通查询、联合查询、子查询等的复杂语句</p>
+<ul>
+<li>SIMPLE：简单的select查询，不包含子查询或union</li>
+<li>PRIMARY：查询中若包含任何复杂的子部分，最外层被标记为primary</li>
+<li>SUBQUERY：在select或where中包含了子查询</li>
+<li>DERIVED：在from列表中包含的子查询被标记为DRIVED(衍生)，MySQL会递归执行这些子查询，把结果放在临时表中。</li>
+<li>UNION：若第二个select出现在union之后，则被标记为UNION；若UNION包含在From子句的子查询中，外层select将被标记为drived</li>
+<li>UNION RESULT：从UNION表中获取结果的select</li>
+</ul>
+</li>
+<li><p>table<br>显示这一行的数据是关于哪张表的</p>
+</li>
+<li><p>type<br>显示查询使用了何种访问类型，<strong>从最好到最差依次是: </strong>system、const、eq_ref、ref、range、index、all。一般来说至少达到range级别，最好能达到ref。  </p>
+<ul>
+<li>system：表只有一行记录(等于系统表)，这是const类型的特例，可以忽略不计。</li>
+<li>const: 表时通过一次索引就找到了，const用于比较primary key或者unique索引，因为只匹配一行数据，所以很快。如将主键至于where列表中，MySQL就能将该查询转换为一盒常量。</li>
+<li>eq_ref: 唯一性索引扫描，对于每个索引键，表中只有一条记录与之匹配，常见于主键或唯一索引扫描。</li>
+<li>ref：非唯一性索引扫描，返回匹配某个单独值的所有行</li>
+<li>range: 只检索给定范围的行，使用一个索引来选择行一般是在where语句中出现了between、&lt;、&gt;、in等的查询，比全表扫描好。</li>
+<li>index: full index scan index只遍历索引树，通常比all快，因为索引文件通常比数据文件小(index从索引文件中读取，而all从硬盘读取)</li>
+<li>all: full table scan，遍历全表</li>
+</ul>
+</li>
+<li>possible_keys<br>显示可能应用在这张表中的索引，一个或多个。但不一定被查询实际使用。poss</li>
+<li>key<br>实际使用的索引，如果为NULL，则没有使用索引。查询中若使用了覆盖索引，则该索引仅出现在key列表中。</li>
+<li>key_len: 表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度。在不损失精确性的情况下，长度越短越好。key_len显示的值为索引字段的最大可能长度，<strong>并非实际使用长度</strong>，即ken_len是根据表定义而得，不是通过表检索出来的。</li>
+<li>ref: 显示索引的哪一列被使用了，如果可能的话，是一个常数。那些列或常量被用于查找索引列上的值。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/1l81f9dhC8.jpg?imageslim" alt="ref"></li>
+<li>rows: 根据表统计信息及索引选用情况，大致估算出找打所需的记录所需要读取的行数。<strong>数值越小越好</strong>。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/Ihj07d48ib.jpg?imageslim" alt="rows"></li>
+<li>extra: 包含不适合在其他列显示但十分重要的额外信息。<strong>using filesort(必须优化)、using temporary(必须优化)、using index(nice,效率不错)重要</strong><ul>
+<li>Using filesort: 说明MySQL对数据使用一个外部的索引排序，而不是按照表内的索引顺序进行读取。MySQL无法利用索引文成的排序操作称作“文件排序”。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/DDKjiJkmcJ.jpg?imageslim" alt="Usingfilesort"></li>
+<li>Using temporary: 使用了临时表保存中间结果，MySQL在堆查询结果排序时使用临时表。常见于order by和分组查询group by。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/5hCDjFHD73.jpg?imageslim" alt="UsingTemporary"></li>
+<li>Using index: 表示使用了覆盖索引，避免了访问表的数据行，效率不错！<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170921/CIm4AC0G8c.jpg?imageslim" alt="UsingIndex"><br>覆盖索引: 就是select的数据列只用从索引中就能够取得，不必读取数据行，MySQL可以利用索引返回select列表中的字段，而不必根据索引再次读取数据文件，换句话说：<strong>查询列要被所建的索引覆盖</strong>。</li>
+<li>Using where: 表明使用了where过滤</li>
+<li>Using join buffer: 使用了连接缓存</li>
+<li>impossible where: where子句的值总是false,不能用来获取任何元组</li>
+<li>select tables optimized away: 在没有groupby子句的情况下，对索引的优化 </li>
+<li>distinct: 优化distinct操作，在招待第一匹配的元组后即停止找同样值的动作。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>热身<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170923/B30ACgKEeK.jpg?imageslim" alt="1"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170923/b305CLiJ3E.jpg?imageslim" alt="2"></li>
+</ul>
+<h3 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h3><h4 id="索引分析"><a href="#索引分析" class="headerlink" title="索引分析"></a>索引分析</h4><ul>
+<li>单表<br>优化前:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/ABCbbaidAf.jpg?imageslim" alt="优化前"><br>优化后:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/Fg476eLig1.jpg?imageslim" alt="优化后"><br><strong>range类型查询字段后面的索引失效</strong></li>
+<li>两表<br>优化前:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/2ghea9jc46.jpg?imageslim" alt="优化前"><br>优化后:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/kcAbK8a0J5.jpg?imageslim" alt="优化后">  </li>
+<li>三表<br>优化前:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/f7BcLFbbmc.jpg?imageslim" alt="优化前"><br>建索引:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/531iCHl82m.jpg?imageslim" alt="建索引"><br>优化后:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/2j9Jcb4ccK.jpg?imageslim" alt="优化后">  </li>
+<li>总结:<ul>
+<li>尽可能减少join语句中的NestedLoop的循环总次数,”永远用小结果集驱动大的结果集”</li>
+<li>优先优化NestedLoop的内层循环</li>
+<li>保证join语句中被驱动表的上join条件字段已经被索引</li>
+<li>当无法保证被驱动表的join条件字段被索引且内存资源充足的前提下，不要太吝啬JoinBuffer的设置 </li>
+</ul>
+</li>
+</ul>
+<h4 id="索引失效"><a href="#索引失效" class="headerlink" title="索引失效"></a>索引失效</h4><ul>
+<li>原因及解决方案加口诀<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/II8gic79FC.jpg?imageslim" alt="原因及解决方案加口诀">  </li>
+</ul>
+<blockquote>
+<p>全值匹配我最爱，最左前缀要遵守；<br>带头大哥不能死，中间兄弟不能断；<br>索引列上少计算，范围之后全失效；<br>LIKE百分写最右，覆盖索引不写星；<br>不等空值还有or，索引失效要少用；<br>VAR引号不可丢，SQL高级也不难！</p>
+</blockquote>
+<ul>
+<li>总结:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170923/Gffh23Gaaf.jpg?imageslim" alt="总结">   </li>
+<li>面试题:<br>面试SQL:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/2CCD1mEEBe.jpg?imageslim" alt="1"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/Jj4HegbEaJ.jpg?imageslim" alt="2"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/ag8kL4bD3D.jpg?imageslim" alt="3"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/fDFFk9B2JI.jpg?imageslim" alt="4"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/A70909eJJg.jpg?imageslim" alt="5"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170922/H865EJh14l.jpg?imageslim" alt="6">  </li>
+</ul>
+<p>总结:<br>定值、范围还是排序，一般OrderBy是给个范围<br>group by基本上都需要排序，会有临时表产生 </p>
+<h4 id="一般性建议"><a href="#一般性建议" class="headerlink" title="一般性建议"></a>一般性建议</h4><ul>
+<li>对于单键索引，尽量选择针对当前query过滤性更好的索引</li>
+<li>在选择组合索引的时候，当前query中过滤性最好的字段在索引字段顺序中，位置越靠前越好</li>
+<li>在选择组合索引的时候，尽量选择可以包含当前query的where子句中更多字段的索引</li>
+<li>尽可能通过分析统计信息和调整query的写法来达到选择合适索引的目的</li>
+</ul>
+<h2 id="查询截取分析"><a href="#查询截取分析" class="headerlink" title="查询截取分析"></a>查询截取分析</h2><h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><h4 id="永远小表驱动大表-类似嵌套循环"><a href="#永远小表驱动大表-类似嵌套循环" class="headerlink" title="永远小表驱动大表(类似嵌套循环)"></a>永远小表驱动大表(类似嵌套循环)</h4><ul>
+<li>查询优化原则<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/eeg72ahAC2.jpg?imageslim" alt="查询优化原则"></li>
+<li>exists<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/Jk3a8EA6aK.jpg?imageslim" alt="exists"><br>例子:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/j9ikblcbHI.jpg?imageslim" alt="例子"></li>
+</ul>
+<h4 id="order-by关键字优化"><a href="#order-by关键字优化" class="headerlink" title="order by关键字优化"></a>order by关键字优化</h4><ul>
+<li>order by 子句尽量使用Index方式排序，避免使用filesort<ol>
+<li>建表:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/67im460k9I.jpg?imageslim" alt="建表"></li>
+<li>例子：<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/CH386hf8jB.jpg?imageslim" alt="例子1"><br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/b9bid9A9Eb.jpg?imageslim" alt="例子2"></li>
+<li>MySQL支持FileSort和index两种排序方式，index效率高，filesort效率低。</li>
+<li>Order by会使用index排序的情况：order by语句使用索引最左前列；使用where子句与order by子句组合满足最左前列。</li>
+</ol>
+</li>
+<li>尽可能在索引上完成排序，遵守最佳左前缀，若不在索引列上，filesort有两种排序算法：双路排序和单路排序。MySQL4.1之前使用双路排序。<ul>
+<li>双路排序：扫描两次磁盘，最终得到数据。即从磁盘取排序字段，在buffer进行排序，在从磁盘读取其他字段。</li>
+<li>单路排序: 从磁盘读取查询需要的所有列，按照orderby列在buffer对它们进行排序，然后扫描排序后的列表进行输出，这样效率更快，避免了第二次读取数据。</li>
+<li>结论及问题：由于单路是后出的，总体而言好过双路，但单路也有问题。<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/g6mGejLge2.jpg?imageslim" alt="单路缺点"></li>
+</ul>
+</li>
+<li>优化策略: 增大sort_buffer_size和max_length_for_sort_data参数设置<br>Why？<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/2GdA8eAk2f.jpg?imageslim" alt="优化策略"></li>
+<li>总结:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/5491ce55aF.jpg?imageslim" alt="总结"><h4 id="group-by关键字优化"><a href="#group-by关键字优化" class="headerlink" title="group by关键字优化"></a>group by关键字优化</h4></li>
+<li>group by实质是先排序后进行分组，遵照索引建的最佳左前缀。</li>
+<li>当无法使用索引列时，增大sort_buffer_size和max_length_for_sort_data参数设置。</li>
+<li>where高于having，能写在where限定的条件就不要去having限定了。</li>
+</ul>
+<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><h4 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h4><p>MySQL的慢查询日志是MySQL提供的一种日志记录，它用来记录在MySQL中相应时间超过阙值的语句，具体指运行时间超过<strong>(大于，而非大于等于)</strong>long_query_time值的SQL，则会被记录到慢查询日志中。long_query_time的默认值为10，意思是运行10秒以上的语句。收集到以后结合explain进行全面分析。</p>
+<h4 id="怎么玩？"><a href="#怎么玩？" class="headerlink" title="怎么玩？"></a>怎么玩？</h4><p><strong>默认情况下，MySQL数据库不开启慢查询日志，需要手动设置。</strong>  </p>
+<ul>
+<li>查看是否开启及如何开启？<br>查看：<code>show variables like &quot;%slow_query_log%&quot;</code><br>开启：<code>set global slow_query_log=1</code> <strong>只对当前数据库生效，MySQL重启后则会失效，要永久生效，需在my.cnf文件中配置</strong></li>
+<li>查看和设置阙值：<br>查看：<code>show variables like &quot;%long_query_time%&quot;</code><br>开启：<code>set global long_query_time=3</code></li>
+<li>查看有多少条慢查询记录<br><code>show global status like &quot;%slow_queryies%&quot;</code></li>
+<li>慢查询日志永久配置<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/CgaDH6D59C.jpg?imageslim" alt="慢查询日志永久配置"></li>
+</ul>
+<h4 id="日志分析工具mysqldumpslow"><a href="#日志分析工具mysqldumpslow" class="headerlink" title="日志分析工具mysqldumpslow"></a>日志分析工具mysqldumpslow</h4><ul>
+<li><p>查看mysqldumpslow的帮助信息</p>
+<ul>
+<li>s:表示按照何种方式进行排序<ul>
+<li>c:访问次数</li>
+<li>l:锁定时间</li>
+<li>r:返回记录</li>
+<li>t:查询时间</li>
+<li>al:平均锁定时间</li>
+<li>ar:平均返回记录数</li>
+<li>at:平均查询时间（默认）</li>
+</ul>
+</li>
+<li>t:返回前面的多少条数据</li>
+<li>g:后边搭配一个正则匹配模式，大小写不敏感</li>
+</ul>
+</li>
+<li><p>工作常用参考<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/aKH7da6Hek.jpg?imageslim" alt="工作常用参考"></p>
+</li>
+</ul>
+<h3 id="批量数据脚本"><a href="#批量数据脚本" class="headerlink" title="批量数据脚本"></a>批量数据脚本</h3><p>利用存储过程脚本往数据库插入1000w条数据。</p>
+<ol>
+<li><p>建表  </p>
+<ul>
+<li><p>创建部门表:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE dept(</div><div class="line">id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,</div><div class="line">deptno MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,</div><div class="line">dname VARCHAR(20) NOT NULL DEFAULT &quot;&quot;,</div><div class="line">loc VARCHAR(13) NOT NULL DEFAULT &quot;&quot;</div><div class="line">)</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建员工表:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE emp(</div><div class="line">id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,</div><div class="line">empno MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,/*编号*/</div><div class="line">ename VARCHAR(20) NOT NULL DEFAULT &quot;&quot;,/*名字*/</div><div class="line">job VARCHAR(9) NOT NULL DEFAULT &quot;&quot;,/*工作*/</div><div class="line">mgr MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,/*上级编号*/</div><div class="line">hiredate DATE NOT NULL,/*入职时间*/</div><div class="line">sal DECIMAL(7,2) NOT NULL,/*薪水*/</div><div class="line">comm DECIMAL(7,2) NOT NULL,/*红利*/</div><div class="line">deptno MEDIUMINT UNSIGNED NOT NULL DEFAULT 0 /*部门编号*/</div><div class="line">)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>设置参数<br>因为开启了慢查询日志和bin_log,创建函数会拨错，所以要设置一个参数: <code>set global log_bin_trust_function_creators=1</code></p>
+</li>
+<li><p>创建函数，保证每条数据都不同  </p>
+<ul>
+<li><p>随机生成字符串函数  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DELIMITER $$</div><div class="line">CREATE FUNCTION rand_string(n INT) RETURNS VARCHAR(255)</div><div class="line">BEGIN</div><div class="line"> DECLARE chars_str VARCHAR(100) DEFAULT &apos;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&apos;;</div><div class="line"> DECLARE return_str VARCHAR(255) DEFAULT &apos;&apos;;</div><div class="line"> DECLARE i INT DEFAULT 0;</div><div class="line"> WHILE i &lt; n DO</div><div class="line">  SET return_str = CONCAT(return_str,SUBSTRING(chars_str,FLOOR(1+RAND()*52),1));</div><div class="line">  SET i = i + 1;</div><div class="line"> END WHILE;</div><div class="line"> RETURN return_str;</div><div class="line">END $$</div></pre></td></tr></table></figure>
+</li>
+<li><p>随机生成数函数:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DELIMITER $$</div><div class="line">CREATE FUNCTION	rand_num() RETURNS INT(5)</div><div class="line">BEGIN</div><div class="line"> DECLARE i INT DEFAULT 0;</div><div class="line"> SET i = FLOOR(100+RAND()*10);</div><div class="line"> RETURN i;</div><div class="line">END $$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>创建存储过程  </p>
+<ul>
+<li><p>插部门数据存储过程:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DELIMITER $$</div><div class="line">CREATE PROCEDURE insert_dept(IN START INT(10),IN max_num INT(10))</div><div class="line">BEGIN</div><div class="line">DECLARE i INT DEFAULT 0;</div><div class="line">SET autocommit = 0;</div><div class="line">REPEAT</div><div class="line">SET i = i + 1;</div><div class="line">INSERT INTO dept(deptno,dname,loc) VALUES ((START+1),rand_string(10),rand_string(8));</div><div class="line">UNTIL i = max_num</div><div class="line">END REPEAT;</div><div class="line">COMMIT;</div><div class="line">END $$</div></pre></td></tr></table></figure>
+</li>
+<li><p>插员工数据存储过程:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">DELIMITER $$</div><div class="line">CREATE PROCEDURE insert_emp(IN START INT(10),IN max_num INT(10))</div><div class="line">BEGIN</div><div class="line">DECLARE i INT DEFAULT 0;</div><div class="line"># set autocommit=0 把autocommit设置成0</div><div class="line">SET autocommit = 0;</div><div class="line">REPEAT</div><div class="line">	SET i = i + 1;</div><div class="line">	INSERT INTO emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES ((START+i),rand_string(6),&apos;SALESMAN&apos;,0001,CURDATE(),2000,400,rand_num());</div><div class="line">UNTIL i= max_num</div><div class="line">END REPEAT;</div><div class="line">COMMIT;</div><div class="line">END $$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>调用存储过程  </p>
+<ul>
+<li>调用部门存储过程:<br><code>CALL insert_dept(100,10);</code>  </li>
+<li>调用部门存储过程:<br><code>CALL insert_emp(100001,500000)</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="Show-Profile"><a href="#Show-Profile" class="headerlink" title="Show Profile"></a>Show Profile</h3><p>是mysql提供可以用来分析当前会话中语句执行的资源消耗情况。可以用于SQL的调优的测量。默认情况下，处于关闭状态，并保存最近15次的运行结果。<br>分析步骤:  </p>
+<ol>
+<li>是否支持: <code>show variables like &#39;profiling&#39;</code></li>
+<li>开启，默认是关闭的: <code>set profiling = on</code> </li>
+<li><p>运行SQL  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">select * from emp group by id%10 limit 150000;</div><div class="line">select * from emp group by id%20 order by 5;</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看结果，show profiles;</p>
+</li>
+<li>诊断SQL: <code>show profile cpu , block io [其他参数...] for query [Query_ID]</code><br>参数:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/GgkJmgBdl1.jpg?imageslim" alt="参数"></li>
+<li>日常开发需要注意的结论(出现以下的情况时必须优化)  </li>
+</ol>
+<ul>
+<li>converting HEAP to MyISAM: 查询结果太大，内存不够用往磁盘上搬了。</li>
+<li>creating tmp table: 拷贝数据到临时表，用完再删除。</li>
+<li>copying to tmp table on disk: 把内存中临时表复制到磁盘，很危险了。</li>
+<li>locked</li>
+</ul>
+<h3 id="全局查询日志"><a href="#全局查询日志" class="headerlink" title="全局查询日志"></a>全局查询日志</h3><p><strong>永远不要在生产环境开启这个功能</strong>  </p>
+<ul>
+<li><p>永久配置(在my.cnf文件)  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 开启</div><div class="line">general_log=1</div><div class="line"># 记录日志文件的路径</div><div class="line">general_log_file=/path/logfile</div><div class="line"># 输出格式</div><div class="line">log_output=FILE</div></pre></td></tr></table></figure>
+</li>
+<li><p>临时配置  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">set global general_log=1;</div><div class="line">set global log_output=&quot;TABLE&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>将会记录到mysql库中的general_log表中，可以用下面命令查看：<br><code>select * from mysql.general_log</code></p>
+<h2 id="MySQL锁机制"><a href="#MySQL锁机制" class="headerlink" title="MySQL锁机制"></a>MySQL锁机制</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>定义: 锁是计算计协调多个进程或线程并发访问某一资源的机制。</li>
+<li><p>分类:  </p>
+<ol>
+<li><p>从对数据操作的类型分为读写锁  </p>
+<ul>
+<li>读锁(共享锁):针对同一份数据，多个读操作可以同时进行而互不影响。</li>
+<li>写锁(排它锁): 当前写操作没有完成，它会阻断其他写锁和读锁  </li>
+</ul>
+</li>
+<li><p>从对数据操作的粒度分为表/行锁</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="三锁"><a href="#三锁" class="headerlink" title="三锁"></a>三锁</h3><h4 id="表锁-偏读"><a href="#表锁-偏读" class="headerlink" title="表锁(偏读)"></a>表锁(偏读)</h4><ul>
+<li>特点: 偏向MyISAM引擎，开销小，加锁快；无死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。</li>
+<li>加解锁: <code>lock table tableName read(write)</code> <code>unlock tables</code></li>
+<li><p>表锁分析: </p>
+<ul>
+<li>查看哪些表被锁了: <code>show open tables;</code></li>
+<li>通过检查table_locks_watied(产生表级锁定的次数)和table_locks_immediate(出现表级锁定争用而发生等待的次数)状态变量来分析系统上的表锁定: <code>show status like &#39;table%&#39;;</code></li>
+</ul>
+</li>
+<li><p>结论：读锁会阻塞写，但是不会阻塞读，而写锁则会把读和写都阻塞。<em>MyISAM的读写锁调度是写优先</em></p>
+</li>
+</ul>
+<h4 id="行锁-偏写"><a href="#行锁-偏写" class="headerlink" title="行锁(偏写)"></a>行锁(偏写)</h4><ul>
+<li>特点: 偏向InnoDB引擎，开销大，加锁慢；会出现死锁；锁定粒度最小，发生死锁冲突定位概率最低，并发度最高。与MyISAM最大不同有两点：一是支持事物，二是采用了行级锁。</li>
+<li>支持事物<ul>
+<li>事务及ACID属性<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/4mfJ9Bk11A.jpg?imageslim" alt="![mark](http://oqwn6kueb.bkt.clouddn.com/blog/170924/4mfJ9Bk11A.jpg?imageslim)">  </li>
+<li>并发带来的问题:  <ul>
+<li>丢失更新：当多个事务选择同一行，然后基于最初选定的值更新该行时，由于每个事务都不知道其他十五的存在，就会发生丢失更新问题—最后的更新覆盖了有其他事务所做的更新。</li>
+<li>脏读: 事务A读取到了事务B已修改但尚未提交的数据。</li>
+<li>不可重复读: 事务A读取到了事务B已经提交的修改数据,不符合隔离性。</li>
+<li>幻读: 事务A读取到了事务B提交的新增数据，不符合隔离性。<strong>脏读和幻读区别: 脏读是事务B里面修改了数据，幻读是事务B新增了数据</strong></li>
+</ul>
+</li>
+<li>事务隔离级别<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/170924/LmKaLfHlAA.jpg?imageslim" alt="事务隔离级别"></li>
+</ul>
+</li>
+<li>索引失效会导致行锁变表锁</li>
+<li>间隙锁: 当用范围条件检索数据，并请求共享或排它锁时，InnoDB会给符合条件而得已有数据记录的索引项加锁，对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP）”，InnoDB也会对这个“间隙”加锁，这种锁机制就是所谓的间隙锁。</li>
+<li>如何锁定一行<br><code>select XXX ... for update</code> 锁定某一行后，其他的操作被阻塞，直到锁定行的会话提交commit。</li>
+<li>分析行锁定: <code>show status like &#39;innodb_row_lock%&#39;</code><ul>
+<li>innodb_row_lock_current_waits: 当前正在等待锁定的数量</li>
+<li><strong>innodb_row_lock_time</strong>: 从系统启动到现在锁定总时间长度</li>
+<li><strong>innodb_row_lock_time_avg</strong>: 每次等待所花平均时间</li>
+<li>innodb_row_lock_time_max: 从系统启动到现在等待时间最长的一次所花的时间</li>
+<li><strong>innodb_row_lock_waits</strong>: 系统启动到现在总共等待的次数</li>
+</ul>
+</li>
+</ul>
+<h4 id="页锁-了解即可"><a href="#页锁-了解即可" class="headerlink" title="页锁(了解即可)"></a>页锁(了解即可)</h4><p>开销和加锁时间介于表锁和行锁之间；会出现死锁；锁定粒度介于表锁和行锁之间，并发度一般。</p>
+<h2 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h2><h3 id="复制的基本原理"><a href="#复制的基本原理" class="headerlink" title="复制的基本原理"></a>复制的基本原理</h3><p>slave会从master读取binlog来进行数据同步  </p>
+<p>复制过程分三步：<br>1.master将改变记录到二进制日志(binary log)。这些记录过程叫做二进制日志事件，binary log events。<br>2.slave将master的binary log evnets 拷贝到它的中继日志(relay log)。<br>3.slave重做中继日志中的事件，将改变应用到自己的数据库中。MySQL复制是异步的且串行化的。</p>
+<h3 id="复制的基本原则"><a href="#复制的基本原则" class="headerlink" title="复制的基本原则"></a>复制的基本原则</h3><ul>
+<li>每个slave只有一个master</li>
+<li>每个slave只能有一个唯一的服务器ID</li>
+<li>每个master可以有多个slave</li>
+</ul>
+<h3 id="复制的最大问题"><a href="#复制的最大问题" class="headerlink" title="复制的最大问题"></a>复制的最大问题</h3><p>延时</p>
+<h3 id="一主一从常见配置"><a href="#一主一从常见配置" class="headerlink" title="一主一从常见配置"></a>一主一从常见配置</h3><h4 id="配置主机-my-cnf文件"><a href="#配置主机-my-cnf文件" class="headerlink" title="配置主机(my.cnf文件)"></a>配置主机(my.cnf文件)</h4><ul>
+<li>主服务器唯一ID(必须): sever-id=1</li>
+<li>启用二进制日志(必须): log-bin=</li>
+<li>启用错误日志(可选) log-err=</li>
+<li>根目录(可选): basedir=</li>
+<li>临时目录(可选): tmpdir=</li>
+<li>数据目录(可选): datadir=</li>
+<li>read-only=0(主机读写都可以)</li>
+<li>设置不要复制的数据库(可选): binlog-ignore-db=</li>
+<li>设置需要复制的数据库(可选): binlog-do-db=</li>
+</ul>
+<h4 id="配置从机"><a href="#配置从机" class="headerlink" title="配置从机"></a>配置从机</h4><ul>
+<li>从服务器唯一ID(必须): server-id=2</li>
+<li>启用二进制日志: log-bin=</li>
+</ul>
+<h4 id="主机从机都关闭防火墙"><a href="#主机从机都关闭防火墙" class="headerlink" title="主机从机都关闭防火墙"></a>主机从机都关闭防火墙</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service iptables stop</div><div class="line">chkconfig iptables off</div></pre></td></tr></table></figure>
+<h4 id="在主机上建立账户并授权slave"><a href="#在主机上建立账户并授权slave" class="headerlink" title="在主机上建立账户并授权slave"></a>在主机上建立账户并授权slave</h4><ul>
+<li>授权: <code>grant replication slave on *.* to &#39;slaveuser&#39;@&#39;192.168.170.252&#39; identified by &#39;123456&#39;</code>  <code>flush privileges</code></li>
+<li>查看master的状态: <code>show master status</code>,记录下file和position的值</li>
+</ul>
+<h4 id="在从机上配置需要复制的主机"><a href="#在从机上配置需要复制的主机" class="headerlink" title="在从机上配置需要复制的主机"></a>在从机上配置需要复制的主机</h4><ul>
+<li><p>配置 server-id=2<br>重启mysql后执行  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">change master to master_host=&apos;192.168.170.251&apos;,</div><div class="line">master_user=&apos;slaveuser&apos;,</div><div class="line">master_password=&apos;123456&apos;,</div><div class="line">master_log_file=&apos;mysqlbin.具体数字&apos;,</div><div class="line">master_log_pos=具体值;</div></pre></td></tr></table></figure>
+</li>
+<li><p>启动从服务器复制功能: <code>start slave</code></p>
+</li>
+<li>查看状态: <code>show slave status\G</code><br>两个参数都是yes，说明配置成功。<code>slave_io_running=yes,slave_sql_running</code></li>
+</ul>
+<h4 id="主机建库，建表，插数据。从机复制"><a href="#主机建库，建表，插数据。从机复制" class="headerlink" title="主机建库，建表，插数据。从机复制"></a>主机建库，建表，插数据。从机复制</h4><h4 id="停止从服务器复制功能"><a href="#停止从服务器复制功能" class="headerlink" title="停止从服务器复制功能"></a>停止从服务器复制功能</h4><p><code>stop slave</code></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;MySQL系统架构介绍&quot;&gt;&lt;a href=&quot;#MySQL系统架构介绍&quot; class=&quot;headerlink&quot; title=&quot;MySQL系统架构介绍&quot;&gt;&lt;/a&gt;MySQL系统架构介绍&lt;/h2&gt;&lt;h3 id=&quot;MySQL安装&quot;&gt;&lt;a href=&quot;#MySQL安装&quot; c
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://www.joahcy.com/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://www.joahcy.com/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JVM--运行时数据区域</title>
+    <link href="http://www.joahcy.com/JVM/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/"/>
+    <id>http://www.joahcy.com/JVM/JVM运行时数据区/</id>
+    <published>2017-09-16T13:45:50.000Z</published>
+    <updated>2017-09-17T03:12:31.012Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java虚拟机在执行java程序的过程会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间。包括以下几个运行时数据区域：程序计数器、Java虚拟机栈、本地方法栈、堆、方法区。如图：<img src="http://oqwn6kueb.bkt.clouddn.com/blog/170917/K9cL337fiE.png?imageslim" alt="Java虚拟机运行时数据区"></p>
+<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>它是一块较小的内存空间，可看作是当前线程所执行的字节码的行号指示器。每条线程都有独立的程序计数器，之间相互不影响。如果执行java方法，计数器记录的是字节码指令的地址；如果执行的是native方法，计数器值为空。它是唯一一个java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。</p>
+<h2 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h2><p>虚拟机栈描述的是Java方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧（Stack Frame: 是方法运行时的基础数据结构）用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。<br>局部变量表存放了编译期可知的各种基本数据类型（boolean、byte、char、short、int、float、long、double）、对象引用和returnAddress类型（指向了一条字节码指令的地址）。<br>在Java虚拟机规范中，对这个区域规定了两种异常情况：如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常；虚拟机栈可以动态扩展，如果扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>
+<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>与虚拟机栈的作用类似，区别是虚拟机栈为Java方法服务，而本地方法栈为Native方法服务。与虚拟机栈一样，也会抛出StackOverflowError和OutOfMemoryError异常。</p>
+<h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>Java堆是线程共享的一块内存区域，主要是用来存放对象实例的，几乎所有的对象实例都在这里分配内存。它是垃圾收集器管理的主要区域，因此很对时候也别称作“GC堆”（Garbage Collected Heap）。从内存回收角度来看，由于现在收集器基本采用分代收集算法，所以Java堆可以分为：新生代和老年代，再细致一点可以分为：Eden空间、From Survivor空间、To Survivor空间。从内存分配角度来看，java堆可能会划分出多个线程私有的分配缓冲区（Thread Local Allocation Buffer，TLAB）。<br>Java堆可以处于物理上不连续的内存空间中，只要逻辑上连续即可，当然也可扩展（通过 -Xmx和-Xms参数控制）。如果在堆中没有内存完成实例分配，并且堆也在无法扩展时，将抛出OutOfMemoryError异常。</p>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>是堆的一个逻辑部分，大多数时候被称作永久代，同样是线程共享的，用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译期编译后的代码等数据。但在jdk1.7以后，已经把放在永久代的字符串常量池移到堆上了。相对而言，垃圾收集在这个区域是比较少出现的，但并非里面的数据就“永久”存在了，这区域的内存回收目标主要是针对常量池的回收和对类型的卸载。一般来说，回收效果并不令人满意，尤其是堆类型的卸载，条件相当苛刻。<br>当方法区无法满足内存分配的需求时，将抛出OutOfMemoryError异常。</p>
+<h2 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h2><p>是方法区的一部分。Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项是常量池，用于存放编译期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池存放。运行期间也可将新的常量放入运行时常量池。</p>
+<p>运行时常量池是把Class文件常量池加载进来，每个类有一个独立的。刚开始运行时常量池里的链接都是符号链接，跟在Class文件里一样；边运行边就会把用到的常量转换成直接链接，例如说要Class A调用Foo.bar()方法，A.class文件里就会有对该方法的Methodref常量，是个符号链接（只有名字没有实体），加载到运行时常量池也还是一样是符号链接，等真的要调用该方法的时候该常量就会被resolve为一个直接链接（直接指向要调用的方法的实体）。</p>
+<p>当常量池无法再申请到内存是会抛出OutOfMemoryError异常。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Java虚拟机在执行java程序的过程会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间。包括以下几个运行时数据区域：程序计数器、Java虚拟机栈、本地方法栈、堆、方法区。如图：&lt;img src=&quot;http://oqwn6kueb.b
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://www.joahcy.com/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://www.joahcy.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JVM对象探秘</title>
+    <link href="http://www.joahcy.com/JVM/JVM%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98/"/>
+    <id>http://www.joahcy.com/JVM/JVM对象探秘/</id>
+    <published>2017-09-15T16:00:00.000Z</published>
+    <updated>2017-09-18T17:35:49.236Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><h3 id="对象创建过程"><a href="#对象创建过程" class="headerlink" title="对象创建过程"></a>对象创建过程</h3><p>在语言层面上，创建对象（例如克隆，反序列化）通常仅仅是一个new关键字而已，而在虚拟机中，对象（本文讨论仅限普通java对象，不包括数组和Class对象等）的创建是一个怎样的过程呢？  </p>
+<ol>
+<li>虚拟机遇到new指令时，首先检查指令的参数是否在常量池中定位到一个类的符号引用，并检查该符号引用代表的类是否已被加载、解析和初始化过。若有则进入下一步，否则必须执行相应的类加载过程。</li>
+<li>在类加载检查通过后，为对象分配内存，内存所需大小在类加载完成后便可确定。</li>
+<li>将分配到的内存空间初始化为零值（不包括对象头）。</li>
+<li>对对象进行必要的都设置（如对象头信息）————对JVM来说对象创建完成。</li>
+<li>执行对象的init方法对字段进行初始化————产生一个真正可以的对象。</li>
+</ol>
+<h3 id="内存分配原则"><a href="#内存分配原则" class="headerlink" title="内存分配原则"></a>内存分配原则</h3><ul>
+<li>内存分配方法<ol>
+<li>指针碰撞: 若Java堆中内存是绝对规整的，所有用过的内存放在一遍，空闲的内存放在另一边，中间放着一个指针作为分界点的指示器，那所分配内存就仅仅是把那个指针指向空闲空间那边挪动一段与对象大小相等的距离。</li>
+<li>空闲列表: 若Java堆中的内存并不是规整的，已使用的内存和空闲的内存相互交错，那就没办法简单地进行指针碰撞了，虚拟机就必须维护一个列表，记录上哪些内存块是可用的，在分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的记录。</li>
+</ol>
+</li>
+<li>分配原则：选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定。Serial、ParNew等带Compact过程的收集器采用指针碰撞；CMS这种基于Mark-Sweep算法的收集器采用空闲列表。</li>
+</ul>
+<p>###　保证内存分配线程安全<br>对象的创建非常频繁，所以分配内存时改变指针的位置不是线程安全的。  </p>
+<ul>
+<li>解决方案一: 对分配内存的动作进行同步—实际上虚拟机采用的CAS算法保证原子性</li>
+<li>解决方案二: 把内存分配的动作划分到不同的空间进行，即每个线程在java堆预先分配一小块内存，称为本地线程分配缓冲(Thread Local Allocation Buffer ,TLAB)。每个线程在自己的TLAB上分配内存，当TLAB用完并分配新的TLAB时，才需要同步锁定。是否使用TLAB，通过-XX:+/-UseTLAB参数来设定。</li>
+</ul>
+<p>##　对象的内存布局</p>
+<p>对象内存布局分为3快区域: 对象头、实例数据、对齐填充。</p>
+<h3 id="对象头-主要包括两部分"><a href="#对象头-主要包括两部分" class="headerlink" title="对象头(主要包括两部分)"></a>对象头(主要包括两部分)</h3><ul>
+<li>运行时数据(哈希码、GC分代年龄、所状态标志、线程持有的锁、偏向线程ID、偏向时间戳)</li>
+<li>类型指针—即对象指向它的类元数据的指针</li>
+<li>若是数组，还有一块内存记录数组的长度</li>
+</ul>
+<h3 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h3><p>存储代码中所定义的各种类型的字段内容(包括继承父类的)。存储顺序受到虚拟机分配策略参数(FieldsAllocationStyle)和代码中定义顺序的影响。默认策略为：longs/doubles、ints、shorts/chars、bytes/booleans、oops。</p>
+<h3 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h3><p>并不是必然存在的，仅仅起占位符的作用，HotSpotVM要求对象起始地址必须是8字节的整数倍，所以当实例数据部分没有对齐时，需要通过对齐填充来补全。</p>
+<h2 id="对象的的访问定位"><a href="#对象的的访问定位" class="headerlink" title="对象的的访问定位"></a>对象的的访问定位</h2><p>/<em>TODO</em>/</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;对象的创建&quot;&gt;&lt;a href=&quot;#对象的创建&quot; class=&quot;headerlink&quot; title=&quot;对象的创建&quot;&gt;&lt;/a&gt;对象的创建&lt;/h2&gt;&lt;h3 id=&quot;对象创建过程&quot;&gt;&lt;a href=&quot;#对象创建过程&quot; class=&quot;headerlink&quot; title=&quot;对
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://www.joahcy.com/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://www.joahcy.com/tags/JVM/"/>
+    
+  </entry>
   
   <entry>
     <title>hexo 多终端同步博客</title>
@@ -202,9 +708,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="spark" scheme="http://www.joahcy.com/tags/spark/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -280,9 +786,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
-    
       <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
+      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
     
   </entry>
   
@@ -723,40 +1229,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>CentOS桌面切换及配置</title>
-    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
-    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:32.837Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
-<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
-<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
-<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
-<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
-</ul>
-<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
-<li>字符界面：sudo systemctl set-default multi-user.target    </li>
-<li>图形界面：sudo systemctl set-default graphical.target</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
-    
-  </entry>
-  
-  <entry>
     <title>SpringMVC发送DELETE和PUT请求</title>
     <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
     <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
@@ -809,6 +1281,40 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>CentOS桌面切换及配置</title>
+    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
+    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:32.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
+<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
+<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
+<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
+<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
+</ul>
+<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
+<li>字符界面：sudo systemctl set-default multi-user.target    </li>
+<li>图形界面：sudo systemctl set-default graphical.target</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下安装JDK</title>
     <link href="http://www.joahcy.com/Java/install-JDK-on-linux/"/>
     <id>http://www.joahcy.com/Java/install-JDK-on-linux/</id>
@@ -834,31 +1340,6 @@ The key fingerprint is:
       <category term="JDK" scheme="http://www.joahcy.com/tags/JDK/"/>
     
       <category term="Java" scheme="http://www.joahcy.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx反向代理配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:01.262Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
-<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
@@ -927,48 +1408,6 @@ cd nginx-1.8.0</code></p>
   </entry>
   
   <entry>
-    <title>nginx负载均衡配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:57.816Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
-<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
-<li><p>在http节点里添加:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
-</li>
-<li><p>每个设备的状态:</p>
-<ul>
-<li>down: 表示单前的server暂时不参与负载.  </li>
-<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
-<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
-<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
-<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
-</ul>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-    
-  </entry>
-  
-  <entry>
     <title>linux配置多IP</title>
     <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
     <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
@@ -996,56 +1435,6 @@ cd nginx-1.8.0</code></p>
     
     
       <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx配置虚拟主机</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:04.861Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><ul>
-<li>1.配置多IP</li>
-<li>2.nginx的配置文件在http节点下加一个server节点,如: </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.128; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-128;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.100; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-100;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>3.复制html页面</li>
-<li>4.访问测试</li>
-</ul>
-<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><ul>
-<li>1.添加server节点,如:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       81; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-81;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       82; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-82;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>2.复制html页面</li>
-<li>3.访问测试</li>
-</ul>
-<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><p><strong>使用最多的虚拟主机配置方式,一个域名只能绑定一个IP，一个IP可以被多个域名绑定</strong></p>
-<ul>
-<li>1.修改host文件实现域名访问<br>  如：<pre><code>192.168.170.128  www.zyx.com
-192.168.170.128  blog.zyx.com
-</code></pre></li>
-<li>2.修改nginx的配置文件</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80;</div><div class="line">	server_name  www.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-www;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  blog.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-blog;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;基于IP的虚拟主机&quot;&gt;&lt;a href=&quot;#基于IP的虚拟主机&quot; class=&quot;headerlink&quot; title=&quot;基于IP的虚拟主机&quot;&gt;&lt;/a&gt;基于IP的虚拟主机&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;1.配置多IP&lt;/li&gt;
-&lt;li&gt;2.nginx的配置文件在http节点
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
     
   </entry>
   
@@ -1634,6 +2023,123 @@ db.fs.files.find()`
     
     
       <category term="MongoDB" scheme="http://www.joahcy.com/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx负载均衡配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:57.816Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
+<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
+<li><p>在http节点里添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
+</li>
+<li><p>每个设备的状态:</p>
+<ul>
+<li>down: 表示单前的server暂时不参与负载.  </li>
+<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
+<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
+<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
+<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx反向代理配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:01.262Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
+<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx配置虚拟主机</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:04.861Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><ul>
+<li>1.配置多IP</li>
+<li>2.nginx的配置文件在http节点下加一个server节点,如: </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.128; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-128;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.100; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-100;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>3.复制html页面</li>
+<li>4.访问测试</li>
+</ul>
+<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><ul>
+<li>1.添加server节点,如:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       81; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-81;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       82; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-82;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>2.复制html页面</li>
+<li>3.访问测试</li>
+</ul>
+<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><p><strong>使用最多的虚拟主机配置方式,一个域名只能绑定一个IP，一个IP可以被多个域名绑定</strong></p>
+<ul>
+<li>1.修改host文件实现域名访问<br>  如：<pre><code>192.168.170.128  www.zyx.com
+192.168.170.128  blog.zyx.com
+</code></pre></li>
+<li>2.修改nginx的配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80;</div><div class="line">	server_name  www.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-www;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  blog.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-blog;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基于IP的虚拟主机&quot;&gt;&lt;a href=&quot;#基于IP的虚拟主机&quot; class=&quot;headerlink&quot; title=&quot;基于IP的虚拟主机&quot;&gt;&lt;/a&gt;基于IP的虚拟主机&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;1.配置多IP&lt;/li&gt;
+&lt;li&gt;2.nginx的配置文件在http节点
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
     
   </entry>
   
