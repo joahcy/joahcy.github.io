@@ -94,10 +94,13 @@
 <meta property="og:site_name" content="Joahcy">
 <meta property="og:description" content="对象的创建对象创建过程在语言层面上，创建对象（例如克隆，反序列化）通常仅仅是一个new关键字而已，而在虚拟机中，对象（本文讨论仅限普通java对象，不包括数组和Class对象等）的创建是一个怎样的过程呢？    虚拟机遇到new指令时，首先检查指令的参数是否在常量池中定位到一个类的符号引用，并检查该符号引用代表的类是否已被加载、解析和初始化过。若有则进入下一步，否则必须执行相应的类加载过程。 在类">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-18T17:35:49.236Z">
+<meta property="og:image" content="http://oqwn6kueb.bkt.clouddn.com/blog/171030/BagCA3i8m5.jpg?imageslim">
+<meta property="og:image" content="http://oqwn6kueb.bkt.clouddn.com/blog/171030/C3EfJaLh3l.jpg?imageslim">
+<meta property="og:updated_time" content="2017-10-30T13:29:43.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM对象探秘">
 <meta name="twitter:description" content="对象的创建对象创建过程在语言层面上，创建对象（例如克隆，反序列化）通常仅仅是一个new关键字而已，而在虚拟机中，对象（本文讨论仅限普通java对象，不包括数组和Class对象等）的创建是一个怎样的过程呢？    虚拟机遇到new指令时，首先检查指令的参数是否在常量池中定位到一个类的符号引用，并检查该符号引用代表的类是否已被加载、解析和初始化过。若有则进入下一步，否则必须执行相应的类加载过程。 在类">
+<meta name="twitter:image" content="http://oqwn6kueb.bkt.clouddn.com/blog/171030/BagCA3i8m5.jpg?imageslim">
 
 
 
@@ -411,13 +414,12 @@
 </li>
 <li>分配原则：选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定。Serial、ParNew等带Compact过程的收集器采用指针碰撞；CMS这种基于Mark-Sweep算法的收集器采用空闲列表。</li>
 </ul>
-<p>###　保证内存分配线程安全<br>对象的创建非常频繁，所以分配内存时改变指针的位置不是线程安全的。  </p>
+<h3 id="保证内存分配线程安全"><a href="#保证内存分配线程安全" class="headerlink" title="保证内存分配线程安全"></a>保证内存分配线程安全</h3><p>对象的创建非常频繁，所以分配内存时改变指针的位置不是线程安全的。</p>
 <ul>
 <li>解决方案一: 对分配内存的动作进行同步—实际上虚拟机采用的CAS算法保证原子性</li>
 <li>解决方案二: 把内存分配的动作划分到不同的空间进行，即每个线程在java堆预先分配一小块内存，称为本地线程分配缓冲(Thread Local Allocation Buffer ,TLAB)。每个线程在自己的TLAB上分配内存，当TLAB用完并分配新的TLAB时，才需要同步锁定。是否使用TLAB，通过-XX:+/-UseTLAB参数来设定。</li>
 </ul>
-<p>##　对象的内存布局</p>
-<p>对象内存布局分为3快区域: 对象头、实例数据、对齐填充。</p>
+<h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><p>对象内存布局分为3快区域: 对象头、实例数据、对齐填充。</p>
 <h3 id="对象头-主要包括两部分"><a href="#对象头-主要包括两部分" class="headerlink" title="对象头(主要包括两部分)"></a>对象头(主要包括两部分)</h3><ul>
 <li>运行时数据(哈希码、GC分代年龄、所状态标志、线程持有的锁、偏向线程ID、偏向时间戳)</li>
 <li>类型指针—即对象指向它的类元数据的指针</li>
@@ -425,7 +427,8 @@
 </ul>
 <h3 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h3><p>存储代码中所定义的各种类型的字段内容(包括继承父类的)。存储顺序受到虚拟机分配策略参数(FieldsAllocationStyle)和代码中定义顺序的影响。默认策略为：longs/doubles、ints、shorts/chars、bytes/booleans、oops。</p>
 <h3 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h3><p>并不是必然存在的，仅仅起占位符的作用，HotSpotVM要求对象起始地址必须是8字节的整数倍，所以当实例数据部分没有对齐时，需要通过对齐填充来补全。</p>
-<h2 id="对象的的访问定位"><a href="#对象的的访问定位" class="headerlink" title="对象的的访问定位"></a>对象的的访问定位</h2><p>/<em>TODO</em>/</p>
+<h2 id="对象的的访问定位"><a href="#对象的的访问定位" class="headerlink" title="对象的的访问定位"></a>对象的的访问定位</h2><h3 id="句柄访问"><a href="#句柄访问" class="headerlink" title="句柄访问"></a>句柄访问</h3><p>Java堆将会划出一块内存作为句柄池,reference中存储的就是对象的句柄地址,而句柄中包含了对象实例数据与类型数据各自的地址信息，如图:  <img src="http://oqwn6kueb.bkt.clouddn.com/blog/171030/BagCA3i8m5.jpg?imageslim" alt="句柄访问"><br><strong>优势:存储的是稳定的句柄地址,在对象被移动时只会改变句柄中的实例数据指针,reference本身不需要修改。</strong></p>
+<h3 id="直接指针访问-HotSpot使用次方式"><a href="#直接指针访问-HotSpot使用次方式" class="headerlink" title="直接指针访问(HotSpot使用次方式)"></a>直接指针访问(HotSpot使用次方式)</h3><p>reference中存储的直接就是对象地址，如图:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171030/C3EfJaLh3l.jpg?imageslim" alt="直接指针访问"><br><strong>优势:访问速度快,节省了一次指针定位的时间开销。</strong></p>
 
       
     </div>
@@ -597,7 +600,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -740,7 +743,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建"><span class="nav-number">1.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象创建过程"><span class="nav-number">1.1.</span> <span class="nav-text">对象创建过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存分配原则"><span class="nav-number">1.2.</span> <span class="nav-text">内存分配原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象头-主要包括两部分"><span class="nav-number">1.3.</span> <span class="nav-text">对象头(主要包括两部分)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例数据"><span class="nav-number">1.4.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐填充"><span class="nav-number">1.5.</span> <span class="nav-text">对齐填充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的的访问定位"><span class="nav-number">2.</span> <span class="nav-text">对象的的访问定位</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建"><span class="nav-number">1.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象创建过程"><span class="nav-number">1.1.</span> <span class="nav-text">对象创建过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存分配原则"><span class="nav-number">1.2.</span> <span class="nav-text">内存分配原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保证内存分配线程安全"><span class="nav-number">1.3.</span> <span class="nav-text">保证内存分配线程安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">2.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象头-主要包括两部分"><span class="nav-number">2.1.</span> <span class="nav-text">对象头(主要包括两部分)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例数据"><span class="nav-number">2.2.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐填充"><span class="nav-number">2.3.</span> <span class="nav-text">对齐填充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的的访问定位"><span class="nav-number">3.</span> <span class="nav-text">对象的的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#句柄访问"><span class="nav-number">3.1.</span> <span class="nav-text">句柄访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接指针访问-HotSpot使用次方式"><span class="nav-number">3.2.</span> <span class="nav-text">直接指针访问(HotSpot使用次方式)</span></a></li></ol></li></ol></div>
             
 
           </div>

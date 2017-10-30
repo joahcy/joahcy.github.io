@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.joahcy.com/MySQL/mysql_advance/</loc>
+    <loc>http://www.joahcy.com/JVM/JVM%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98/</loc>
     
-    <lastmod>2017-09-25T04:07:51.616Z</lastmod>
+    <lastmod>2017-10-30T13:29:43.060Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.joahcy.com/JVM/JVM%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98/</loc>
     
-    <lastmod>2017-09-18T17:35:49.236Z</lastmod>
+    <lastmod>2017-10-30T13:24:11.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.joahcy.com/MySQL/mysql_advance/</loc>
+    
+    <lastmod>2017-09-25T04:07:51.616Z</lastmod>
     
   </url>
   
