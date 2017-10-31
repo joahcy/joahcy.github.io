@@ -442,7 +442,7 @@
     <link href="http://www.joahcy.com/JVM/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"/>
     <id>http://www.joahcy.com/JVM/类的加载机制/</id>
     <published>2017-09-19T16:00:00.000Z</published>
-    <updated>2017-10-31T08:59:04.975Z</updated>
+    <updated>2017-10-31T14:00:05.315Z</updated>
     
     <content type="html"><![CDATA[<p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转化解析和初始化，最终形成可以被虚拟机直接使用的java类型，这就是虚拟机的类加载机制。</p>
 <h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>类从加载到卸载整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载等7个阶段，其中验证、准备、解析统称为连接。如图:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171031/1fjBh3cDib.jpg?imageslim" alt="类的生命周期"><br>什么情况下需要开始类加载过程的第一个阶段:”加载”。虚拟机规范中并没强行约束，这点可以交给虚拟机的的具体实现自由把握，但是对于初始化阶段虚拟机规范是严格规定了如下几种情况，如果类未初始化会对类进行初始化。 </p>
@@ -487,7 +487,22 @@
 <li>接口也会产生<code>&lt;clinti&gt;()</code>方法。只有当使用父接口的变量时才会初始化父接口，另外接口的实现类初始化时也不会执行接口的<code>&lt;clinti&gt;()</code>方法。</li>
 <li><code>&lt;clinti&gt;()</code>是虚拟机保证线程安全的。</li>
 </ul>
-<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><h3 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h3>]]></content>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>对于任意一个类，都需要由加载它的类加载器和这个类本身一同确立其在Java虚拟机中的唯一性，每一个类加载器，都有一个一个独立的类命名空间。通俗来讲就是，比较两个类是否“相等”，只有在这两个类由同一个类加载器加载的前提下才有意义，否则，即使这两个类来源于同一个Class文件，加载他们的类加载器不同，那这两个类必定不相等。</p>
+<h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><h4 id="类加载器种类"><a href="#类加载器种类" class="headerlink" title="类加载器种类"></a>类加载器种类</h4><p>从Java虚拟机的角度来说，只存在两种不同的类加载器：一种是启动类加载器（Bootstrap ClassLoader），这个类加载器使用C++语言实现（HotSpot虚拟机中），是虚拟机自身的一部分；另一种就是所有其他的类加载器，这些类加载器都由Java语言实现，独立于虚拟机外部，并且全部继承自抽象类java.lang.ClassLoader。<br>从开发者的角度，类加载器可以细分为： </p>
+<ul>
+<li><p>启动（Bootstrap）类加载器：负责将 Java_Home/lib下面的类库加载到内存中（比如rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</p>
+</li>
+<li><p>标准扩展（Extension）类加载器：是由 Sun 的 ExtClassLoader（sun.misc.Launcher$ExtClassLoader）实现的。它负责将Java_Home /lib/ext或者由系统变量 java.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。</p>
+</li>
+<li><p>应用程序（Application）类加载器：是由 Sun 的 AppClassLoader（sun.misc.Launcher$AppClassLoader）实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用系统类加载器。由于这个类加载器是ClassLoader中的getSystemClassLoader()方法的返回值，因此一般称为系统（System）加载器。</p>
+</li>
+</ul>
+<p>除此之外，还有自定义的类加载器，它们之间的层次关系被称为类加载器的双亲委派模型。该模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器，而这种父子关系一般通过组合（Composition）关系来实现，而不是通过继承（Inheritance）。如图：<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171031/d8487cLj80.jpg?imageslim" alt="双亲委派模型"></p>
+<h4 id="双亲委派模型过程"><a href="#双亲委派模型过程" class="headerlink" title="双亲委派模型过程"></a>双亲委派模型过程</h4><p>某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成类加载任务，就成功返回；只有父类加载器无法完成此加载任务时，才自己去加载。<br>使用双亲委派模型的好处在于Java类随着它的类加载器一起具备了一种带有优先级的层次关系。</p>
+<h4 id="双亲委派模型的系统实现"><a href="#双亲委派模型的系统实现" class="headerlink" title="双亲委派模型的系统实现"></a>双亲委派模型的系统实现</h4><p>在java.lang.ClassLoader的loadClass()方法中，先检查是否已经被加载过，若没有加载则调用父类加载器的loadClass()方法，若父加载器为空则默认使用启动类加载器作为父加载器。如果父加载失败，则抛出ClassNotFoundException异常后，再调用自己的findClass()方法进行加载。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">synchronized</span> Class&lt;?&gt; loadClass(String name,<span class="keyword">boolean</span> resolve)<span class="keyword">throws</span> ClassNotFoundException&#123;</div><div class="line">    <span class="comment">//首先检查请求的类是否已经加载过了</span></div><div class="line">    Class c = findLoadedClass(name);</div><div class="line">    <span class="keyword">if</span>(c == <span class="keyword">null</span>)&#123;</div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            <span class="keyword">if</span>(parent != <span class="keyword">null</span>)&#123;</div><div class="line">                c = parent.loadClass(name,<span class="keyword">false</span>);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                c = findBootstrapClassOrNull(name);</div><div class="line">            &#125;</div><div class="line">        &#125;<span class="keyword">catch</span>(ClassNotFoundException e)&#123;</div><div class="line">            <span class="comment">//若父类抛出异常，说明父类无法完成加载请求</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//父类无法加载时，再调用本身的findClass()方法进行加载</span></div><div class="line">        <span class="keyword">if</span>(c == <span class="keyword">null</span>)&#123;</div><div class="line">            c = findClass(name);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(resolve)&#123;</div><div class="line">        resolveClass(c);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> c;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h3><p>双亲委派模型是Java设计者推荐给开发者的类加载器的实现方式，并不是强制规定的。大多数的类加载器都遵循这个模型，但是JDK中也有较大规模破坏双亲模型的情况，例如线程上下文类加载器（Thread Context ClassLoader）的出现，具体参考《深入理解Java虚拟机》。</p>
+]]></content>
     
     <summary type="html">
     
@@ -774,9 +789,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="spark" scheme="http://www.joahcy.com/tags/spark/"/>
-    
       <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
+      <category term="spark" scheme="http://www.joahcy.com/tags/spark/"/>
     
   </entry>
   
@@ -1003,11 +1018,11 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="hadoop" scheme="http://www.joahcy.com/tags/hadoop/"/>
     
       <category term="cluster" scheme="http://www.joahcy.com/tags/cluster/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1182,92 +1197,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>CentOS桌面切换及配置</title>
-    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
-    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:32.837Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
-<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
-<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
-<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
-<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
-</ul>
-<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
-<li>字符界面：sudo systemctl set-default multi-user.target    </li>
-<li>图形界面：sudo systemctl set-default graphical.target</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringMVC发送DELETE和PUT请求</title>
-    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
-    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:52:42.803Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
-<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
-</blockquote>
-<p>Rest 风格的 URL.</p>
-<ul>
-<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
-<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
-<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
-<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
-</ul>
-<p>以 CRUD Order为例:</p>
-<ul>
-<li>新增: /order POST </li>
-<li>修改: /order/1 PUT update?id=1 </li>
-<li>获取: /order/1 GET get?id=1 </li>
-<li>删除: /order/1 DELETE delete?id=1</li>
-</ul>
-<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
-<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-<p>  发送DELETE请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
-    
-    </summary>
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
     <title>单例模式与多线程</title>
     <link href="http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/"/>
     <id>http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/</id>
@@ -1381,6 +1310,92 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>CentOS桌面切换及配置</title>
+    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
+    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:32.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
+<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
+<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
+<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
+<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
+</ul>
+<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
+<li>字符界面：sudo systemctl set-default multi-user.target    </li>
+<li>图形界面：sudo systemctl set-default graphical.target</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC发送DELETE和PUT请求</title>
+    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
+    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:52:42.803Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
+<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
+</blockquote>
+<p>Rest 风格的 URL.</p>
+<ul>
+<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
+<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
+<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
+<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
+</ul>
+<p>以 CRUD Order为例:</p>
+<ul>
+<li>新增: /order POST </li>
+<li>修改: /order/1 PUT update?id=1 </li>
+<li>获取: /order/1 GET get?id=1 </li>
+<li>删除: /order/1 DELETE delete?id=1</li>
+</ul>
+<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
+<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<p>  发送DELETE请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
+    
+    </summary>
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
+    
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下安装JDK</title>
     <link href="http://www.joahcy.com/Java/install-JDK-on-linux/"/>
     <id>http://www.joahcy.com/Java/install-JDK-on-linux/</id>
@@ -1406,6 +1421,95 @@ The key fingerprint is:
       <category term="JDK" scheme="http://www.joahcy.com/tags/JDK/"/>
     
       <category term="Java" scheme="http://www.joahcy.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux下的Nginx安装</title>
+    <link href="http://www.joahcy.com/Nginx/nginx_install_on_linux/"/>
+    <id>http://www.joahcy.com/Nginx/nginx_install_on_linux/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:13.213Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
+<li><p>PCRE<br>  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。<br>  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>  <code>yum install -y pcre pcre-devel</code><br>  <strong><em>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</em></strong></p>
+</li>
+<li><p>zlib<br>  zlib库提供了很多种压缩和解压缩的方式,nginx使用zlib对http包的内容进行gzip,所以需要在linux上安装zlib库。<br>  <code>yum install -y zlib zlib-devel</code></p>
+</li>
+<li>openssl<br>  OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>  nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>  <code>yum install -y openssl openssl-devel</code></li>
+</ul>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>将nginx-1.8.0.tar.gz拷贝至linux服务器。<br>解压：<br><code>tar -zxvf nginx-1.8.0.tar.gz
+cd nginx-1.8.0</code></p>
+<ul>
+<li>configure配置<br>  ./configure –help查询详细参数（参考本教程附录部分：nginx编译参数）<br>  参数设置如下：<br>  <code>./configure \
+  --prefix=/usr/local/nginx \
+  --pid-path=/var/run/nginx/nginx.pid \
+  --lock-path=/var/lock/nginx.lock \
+  --error-log-path=/var/log/nginx/error.log \
+  --http-log-path=/var/log/nginx/access.log \
+  --with-http_gzip_static_module \
+  --http-client-body-temp-path=/var/temp/nginx/client \
+  --http-proxy-temp-path=/var/temp/nginx/proxy \
+  --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+  --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+  --http-scgi-temp-path=/var/temp/nginx/scgi</code><br>  <strong><em>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录</em></strong></li>
+<li>编译安装<br>  <code>make</code><br>  <code>make  install</code></li>
+</ul>
+<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><p><code>cd /usr/local/nginx/sbin/
+./nginx</code></p>
+<ul>
+<li>查询nginx进程：<br> <code>ps -ef |grep nginx</code><br>  <strong><em>注意：执行./nginx启动nginx，这里可以-c指定加载的nginx配置文件，如下：<br>  ./nginx -c /usr/local/nginx/conf/nginx.conf<br>  如果不指定-c，nginx在启动时默认加载conf/nginx.conf文件，此文件的地址也可以在编译安装nginx时指定./configure的参数（–conf-path= 指向配置文件（nginx.conf））</em></strong></li>
+</ul>
+<h2 id="停止nginx"><a href="#停止nginx" class="headerlink" title="停止nginx"></a>停止nginx</h2><ul>
+<li>方式1，快速停止：<br>  <code>cd /usr/local/nginx/sbin
+  ./nginx -s stop</code><br>  此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。</li>
+<li>方式2，完整停止(建议使用)：<br>  <code>cd /usr/local/nginx/sbin
+  ./nginx -s quit</code><br>  此方式停止步骤是待nginx进程处理任务完毕进行停止。</li>
+</ul>
+<h2 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h2><ul>
+<li>方式1，先停止再启动（建议使用）：<br>  对nginx进行重启相当于先停止nginx再启动nginx，即先执行停止命令再执行启动命令。<br>  如下：<br>  <code>./nginx -s quit
+  ./nginx</code></li>
+<li>方式2，重新加载配置文件：<br>  当nginx的配置文件nginx.conf修改后，要想让配置生效需要重启nginx，使用-s reload不用先停止nginx再启动nginx即可将配置信息在nginx中生效，如下：<br>  <code>./nginx -s reload</code></li>
+</ul>
+<h2 id="安装测试"><a href="#安装测试" class="headerlink" title="安装测试"></a>安装测试</h2><p>nginx安装成功，启动nginx，即可访问虚拟机上的nginx。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;安装依赖&quot;&gt;&lt;a href=&quot;#安装依赖&quot; class=&quot;headerlink&quot; title=&quot;安装依赖&quot;&gt;&lt;/a&gt;安装依赖&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;PCRE&lt;br&gt;  PCRE(Perl Compatible Regular Expressions)是一
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx反向代理配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:01.262Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
+<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
@@ -2029,73 +2133,6 @@ db.fs.files.find()`
   </entry>
   
   <entry>
-    <title>nginx负载均衡配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:57.816Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
-<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
-<li><p>在http节点里添加:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
-</li>
-<li><p>每个设备的状态:</p>
-<ul>
-<li>down: 表示单前的server暂时不参与负载.  </li>
-<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
-<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
-<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
-<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
-</ul>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx反向代理配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:01.262Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
-<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
     <title>nginx配置虚拟主机</title>
     <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
     <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
@@ -2146,59 +2183,35 @@ db.fs.files.find()`
   </entry>
   
   <entry>
-    <title>Linux下的Nginx安装</title>
-    <link href="http://www.joahcy.com/Nginx/nginx_install_on_linux/"/>
-    <id>http://www.joahcy.com/Nginx/nginx_install_on_linux/</id>
+    <title>nginx负载均衡配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
     <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:13.213Z</updated>
+    <updated>2017-08-05T03:47:57.816Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
-<li><p>PCRE<br>  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。<br>  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>  <code>yum install -y pcre pcre-devel</code><br>  <strong><em>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</em></strong></p>
+    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
+<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
+<li><p>在http节点里添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-<li><p>zlib<br>  zlib库提供了很多种压缩和解压缩的方式,nginx使用zlib对http包的内容进行gzip,所以需要在linux上安装zlib库。<br>  <code>yum install -y zlib zlib-devel</code></p>
+<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
 </li>
-<li>openssl<br>  OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>  nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>  <code>yum install -y openssl openssl-devel</code></li>
-</ul>
-<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>将nginx-1.8.0.tar.gz拷贝至linux服务器。<br>解压：<br><code>tar -zxvf nginx-1.8.0.tar.gz
-cd nginx-1.8.0</code></p>
+<li><p>每个设备的状态:</p>
 <ul>
-<li>configure配置<br>  ./configure –help查询详细参数（参考本教程附录部分：nginx编译参数）<br>  参数设置如下：<br>  <code>./configure \
-  --prefix=/usr/local/nginx \
-  --pid-path=/var/run/nginx/nginx.pid \
-  --lock-path=/var/lock/nginx.lock \
-  --error-log-path=/var/log/nginx/error.log \
-  --http-log-path=/var/log/nginx/access.log \
-  --with-http_gzip_static_module \
-  --http-client-body-temp-path=/var/temp/nginx/client \
-  --http-proxy-temp-path=/var/temp/nginx/proxy \
-  --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
-  --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
-  --http-scgi-temp-path=/var/temp/nginx/scgi</code><br>  <strong><em>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录</em></strong></li>
-<li>编译安装<br>  <code>make</code><br>  <code>make  install</code></li>
+<li>down: 表示单前的server暂时不参与负载.  </li>
+<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
+<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
+<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
+<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
 </ul>
-<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><p><code>cd /usr/local/nginx/sbin/
-./nginx</code></p>
-<ul>
-<li>查询nginx进程：<br> <code>ps -ef |grep nginx</code><br>  <strong><em>注意：执行./nginx启动nginx，这里可以-c指定加载的nginx配置文件，如下：<br>  ./nginx -c /usr/local/nginx/conf/nginx.conf<br>  如果不指定-c，nginx在启动时默认加载conf/nginx.conf文件，此文件的地址也可以在编译安装nginx时指定./configure的参数（–conf-path= 指向配置文件（nginx.conf））</em></strong></li>
+</li>
 </ul>
-<h2 id="停止nginx"><a href="#停止nginx" class="headerlink" title="停止nginx"></a>停止nginx</h2><ul>
-<li>方式1，快速停止：<br>  <code>cd /usr/local/nginx/sbin
-  ./nginx -s stop</code><br>  此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。</li>
-<li>方式2，完整停止(建议使用)：<br>  <code>cd /usr/local/nginx/sbin
-  ./nginx -s quit</code><br>  此方式停止步骤是待nginx进程处理任务完毕进行停止。</li>
-</ul>
-<h2 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h2><ul>
-<li>方式1，先停止再启动（建议使用）：<br>  对nginx进行重启相当于先停止nginx再启动nginx，即先执行停止命令再执行启动命令。<br>  如下：<br>  <code>./nginx -s quit
-  ./nginx</code></li>
-<li>方式2，重新加载配置文件：<br>  当nginx的配置文件nginx.conf修改后，要想让配置生效需要重启nginx，使用-s reload不用先停止nginx再启动nginx即可将配置信息在nginx中生效，如下：<br>  <code>./nginx -s reload</code></li>
-</ul>
-<h2 id="安装测试"><a href="#安装测试" class="headerlink" title="安装测试"></a>安装测试</h2><p>nginx安装成功，启动nginx，即可访问虚拟机上的nginx。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;安装依赖&quot;&gt;&lt;a href=&quot;#安装依赖&quot; class=&quot;headerlink&quot; title=&quot;安装依赖&quot;&gt;&lt;/a&gt;安装依赖&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;PCRE&lt;br&gt;  PCRE(Perl Compatible Regular Expressions)是一
+      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
     
     </summary>
     
@@ -2206,6 +2219,8 @@ cd nginx-1.8.0</code></p>
     
     
       <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
     
   </entry>
   
