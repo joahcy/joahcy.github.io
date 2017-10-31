@@ -442,7 +442,7 @@
     <link href="http://www.joahcy.com/JVM/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"/>
     <id>http://www.joahcy.com/JVM/类的加载机制/</id>
     <published>2017-09-19T16:00:00.000Z</published>
-    <updated>2017-10-31T08:25:17.186Z</updated>
+    <updated>2017-10-31T08:28:13.673Z</updated>
     
     <content type="html"><![CDATA[<p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转化解析和初始化，最终形成可以被虚拟机直接使用的java类型，这就是虚拟机的类加载机制。</p>
 <h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>类从加载到卸载整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载等7个阶段，其中验证、准备、解析统称为连接。如图:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171031/1fjBh3cDib.jpg?imageslim" alt="类的生命周期"><br>什么情况下需要开始类加载过程的第一个阶段:”加载”。虚拟机规范中并没强行约束，这点可以交给虚拟机的的具体实现自由把握，但是对于初始化阶段虚拟机规范是严格规定了如下几种情况，如果类未初始化会对类进行初始化。 </p>
@@ -472,7 +472,7 @@
 <ul>
 <li>文件格式验证: 是要验证字节流是否符合Class文件格式的规范，并且能被当前版本的虚拟机处理。如验证魔数是否0xCAFEBABE；主、次版本号是否正在当前虚拟机处理范围之内；常量池的常量中是否有不被支持的常量类型；指向常量的索引值是否指向不存在的常量或不符合类型的常量等等…该验证阶段的主要目的是保证输入的字节流能正确地解析并存储于方法区中，经过这个阶段的验证后，字节流才会进入内存的方法区中存储，所以后面的三个验证阶段都是基于方法区的存储结构进行的。</li>
 <li>元数据验证: 是对字节码描述的信息进行语义分析，以保证其描述的信息符合Java语言规范的要求。可能包括的验证如：这个类是否有父类；这个类的父类是否继承了不允许被继承的类；如果这个类不是抽象类，是否实现了其父类或接口中要求实现的所有方法…</li>
-<li>字节码验证: 主要工作是进行数据流和控制流分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的行为。如果一个类方法体的<br>字节码没有通过字节码验证，那肯定是有问题的；但如果一个方法体通过了字节码验证，也不能说明其一定就是安全的。应为因为存在“停机<br>问题”，通俗来讲，就是通过程序去校验程序逻辑是无法做到绝对准确的。由于数据校验的高复杂性，在JDK1.6之后给方法体的Code属性加<br>入了名为“StackMapTable”的属性，可以将字节码的推导准变为类型检查从而节省时间。jdk1.6可以通过设置参数关闭优化或在类型校验失<br>败时退回到类型推导，而jdk1.7不允许退回。</li>
+<li>字节码验证: 主要工作是进行数据流和控制流分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的行为。如果一个类方法体的字节码没有通过字节码验证，那肯定是有问题的；但如果一个方法体通过了字节码验证，也不能说明其一定就是安全的。应为因为存在“停机问题”，通俗来讲，就是通过程序去校验程序逻辑是无法做到绝对准确的。由于数据校验的高复杂性，在JDK1.6之后给方法体的Code属性加入了名为“StackMapTable”的属性，可以将字节码的推导准变为类型检查从而节省时间。jdk1.6可以通过设置参数关闭优化或在类型校验失败时退回到类型推导，而jdk1.7不允许退回。</li>
 <li>符号引用验证: 发生在虚拟机将符号引用转化为直接引用的时候，这个转化动作将在“解析阶段”中发生。验证符号引用中通过字符串描述的权限定名是否能找到对应的类；在指定类中是否存在符合方法字段的描述符及简单名称所描述的方法和字段；符号引用中的类、字段和方法的访问性(private、protected、public、default)是否可被当前类访问等等…<br>验证阶段对于虚拟机的类加载机制来说，不一定是必要的阶段。如果所运行的全部代码确认是安全的，可以使用-Xverify：none参数来关闭<br>大部分的类验证措施，以缩短虚拟机类加载时间。</li>
 </ul>
 <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段是为类的静态变量分配内存并将其初始化为默认值，这些内存都将在方法区中进行分配。准备阶段不分配类中的实例变量的内存，实例变量将会在对象实例化时随着对象一起分配在Java堆中。<br>public static int value=123;//在准备阶段value初始值为0 。在初始化阶段才会变为123。<br>public static final int value=123; //编译时将会为value生成ConstantValue属性，准备阶段进行初始化为123。</p>
@@ -852,9 +852,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1003,11 +1003,11 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
       <category term="hadoop" scheme="http://www.joahcy.com/tags/hadoop/"/>
     
       <category term="cluster" scheme="http://www.joahcy.com/tags/cluster/"/>
-    
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1182,6 +1182,92 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>CentOS桌面切换及配置</title>
+    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
+    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:32.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
+<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
+<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
+<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
+<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
+</ul>
+<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
+<li>字符界面：sudo systemctl set-default multi-user.target    </li>
+<li>图形界面：sudo systemctl set-default graphical.target</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC发送DELETE和PUT请求</title>
+    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
+    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:52:42.803Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
+<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
+</blockquote>
+<p>Rest 风格的 URL.</p>
+<ul>
+<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
+<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
+<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
+<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
+</ul>
+<p>以 CRUD Order为例:</p>
+<ul>
+<li>新增: /order POST </li>
+<li>修改: /order/1 PUT update?id=1 </li>
+<li>获取: /order/1 GET get?id=1 </li>
+<li>删除: /order/1 DELETE delete?id=1</li>
+</ul>
+<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
+<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<p>  发送DELETE请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
+    
+    </summary>
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
+    
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
+    
+  </entry>
+  
+  <entry>
     <title>单例模式与多线程</title>
     <link href="http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/"/>
     <id>http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/</id>
@@ -1295,92 +1381,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>CentOS桌面切换及配置</title>
-    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
-    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:32.837Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
-<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
-<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
-<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
-<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
-</ul>
-<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
-<li>字符界面：sudo systemctl set-default multi-user.target    </li>
-<li>图形界面：sudo systemctl set-default graphical.target</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringMVC发送DELETE和PUT请求</title>
-    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
-    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:52:42.803Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
-<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
-</blockquote>
-<p>Rest 风格的 URL.</p>
-<ul>
-<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
-<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
-<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
-<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
-</ul>
-<p>以 CRUD Order为例:</p>
-<ul>
-<li>新增: /order POST </li>
-<li>修改: /order/1 PUT update?id=1 </li>
-<li>获取: /order/1 GET get?id=1 </li>
-<li>删除: /order/1 DELETE delete?id=1</li>
-</ul>
-<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
-<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-<p>  发送DELETE请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
-    
-    </summary>
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Linux下安装JDK</title>
     <link href="http://www.joahcy.com/Java/install-JDK-on-linux/"/>
     <id>http://www.joahcy.com/Java/install-JDK-on-linux/</id>
@@ -1406,37 +1406,6 @@ The key fingerprint is:
       <category term="JDK" scheme="http://www.joahcy.com/tags/JDK/"/>
     
       <category term="Java" scheme="http://www.joahcy.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux配置多IP</title>
-    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
-    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:08.069Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
-<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
-<li>3.重启虚拟机</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;ul&gt;
-&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
-&lt;li&gt;3.重启虚拟机&lt;/li&gt;
-&lt;/u
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
     
   </entry>
   
@@ -1483,6 +1452,37 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>linux配置多IP</title>
+    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
+    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:08.069Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
+<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
+<li>3.重启虚拟机</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
+&lt;li&gt;3.重启虚拟机&lt;/li&gt;
+&lt;/u
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>nginx反向代理配置</title>
     <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
     <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
@@ -1504,6 +1504,56 @@ The key fingerprint is:
       <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
     
       <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx配置虚拟主机</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:04.861Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><ul>
+<li>1.配置多IP</li>
+<li>2.nginx的配置文件在http节点下加一个server节点,如: </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.128; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-128;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.100; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-100;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>3.复制html页面</li>
+<li>4.访问测试</li>
+</ul>
+<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><ul>
+<li>1.添加server节点,如:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       81; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-81;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       82; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-82;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>2.复制html页面</li>
+<li>3.访问测试</li>
+</ul>
+<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><p><strong>使用最多的虚拟主机配置方式,一个域名只能绑定一个IP，一个IP可以被多个域名绑定</strong></p>
+<ul>
+<li>1.修改host文件实现域名访问<br>  如：<pre><code>192.168.170.128  www.zyx.com
+192.168.170.128  blog.zyx.com
+</code></pre></li>
+<li>2.修改nginx的配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80;</div><div class="line">	server_name  www.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-www;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  blog.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-blog;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基于IP的虚拟主机&quot;&gt;&lt;a href=&quot;#基于IP的虚拟主机&quot; class=&quot;headerlink&quot; title=&quot;基于IP的虚拟主机&quot;&gt;&lt;/a&gt;基于IP的虚拟主机&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;1.配置多IP&lt;/li&gt;
+&lt;li&gt;2.nginx的配置文件在http节点
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
     
   </entry>
   
@@ -1568,56 +1618,6 @@ cd nginx-1.8.0</code></p>
     
     
       <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx配置虚拟主机</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:04.861Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><ul>
-<li>1.配置多IP</li>
-<li>2.nginx的配置文件在http节点下加一个server节点,如: </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.128; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-128;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.100; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-100;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>3.复制html页面</li>
-<li>4.访问测试</li>
-</ul>
-<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><ul>
-<li>1.添加server节点,如:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       81; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-81;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       82; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-82;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>2.复制html页面</li>
-<li>3.访问测试</li>
-</ul>
-<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><p><strong>使用最多的虚拟主机配置方式,一个域名只能绑定一个IP，一个IP可以被多个域名绑定</strong></p>
-<ul>
-<li>1.修改host文件实现域名访问<br>  如：<pre><code>192.168.170.128  www.zyx.com
-192.168.170.128  blog.zyx.com
-</code></pre></li>
-<li>2.修改nginx的配置文件</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80;</div><div class="line">	server_name  www.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-www;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  blog.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-blog;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;基于IP的虚拟主机&quot;&gt;&lt;a href=&quot;#基于IP的虚拟主机&quot; class=&quot;headerlink&quot; title=&quot;基于IP的虚拟主机&quot;&gt;&lt;/a&gt;基于IP的虚拟主机&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;1.配置多IP&lt;/li&gt;
-&lt;li&gt;2.nginx的配置文件在http节点
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
     
   </entry>
   
