@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.joahcy.com/"/>
-  <updated>2017-10-30T13:24:11.487Z</updated>
+  <updated>2017-09-25T04:07:51.616Z</updated>
   <id>http://www.joahcy.com/</id>
   
   <author>
@@ -14,1211 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="http://www.joahcy.com/JVM/JVM%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98/"/>
-    <id>http://www.joahcy.com/JVM/JVM对象探秘/</id>
-    <published>2017-10-30T13:24:11.487Z</published>
-    <updated>2017-10-30T13:24:11.487Z</updated>
-    
-    <content type="html"><![CDATA[<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="date" content="2017-09-16">
-<meta name="comments" content="false">
-<meta name="categories" content="[JVM]">
-<meta name="tags" content="[JVM]"><style>body {
-  max-width: 980px;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
-  margin: 16px auto;
-}
-
-body .markdown-body
-{
-  padding: 45px;
-}
-
-@font-face {
-  font-family: fontawesome-mini;
-  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
-}
-
-@font-face {
-  font-family: octicons-anchor;
-  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
-}
-
-.markdown-body {
-  font-family: sans-serif;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  color: #333333;
-  overflow: hidden;
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  word-wrap: break-word;
-}
-
-.markdown-body a {
-  background: transparent;
-}
-
-.markdown-body a:active,
-.markdown-body a:hover {
-  outline: 0;
-}
-
-.markdown-body b,
-.markdown-body strong {
-  font-weight: bold;
-}
-
-.markdown-body mark {
-  background: #ff0;
-  color: #000;
-  font-style: italic;
-  font-weight: bold;
-}
-
-.markdown-body sub,
-.markdown-body sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-.markdown-body sup {
-  top: -0.5em;
-}
-.markdown-body sub {
-  bottom: -0.25em;
-}
-
-.markdown-body h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-
-.markdown-body img {
-  border: 0;
-}
-
-.markdown-body hr {
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  height: 0;
-}
-
-.markdown-body pre {
-  overflow: auto;
-}
-
-.markdown-body code,
-.markdown-body kbd,
-.markdown-body pre,
-.markdown-body samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
-
-.markdown-body input {
-  color: inherit;
-  font: inherit;
-  margin: 0;
-}
-
-.markdown-body html input[disabled] {
-  cursor: default;
-}
-
-.markdown-body input {
-  line-height: normal;
-}
-
-.markdown-body input[type="checkbox"] {
-  box-sizing: border-box;
-  padding: 0;
-}
-
-.markdown-body table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.markdown-body td,
-.markdown-body th {
-  padding: 0;
-}
-
-.markdown-body .codehilitetable {
-  border: 0;
-  border-spacing: 0;
-}
-
-.markdown-body .codehilitetable tr {
-  border: 0;
-}
-
-.markdown-body .codehilitetable pre,
-.markdown-body .codehilitetable div.codehilite {
-  margin: 0;
-}
-
-.markdown-body .linenos,
-.markdown-body .code,
-.markdown-body .codehilitetable td {
-  border: 0;
-  padding: 0;
-}
-
-.markdown-body td:not(.linenos) .linenodiv {
-  padding: 0 !important;
-}
-
-.markdown-body .code {
-  width: 100%;
-}
-
-.markdown-body .linenos div pre,
-.markdown-body .linenodiv pre,
-.markdown-body .linenodiv {
-  border: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  -webkit-border-top-left-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-topleft: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-
-.markdown-body .code div pre,
-.markdown-body .code div {
-  border: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  -webkit-border-top-right-radius: 3px;
-  -webkit-border-bottom-right-radius: 3px;
-  -moz-border-radius-topright: 3px;
-  -moz-border-radius-bottomright: 3px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-
-.markdown-body * {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.markdown-body input {
-  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-  line-height: 1.4;
-}
-
-.markdown-body a {
-  color: #4183c4;
-  text-decoration: none;
-}
-
-.markdown-body a:hover,
-.markdown-body a:focus,
-.markdown-body a:active {
-  text-decoration: underline;
-}
-
-.markdown-body hr {
-  height: 0;
-  margin: 15px 0;
-  overflow: hidden;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.markdown-body hr:before,
-.markdown-body hr:after {
-  display: table;
-  content: " ";
-}
-
-.markdown-body hr:after {
-  clear: both;
-}
-
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  line-height: 1.1;
-}
-
-.markdown-body h1 {
-  font-size: 30px;
-}
-
-.markdown-body h2 {
-  font-size: 21px;
-}
-
-.markdown-body h3 {
-  font-size: 16px;
-}
-
-.markdown-body h4 {
-  font-size: 14px;
-}
-
-.markdown-body h5 {
-  font-size: 12px;
-}
-
-.markdown-body h6 {
-  font-size: 11px;
-}
-
-.markdown-body blockquote {
-  margin: 0;
-}
-
-.markdown-body ul,
-.markdown-body ol {
-  padding: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.markdown-body ol ol,
-.markdown-body ul ol {
-  list-style-type: lower-roman;
-}
-
-.markdown-body ul ul ol,
-.markdown-body ul ol ol,
-.markdown-body ol ul ol,
-.markdown-body ol ol ol {
-  list-style-type: lower-alpha;
-}
-
-.markdown-body dd {
-  margin-left: 0;
-}
-
-.markdown-body code,
-.markdown-body pre,
-.markdown-body samp {
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 12px;
-}
-
-.markdown-body pre {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.markdown-body kbd {
-  background-color: #e7e7e7;
-  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
-  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
-  background-image: linear-gradient(#fefefe, #e7e7e7);
-  background-repeat: repeat-x;
-  border-radius: 2px;
-  border: 1px solid #cfcfcf;
-  color: #000;
-  padding: 3px 5px;
-  line-height: 10px;
-  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  display: inline-block;
-}
-
-.markdown-body>*:first-child {
-  margin-top: 0 !important;
-}
-
-.markdown-body>*:last-child {
-  margin-bottom: 0 !important;
-}
-
-.markdown-body .headeranchor-link {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  padding-right: 6px;
-  padding-left: 30px;
-  margin-left: -30px;
-}
-
-.markdown-body .headeranchor-link:focus {
-  outline: none;
-}
-
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-  position: relative;
-  margin-top: 1em;
-  margin-bottom: 16px;
-  font-weight: bold;
-  line-height: 1.4;
-}
-
-.markdown-body h1 .headeranchor,
-.markdown-body h2 .headeranchor,
-.markdown-body h3 .headeranchor,
-.markdown-body h4 .headeranchor,
-.markdown-body h5 .headeranchor,
-.markdown-body h6 .headeranchor {
-  display: none;
-  color: #000;
-  vertical-align: middle;
-}
-
-.markdown-body h1:hover .headeranchor-link,
-.markdown-body h2:hover .headeranchor-link,
-.markdown-body h3:hover .headeranchor-link,
-.markdown-body h4:hover .headeranchor-link,
-.markdown-body h5:hover .headeranchor-link,
-.markdown-body h6:hover .headeranchor-link {
-  height: 1em;
-  padding-left: 8px;
-  margin-left: -30px;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.markdown-body h1:hover .headeranchor-link .headeranchor,
-.markdown-body h2:hover .headeranchor-link .headeranchor,
-.markdown-body h3:hover .headeranchor-link .headeranchor,
-.markdown-body h4:hover .headeranchor-link .headeranchor,
-.markdown-body h5:hover .headeranchor-link .headeranchor,
-.markdown-body h6:hover .headeranchor-link .headeranchor {
-  display: inline-block;
-}
-
-.markdown-body h1 {
-  padding-bottom: 0.3em;
-  font-size: 2.25em;
-  line-height: 1.2;
-  border-bottom: 1px solid #eee;
-}
-
-.markdown-body h2 {
-  padding-bottom: 0.3em;
-  font-size: 1.75em;
-  line-height: 1.225;
-  border-bottom: 1px solid #eee;
-}
-
-.markdown-body h3 {
-  font-size: 1.5em;
-  line-height: 1.43;
-}
-
-.markdown-body h4 {
-  font-size: 1.25em;
-}
-
-.markdown-body h5 {
-  font-size: 1em;
-}
-
-.markdown-body h6 {
-  font-size: 1em;
-  color: #777;
-}
-
-.markdown-body p,
-.markdown-body blockquote,
-.markdown-body ul,
-.markdown-body ol,
-.markdown-body dl,
-.markdown-body table,
-.markdown-body pre,
-.markdown-body .admonition {
-  margin-top: 0;
-  margin-bottom: 16px;
-}
-
-.markdown-body hr {
-  height: 4px;
-  padding: 0;
-  margin: 16px 0;
-  background-color: #e7e7e7;
-  border: 0 none;
-}
-
-.markdown-body ul,
-.markdown-body ol {
-  padding-left: 2em;
-}
-
-.markdown-body ul ul,
-.markdown-body ul ol,
-.markdown-body ol ol,
-.markdown-body ol ul {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.markdown-body li>p {
-  margin-top: 16px;
-}
-
-.markdown-body dl {
-  padding: 0;
-}
-
-.markdown-body dl dt {
-  padding: 0;
-  margin-top: 16px;
-  font-size: 1em;
-  font-style: italic;
-  font-weight: bold;
-}
-
-.markdown-body dl dd {
-  padding: 0 16px;
-  margin-bottom: 16px;
-}
-
-.markdown-body blockquote {
-  padding: 0 15px;
-  color: #777;
-  border-left: 4px solid #ddd;
-}
-
-.markdown-body blockquote>:first-child {
-  margin-top: 0;
-}
-
-.markdown-body blockquote>:last-child {
-  margin-bottom: 0;
-}
-
-.markdown-body table {
-  display: block;
-  width: 100%;
-  overflow: auto;
-  word-break: normal;
-  word-break: keep-all;
-}
-
-.markdown-body table th {
-  font-weight: bold;
-}
-
-.markdown-body table th,
-.markdown-body table td {
-  padding: 6px 13px;
-  border: 1px solid #ddd;
-}
-
-.markdown-body table tr {
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-}
-
-.markdown-body table tr:nth-child(2n) {
-  background-color: #f8f8f8;
-}
-
-.markdown-body img {
-  max-width: 100%;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.markdown-body code,
-.markdown-body samp {
-  padding: 0;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  margin: 0;
-  font-size: 85%;
-  background-color: rgba(0,0,0,0.04);
-  border-radius: 3px;
-}
-
-.markdown-body code:before,
-.markdown-body code:after {
-  letter-spacing: -0.2em;
-  content: "\00a0";
-}
-
-.markdown-body pre>code {
-  padding: 0;
-  margin: 0;
-  font-size: 100%;
-  word-break: normal;
-  white-space: pre;
-  background: transparent;
-  border: 0;
-}
-
-.markdown-body .codehilite {
-  margin-bottom: 16px;
-}
-
-.markdown-body .codehilite pre,
-.markdown-body pre {
-  padding: 16px;
-  overflow: auto;
-  font-size: 85%;
-  line-height: 1.45;
-  background-color: #f7f7f7;
-  border-radius: 3px;
-}
-
-.markdown-body .codehilite pre {
-  margin-bottom: 0;
-  word-break: normal;
-}
-
-.markdown-body pre {
-  word-wrap: normal;
-}
-
-.markdown-body pre code {
-  display: inline;
-  max-width: initial;
-  padding: 0;
-  margin: 0;
-  overflow: initial;
-  line-height: inherit;
-  word-wrap: normal;
-  background-color: transparent;
-  border: 0;
-}
-
-.markdown-body pre code:before,
-.markdown-body pre code:after {
-  content: normal;
-}
-
-/* Admonition */
-.markdown-body .admonition {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  position: relative;
-  border-radius: 3px;
-  border: 1px solid #e0e0e0;
-  border-left: 6px solid #333;
-  padding: 10px 10px 10px 30px;
-}
-
-.markdown-body .admonition table {
-  color: #333;
-}
-
-.markdown-body .admonition p {
-  padding: 0;
-}
-
-.markdown-body .admonition-title {
-  font-weight: bold;
-  margin: 0;
-}
-
-.markdown-body .admonition>.admonition-title {
-  color: #333;
-}
-
-.markdown-body .attention>.admonition-title {
-  color: #a6d796;
-}
-
-.markdown-body .caution>.admonition-title {
-  color: #d7a796;
-}
-
-.markdown-body .hint>.admonition-title {
-  color: #96c6d7;
-}
-
-.markdown-body .danger>.admonition-title {
-  color: #c25f77;
-}
-
-.markdown-body .question>.admonition-title {
-  color: #96a6d7;
-}
-
-.markdown-body .note>.admonition-title {
-  color: #d7c896;
-}
-
-.markdown-body .admonition:before,
-.markdown-body .attention:before,
-.markdown-body .caution:before,
-.markdown-body .hint:before,
-.markdown-body .danger:before,
-.markdown-body .question:before,
-.markdown-body .note:before {
-  font: normal normal 16px fontawesome-mini;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  line-height: 1.5;
-  color: #333;
-  position: absolute;
-  left: 0;
-  top: 0;
-  padding-top: 10px;
-  padding-left: 10px;
-}
-
-.markdown-body .admonition:before {
-  content: "\f056\00a0";
-  color: 333;
-}
-
-.markdown-body .attention:before {
-  content: "\f058\00a0";
-  color: #a6d796;
-}
-
-.markdown-body .caution:before {
-  content: "\f06a\00a0";
-  color: #d7a796;
-}
-
-.markdown-body .hint:before {
-  content: "\f05a\00a0";
-  color: #96c6d7;
-}
-
-.markdown-body .danger:before {
-  content: "\f057\00a0";
-  color: #c25f77;
-}
-
-.markdown-body .question:before {
-  content: "\f059\00a0";
-  color: #96a6d7;
-}
-
-.markdown-body .note:before {
-  content: "\f040\00a0";
-  color: #d7c896;
-}
-
-.markdown-body .admonition::after {
-  content: normal;
-}
-
-.markdown-body .attention {
-  border-left: 6px solid #a6d796;
-}
-
-.markdown-body .caution {
-  border-left: 6px solid #d7a796;
-}
-
-.markdown-body .hint {
-  border-left: 6px solid #96c6d7;
-}
-
-.markdown-body .danger {
-  border-left: 6px solid #c25f77;
-}
-
-.markdown-body .question {
-  border-left: 6px solid #96a6d7;
-}
-
-.markdown-body .note {
-  border-left: 6px solid #d7c896;
-}
-
-.markdown-body .admonition>*:first-child {
-  margin-top: 0 !important;
-}
-
-.markdown-body .admonition>*:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* progress bar*/
-.markdown-body .progress {
-  display: block;
-  width: 300px;
-  margin: 10px 0;
-  height: 24px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  background-color: #ededed;
-  position: relative;
-  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
-}
-
-.markdown-body .progress-label {
-  position: absolute;
-  text-align: center;
-  font-weight: bold;
-  width: 100%; margin: 0;
-  line-height: 24px;
-  color: #333;
-  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
-  -webkit-font-smoothing: antialiased !important;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.markdown-body .progress-bar {
-  height: 24px;
-  float: left;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  background-color: #96c6d7;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
-  background-size: 30px 30px;
-  background-image: -webkit-linear-gradient(
-    135deg, rgba(255, 255, 255, .4) 27%,
-    transparent 27%,
-    transparent 52%, rgba(255, 255, 255, .4) 52%,
-    rgba(255, 255, 255, .4) 77%,
-    transparent 77%, transparent
-  );
-  background-image: -moz-linear-gradient(
-    135deg,
-    rgba(255, 255, 255, .4) 27%, transparent 27%,
-    transparent 52%, rgba(255, 255, 255, .4) 52%,
-    rgba(255, 255, 255, .4) 77%, transparent 77%,
-    transparent
-  );
-  background-image: -ms-linear-gradient(
-    135deg,
-    rgba(255, 255, 255, .4) 27%, transparent 27%,
-    transparent 52%, rgba(255, 255, 255, .4) 52%,
-    rgba(255, 255, 255, .4) 77%, transparent 77%,
-    transparent
-  );
-  background-image: -o-linear-gradient(
-    135deg,
-    rgba(255, 255, 255, .4) 27%, transparent 27%,
-    transparent 52%, rgba(255, 255, 255, .4) 52%,
-    rgba(255, 255, 255, .4) 77%, transparent 77%,
-    transparent
-  );
-  background-image: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, .4) 27%, transparent 27%,
-    transparent 52%, rgba(255, 255, 255, .4) 52%,
-    rgba(255, 255, 255, .4) 77%, transparent 77%,
-    transparent
-  );
-}
-
-.markdown-body .progress-100plus .progress-bar {
-  background-color: #a6d796;
-}
-
-.markdown-body .progress-80plus .progress-bar {
-  background-color: #c6d796;
-}
-
-.markdown-body .progress-60plus .progress-bar {
-  background-color: #d7c896;
-}
-
-.markdown-body .progress-40plus .progress-bar {
-  background-color: #d7a796;
-}
-
-.markdown-body .progress-20plus .progress-bar {
-  background-color: #d796a6;
-}
-
-.markdown-body .progress-0plus .progress-bar {
-  background-color: #c25f77;
-}
-
-.markdown-body .candystripe-animate .progress-bar{
-  -webkit-animation: animate-stripes 3s linear infinite;
-  -moz-animation: animate-stripes 3s linear infinite;
-  animation: animate-stripes 3s linear infinite;
-}
-
-@-webkit-keyframes animate-stripes {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 60px 0;
-  }
-}
-
-@-moz-keyframes animate-stripes {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 60px 0;
-  }
-}
-
-@keyframes animate-stripes {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 60px 0;
-  }
-}
-
-.markdown-body .gloss .progress-bar {
-  box-shadow:
-    inset 0 4px 12px rgba(255, 255, 255, .7),
-    inset 0 -12px 0 rgba(0, 0, 0, .05);
-}
-
-/* Multimarkdown Critic Blocks */
-.markdown-body .critic_mark {
-  background: #ff0;
-}
-
-.markdown-body .critic_delete {
-  color: #c82829;
-  text-decoration: line-through;
-}
-
-.markdown-body .critic_insert {
-  color: #718c00 ;
-  text-decoration: underline;
-}
-
-.markdown-body .critic_comment {
-  color: #8e908c;
-  font-style: italic;
-}
-
-.markdown-body .headeranchor {
-  font: normal normal 16px octicons-anchor;
-  line-height: 1;
-  display: inline-block;
-  text-decoration: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.headeranchor:before {
-  content: '\f05c';
-}
-
-.markdown-body .task-list-item {
-  list-style-type: none;
-}
-
-.markdown-body .task-list-item+.task-list-item {
-  margin-top: 3px;
-}
-
-.markdown-body .task-list-item input {
-  margin: 0 4px 0.25em -20px;
-  vertical-align: middle;
-}
-
-/* Media */
-@media only screen and (min-width: 480px) {
-  .markdown-body {
-    font-size:14px;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  .markdown-body {
-    font-size:16px;
-  }
-}
-
-@media print {
-  .markdown-body * {
-    background: transparent !important;
-    color: black !important;
-    filter:none !important;
-    -ms-filter: none !important;
-  }
-
-  .markdown-body {
-    font-size:12pt;
-    max-width:100%;
-    outline:none;
-    border: 0;
-  }
-
-  .markdown-body a,
-  .markdown-body a:visited {
-    text-decoration: underline;
-  }
-
-  .markdown-body .headeranchor-link {
-    display: none;
-  }
-
-  .markdown-body a[href]:after {
-    content: " (" attr(href) ")";
-  }
-
-  .markdown-body abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-
-  .markdown-body .ir a:after,
-  .markdown-body a[href^="javascript:"]:after,
-  .markdown-body a[href^="#"]:after {
-    content: "";
-  }
-
-  .markdown-body pre {
-    white-space: pre;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .markdown-body pre,
-  .markdown-body blockquote {
-    border: 1px solid #999;
-    padding-right: 1em;
-    page-break-inside: avoid;
-  }
-
-  .markdown-body .progress,
-  .markdown-body .progress-bar {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-
-  .markdown-body .progress {
-    border: 1px solid #ddd;
-  }
-
-  .markdown-body .progress-bar {
-    height: 22px;
-    border-right: 1px solid #ddd;
-  }
-
-  .markdown-body tr,
-  .markdown-body img {
-    page-break-inside: avoid;
-  }
-
-  .markdown-body img {
-    max-width: 100% !important;
-  }
-
-  .markdown-body p,
-  .markdown-body h2,
-  .markdown-body h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  .markdown-body h2,
-  .markdown-body h3 {
-    page-break-after: avoid;
-  }
-}
-</style><style>/*github*/
-.codehilite {background-color:#fff;color:#333333;}
-.codehilite .hll {background-color:#ffffcc;}
-.codehilite .c{color:#999988;font-style:italic}
-.codehilite .err{color:#a61717;background-color:#e3d2d2}
-.codehilite .k{font-weight:bold}
-.codehilite .o{font-weight:bold}
-.codehilite .cm{color:#999988;font-style:italic}
-.codehilite .cp{color:#999999;font-weight:bold}
-.codehilite .c1{color:#999988;font-style:italic}
-.codehilite .cs{color:#999999;font-weight:bold;font-style:italic}
-.codehilite .gd{color:#000000;background-color:#ffdddd}
-.codehilite .ge{font-style:italic}
-.codehilite .gr{color:#aa0000}
-.codehilite .gh{color:#999999}
-.codehilite .gi{color:#000000;background-color:#ddffdd}
-.codehilite .go{color:#888888}
-.codehilite .gp{color:#555555}
-.codehilite .gs{font-weight:bold}
-.codehilite .gu{color:#800080;font-weight:bold}
-.codehilite .gt{color:#aa0000}
-.codehilite .kc{font-weight:bold}
-.codehilite .kd{font-weight:bold}
-.codehilite .kn{font-weight:bold}
-.codehilite .kp{font-weight:bold}
-.codehilite .kr{font-weight:bold}
-.codehilite .kt{color:#445588;font-weight:bold}
-.codehilite .m{color:#009999}
-.codehilite .s{color:#dd1144}
-.codehilite .n{color:#333333}
-.codehilite .na{color:teal}
-.codehilite .nb{color:#0086b3}
-.codehilite .nc{color:#445588;font-weight:bold}
-.codehilite .no{color:teal}
-.codehilite .ni{color:purple}
-.codehilite .ne{color:#990000;font-weight:bold}
-.codehilite .nf{color:#990000;font-weight:bold}
-.codehilite .nn{color:#555555}
-.codehilite .nt{color:navy}
-.codehilite .nv{color:teal}
-.codehilite .ow{font-weight:bold}
-.codehilite .w{color:#bbbbbb}
-.codehilite .mf{color:#009999}
-.codehilite .mh{color:#009999}
-.codehilite .mi{color:#009999}
-.codehilite .mo{color:#009999}
-.codehilite .sb{color:#dd1144}
-.codehilite .sc{color:#dd1144}
-.codehilite .sd{color:#dd1144}
-.codehilite .s2{color:#dd1144}
-.codehilite .se{color:#dd1144}
-.codehilite .sh{color:#dd1144}
-.codehilite .si{color:#dd1144}
-.codehilite .sx{color:#dd1144}
-.codehilite .sr{color:#009926}
-.codehilite .s1{color:#dd1144}
-.codehilite .ss{color:#990073}
-.codehilite .bp{color:#999999}
-.codehilite .vc{color:teal}
-.codehilite .vg{color:teal}
-.codehilite .vi{color:teal}
-.codehilite .il{color:#009999}
-.codehilite .gc{color:#999;background-color:#EAF2F5}
-</style><script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
-<script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-<script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.4/sequence-diagram-min.js"></script>
-<script type="text/javascript">// flowchart, v1.3.4
-// Copyright (c)2014 Adriano Raiano (adrai).
-// Distributed under MIT license
-// http://adrai.github.io/flowchart.js
-!function(){function a(b,c){if(!b||"function"==typeof b)return c;var d={};for(var e in c)d[e]=c[e];for(e in b)b[e]&&(d[e]="object"==typeof d[e]?a(d[e],b[e]):b[e]);return d}function b(a,b){if("function"==typeof Object.create)a.super_=b,a.prototype=Object.create(b.prototype,{constructor:{value:a,enumerable:!1,writable:!0,configurable:!0}});else{a.super_=b;var c=function(){};c.prototype=b.prototype,a.prototype=new c,a.prototype.constructor=a}}function c(a,b,c){var d,e,f="M{0},{1}";for(d=2,e=2*c.length+2;e>d;d+=2)f+=" L{"+d+"},{"+(d+1)+"}";var g=[b.x,b.y];for(d=0,e=c.length;e>d;d++)g.push(c[d].x),g.push(c[d].y);var h=a.paper.path(f,g);h.attr("stroke",a.options["element-color"]),h.attr("stroke-width",a.options["line-width"]);var i=a.options.font,j=a.options["font-family"],k=a.options["font-weight"];return i&&h.attr({font:i}),j&&h.attr({"font-family":j}),k&&h.attr({"font-weight":k}),h}function d(a,b,c,d){var e,f;"[object Array]"!==Object.prototype.toString.call(c)&&(c=[c]);var g="M{0},{1}";for(e=2,f=2*c.length+2;f>e;e+=2)g+=" L{"+e+"},{"+(e+1)+"}";var h=[b.x,b.y];for(e=0,f=c.length;f>e;e++)h.push(c[e].x),h.push(c[e].y);var i=a.paper.path(g,h);i.attr({stroke:a.options["line-color"],"stroke-width":a.options["line-width"],"arrow-end":a.options["arrow-end"]});var j=a.options.font,k=a.options["font-family"],l=a.options["font-weight"];if(j&&i.attr({font:j}),k&&i.attr({"font-family":k}),l&&i.attr({"font-weight":l}),d){var m=!1,n=a.paper.text(0,0,d),o=!1,p=c[0];b.y===p.y&&(o=!0);var q=0,r=0;m?(q=b.x>p.x?b.x-(b.x-p.x)/2:p.x-(p.x-b.x)/2,r=b.y>p.y?b.y-(b.y-p.y)/2:p.y-(p.y-b.y)/2,o?(q-=n.getBBox().width/2,r-=a.options["text-margin"]):(q+=a.options["text-margin"],r-=n.getBBox().height/2)):(q=b.x,r=b.y,o?(q+=a.options["text-margin"]/2,r-=a.options["text-margin"]):(q+=a.options["text-margin"]/2,r+=a.options["text-margin"])),n.attr({"text-anchor":"start","font-size":a.options["font-size"],fill:a.options["font-color"],x:q,y:r}),j&&n.attr({font:j}),k&&n.attr({"font-family":k}),l&&n.attr({"font-weight":l})}return i}function e(a,b,c,d,e,f,g,h){var i,j,k,l,m,n={x:null,y:null,onLine1:!1,onLine2:!1};return i=(h-f)*(c-a)-(g-e)*(d-b),0===i?n:(j=b-f,k=a-e,l=(g-e)*j-(h-f)*k,m=(c-a)*j-(d-b)*k,j=l/i,k=m/i,n.x=a+j*(c-a),n.y=b+j*(d-b),j>0&&1>j&&(n.onLine1=!0),k>0&&1>k&&(n.onLine2=!0),n)}function f(a,b){b=b||{},this.paper=new Raphael(a),this.options=r.defaults(b,q),this.symbols=[],this.lines=[],this.start=null}function g(a,b,c){this.chart=a,this.group=this.chart.paper.set(),this.symbol=c,this.connectedTo=[],this.symbolType=b.symbolType,this.flowstate=b.flowstate||"future",this.next_direction=b.next&&b.direction_next?b.direction_next:void 0,this.text=this.chart.paper.text(0,0,b.text),b.key&&(this.text.node.id=b.key+"t"),this.text.node.setAttribute("class",this.getAttr("class")+"t"),this.text.attr({"text-anchor":"start",x:this.getAttr("text-margin"),fill:this.getAttr("font-color"),"font-size":this.getAttr("font-size")});var d=this.getAttr("font"),e=this.getAttr("font-family"),f=this.getAttr("font-weight");d&&this.text.attr({font:d}),e&&this.text.attr({"font-family":e}),f&&this.text.attr({"font-weight":f}),b.link&&this.text.attr("href",b.link),b.target&&this.text.attr("target",b.target);var g=this.getAttr("maxWidth");if(g){for(var h=b.text.split(" "),i="",j=0,k=h.length;k>j;j++){var l=h[j];this.text.attr("text",i+" "+l),i+=this.text.getBBox().width>g?"\n"+l:" "+l}this.text.attr("text",i.substring(1))}if(this.group.push(this.text),c){var m=this.getAttr("text-margin");c.attr({fill:this.getAttr("fill"),stroke:this.getAttr("element-color"),"stroke-width":this.getAttr("line-width"),width:this.text.getBBox().width+2*m,height:this.text.getBBox().height+2*m}),c.node.setAttribute("class",this.getAttr("class")),b.link&&c.attr("href",b.link),b.target&&c.attr("target",b.target),b.key&&(c.node.id=b.key),this.group.push(c),c.insertBefore(this.text),this.text.attr({y:c.getBBox().height/2}),this.initialize()}}function h(a,b){var c=a.paper.rect(0,0,0,0,20);b=b||{},b.text=b.text||"Start",g.call(this,a,b,c)}function i(a,b){var c=a.paper.rect(0,0,0,0,20);b=b||{},b.text=b.text||"End",g.call(this,a,b,c)}function j(a,b){var c=a.paper.rect(0,0,0,0);b=b||{},g.call(this,a,b,c)}function k(a,b){var c=a.paper.rect(0,0,0,0);b=b||{},g.call(this,a,b,c),c.attr({width:this.text.getBBox().width+4*this.getAttr("text-margin")}),this.text.attr({x:2*this.getAttr("text-margin")});var d=a.paper.rect(0,0,0,0);d.attr({x:this.getAttr("text-margin"),stroke:this.getAttr("element-color"),"stroke-width":this.getAttr("line-width"),width:this.text.getBBox().width+2*this.getAttr("text-margin"),height:this.text.getBBox().height+2*this.getAttr("text-margin"),fill:this.getAttr("fill")}),b.key&&(d.node.id=b.key+"i");var e=this.getAttr("font"),f=this.getAttr("font-family"),h=this.getAttr("font-weight");e&&d.attr({font:e}),f&&d.attr({"font-family":f}),h&&d.attr({"font-weight":h}),b.link&&d.attr("href",b.link),b.target&&d.attr("target",b.target),this.group.push(d),d.insertBefore(this.text),this.initialize()}function l(a,b){b=b||{},g.call(this,a,b),this.textMargin=this.getAttr("text-margin"),this.text.attr({x:3*this.textMargin});var d=this.text.getBBox().width+4*this.textMargin,e=this.text.getBBox().height+2*this.textMargin,f=this.textMargin,h=e/2,i={x:f,y:h},j=[{x:f-this.textMargin,y:e},{x:f-this.textMargin+d,y:e},{x:f-this.textMargin+d+2*this.textMargin,y:0},{x:f-this.textMargin+2*this.textMargin,y:0},{x:f,y:h}],k=c(a,i,j);k.attr({stroke:this.getAttr("element-color"),"stroke-width":this.getAttr("line-width"),fill:this.getAttr("fill")}),b.link&&k.attr("href",b.link),b.target&&k.attr("target",b.target),b.key&&(k.node.id=b.key),k.node.setAttribute("class",this.getAttr("class")),this.text.attr({y:k.getBBox().height/2}),this.group.push(k),k.insertBefore(this.text),this.initialize()}function m(a,b){b=b||{},g.call(this,a,b),this.textMargin=this.getAttr("text-margin"),this.yes_direction="bottom",this.no_direction="right",b.yes&&b.direction_yes&&b.no&&!b.direction_no?"right"===b.direction_yes?(this.no_direction="bottom",this.yes_direction="right"):(this.no_direction="right",this.yes_direction="bottom"):b.yes&&!b.direction_yes&&b.no&&b.direction_no?"right"===b.direction_no?(this.yes_direction="bottom",this.no_direction="right"):(this.yes_direction="right",this.no_direction="bottom"):(this.yes_direction="bottom",this.no_direction="right"),this.yes_direction=this.yes_direction||"bottom",this.no_direction=this.no_direction||"right",this.text.attr({x:2*this.textMargin});var d=this.text.getBBox().width+3*this.textMargin;d+=d/2;var e=this.text.getBBox().height+2*this.textMargin;e+=e/2,e=Math.max(.5*d,e);var f=d/4,h=e/4;this.text.attr({x:f+this.textMargin/2});var i={x:f,y:h},j=[{x:f-d/4,y:h+e/4},{x:f-d/4+d/2,y:h+e/4+e/2},{x:f-d/4+d,y:h+e/4},{x:f-d/4+d/2,y:h+e/4-e/2},{x:f-d/4,y:h+e/4}],k=c(a,i,j);k.attr({stroke:this.getAttr("element-color"),"stroke-width":this.getAttr("line-width"),fill:this.getAttr("fill")}),b.link&&k.attr("href",b.link),b.target&&k.attr("target",b.target),b.key&&(k.node.id=b.key),k.node.setAttribute("class",this.getAttr("class")),this.text.attr({y:k.getBBox().height/2}),this.group.push(k),k.insertBefore(this.text),this.initialize()}function n(a){function b(a){var b=a.indexOf("(")+1,c=a.indexOf(")");return b>=0&&c>=0?d.symbols[a.substring(0,b-1)]:d.symbols[a]}function c(a){var b="next",c=a.indexOf("(")+1,d=a.indexOf(")");return c>=0&&d>=0&&(b=D.substring(c,d),b.indexOf(",")<0&&"yes"!==b&&"no"!==b&&(b="next, "+b)),b}a=a||"",a=a.trim();for(var d={symbols:{},start:null,drawSVG:function(a,b){function c(a){if(g[a.key])return g[a.key];switch(a.symbolType){case"start":g[a.key]=new h(e,a);break;case"end":g[a.key]=new i(e,a);break;case"operation":g[a.key]=new j(e,a);break;case"inputoutput":g[a.key]=new l(e,a);break;case"subroutine":g[a.key]=new k(e,a);break;case"condition":g[a.key]=new m(e,a);break;default:return new Error("Wrong symbol type!")}return g[a.key]}var d=this;this.diagram&&this.diagram.clean();var e=new f(a,b);this.diagram=e;var g={};!function n(a,b,f){var g=c(a);return d.start===a?e.startWith(g):b&&f&&!b.pathOk&&(b instanceof m?(f.yes===a&&b.yes(g),f.no===a&&b.no(g)):b.then(g)),g.pathOk?g:(g instanceof m?(a.yes&&n(a.yes,g,a),a.no&&n(a.no,g,a)):a.next&&n(a.next,g,a),g)}(this.start),e.render()},clean:function(){this.diagram.clean()}},e=[],g=0,n=1,o=a.length;o>n;n++)if("\n"===a[n]&&"\\"!==a[n-1]){var p=a.substring(g,n);g=n+1,e.push(p.replace(/\\\n/g,"\n"))}g<a.length&&e.push(a.substr(g));for(var q=1,r=e.length;r>q;){var s=e[q];s.indexOf(": ")<0&&s.indexOf("(")<0&&s.indexOf(")")<0&&s.indexOf("->")<0&&s.indexOf("=>")<0?(e[q-1]+="\n"+s,e.splice(q,1),r--):q++}for(;e.length>0;){var t=e.splice(0,1)[0];if(t.indexOf("=>")>=0){var u,v=t.split("=>"),w={key:v[0],symbolType:v[1],text:null,link:null,target:null,flowstate:null};if(w.symbolType.indexOf(": ")>=0&&(u=w.symbolType.split(": "),w.symbolType=u[0],w.text=u[1]),w.text&&w.text.indexOf(":>")>=0?(u=w.text.split(":>"),w.text=u[0],w.link=u[1]):w.symbolType.indexOf(":>")>=0&&(u=w.symbolType.split(":>"),w.symbolType=u[0],w.link=u[1]),w.symbolType.indexOf("\n")>=0&&(w.symbolType=w.symbolType.split("\n")[0]),w.link){var x=w.link.indexOf("[")+1,y=w.link.indexOf("]");x>=0&&y>=0&&(w.target=w.link.substring(x,y),w.link=w.link.substring(0,x-1))}if(w.text&&w.text.indexOf("|")>=0){var z=w.text.split("|");w.text=z[0],w.flowstate=z[1].trim()}d.symbols[w.key]=w}else if(t.indexOf("->")>=0)for(var A=t.split("->"),B=0,C=A.length;C>B;B++){var D=A[B],E=b(D),F=c(D),G=null;if(F.indexOf(",")>=0){var H=F.split(",");F=H[0],G=H[1].trim()}if(d.start||(d.start=E),C>B+1){var I=A[B+1];E[F]=b(I),E["direction_"+F]=G,G=null}}}return d}Array.prototype.indexOf||(Array.prototype.indexOf=function(a){"use strict";if(null===this)throw new TypeError;var b=Object(this),c=b.length>>>0;if(0===c)return-1;var d=0;if(arguments.length>0&&(d=Number(arguments[1]),d!=d?d=0:0!==d&&1/0!=d&&d!=-1/0&&(d=(d>0||-1)*Math.floor(Math.abs(d)))),d>=c)return-1;for(var e=d>=0?d:Math.max(c-Math.abs(d),0);c>e;e++)if(e in b&&b[e]===a)return e;return-1}),Array.prototype.lastIndexOf||(Array.prototype.lastIndexOf=function(a){"use strict";if(null===this)throw new TypeError;var b=Object(this),c=b.length>>>0;if(0===c)return-1;var d=c;arguments.length>1&&(d=Number(arguments[1]),d!=d?d=0:0!==d&&d!=1/0&&d!=-(1/0)&&(d=(d>0||-1)*Math.floor(Math.abs(d))));for(var e=d>=0?Math.min(d,c-1):c-Math.abs(d);e>=0;e--)if(e in b&&b[e]===a)return e;return-1}),String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")});var o=this,p={};"undefined"!=typeof module&&module.exports?module.exports=p:o.flowchart=o.flowchart||p;var q={x:0,y:0,"line-width":3,"line-length":50,"text-margin":10,"font-size":14,"font-color":"black","line-color":"black","element-color":"black",fill:"white","yes-text":"yes","no-text":"no","arrow-end":"block","class":"flowchart",symbols:{start:{},end:{},condition:{},inputoutput:{},operation:{},subroutine:{}}},r={defaults:a,inherits:b};f.prototype.handle=function(a){this.symbols.indexOf(a)<=-1&&this.symbols.push(a);var b=this;return a instanceof m?(a.yes=function(c){return a.yes_symbol=c,a.no_symbol&&(a.pathOk=!0),b.handle(c)},a.no=function(c){return a.no_symbol=c,a.yes_symbol&&(a.pathOk=!0),b.handle(c)}):a.then=function(c){return a.next=c,a.pathOk=!0,b.handle(c)},a},f.prototype.startWith=function(a){return this.start=a,this.handle(a)},f.prototype.render=function(){var a,b=0,c=0,d=0,e=0,f=0,g=0;for(d=0,e=this.symbols.length;e>d;d++)a=this.symbols[d],a.width>b&&(b=a.width),a.height>c&&(c=a.height);for(d=0,e=this.symbols.length;e>d;d++)a=this.symbols[d],a.shiftX(this.options.x+(b-a.width)/2+this.options["line-width"]),a.shiftY(this.options.y+(c-a.height)/2+this.options["line-width"]);for(this.start.render(),d=0,e=this.symbols.length;e>d;d++)a=this.symbols[d],a.renderLines();for(f=this.maxXFromLine,d=0,e=this.symbols.length;e>d;d++){a=this.symbols[d];var h=a.getX()+a.width,i=a.getY()+a.height;h>f&&(f=h),i>g&&(g=i)}this.paper.setSize(f+this.options["line-width"],g+this.options["line-width"])},f.prototype.clean=function(){if(this.paper){var a=this.paper.canvas;a.parentNode.removeChild(a)}},g.prototype.getAttr=function(a){if(!this.chart)return void 0;var b,c=this.chart.options?this.chart.options[a]:void 0,d=this.chart.options.symbols?this.chart.options.symbols[this.symbolType][a]:void 0;return this.chart.options.flowstate&&this.chart.options.flowstate[this.flowstate]&&(b=this.chart.options.flowstate[this.flowstate][a]),b||d||c},g.prototype.initialize=function(){this.group.transform("t"+this.getAttr("line-width")+","+this.getAttr("line-width")),this.width=this.group.getBBox().width,this.height=this.group.getBBox().height},g.prototype.getCenter=function(){return{x:this.getX()+this.width/2,y:this.getY()+this.height/2}},g.prototype.getX=function(){return this.group.getBBox().x},g.prototype.getY=function(){return this.group.getBBox().y},g.prototype.shiftX=function(a){this.group.transform("t"+(this.getX()+a)+","+this.getY())},g.prototype.setX=function(a){this.group.transform("t"+a+","+this.getY())},g.prototype.shiftY=function(a){this.group.transform("t"+this.getX()+","+(this.getY()+a))},g.prototype.setY=function(a){this.group.transform("t"+this.getX()+","+a)},g.prototype.getTop=function(){var a=this.getY(),b=this.getX()+this.width/2;return{x:b,y:a}},g.prototype.getBottom=function(){var a=this.getY()+this.height,b=this.getX()+this.width/2;return{x:b,y:a}},g.prototype.getLeft=function(){var a=this.getY()+this.group.getBBox().height/2,b=this.getX();return{x:b,y:a}},g.prototype.getRight=function(){var a=this.getY()+this.group.getBBox().height/2,b=this.getX()+this.group.getBBox().width;return{x:b,y:a}},g.prototype.render=function(){if(this.next){var a=this.getAttr("line-length");if("right"===this.next_direction){var b=this.getRight();if(this.next.getLeft(),!this.next.isPositioned){this.next.setY(b.y-this.next.height/2),this.next.shiftX(this.group.getBBox().x+this.width+a);var c=this;!function e(){for(var b,d=!1,f=0,g=c.chart.symbols.length;g>f;f++){b=c.chart.symbols[f];var h=Math.abs(b.getCenter().x-c.next.getCenter().x);if(b.getCenter().y>c.next.getCenter().y&&h<=c.next.width/2){d=!0;break}}d&&(c.next.setX(b.getX()+b.width+a),e())}(),this.next.isPositioned=!0,this.next.render()}}else{var d=this.getBottom();this.next.getTop(),this.next.isPositioned||(this.next.shiftY(this.getY()+this.height+a),this.next.setX(d.x-this.next.width/2),this.next.isPositioned=!0,this.next.render())}}},g.prototype.renderLines=function(){this.next&&(this.next_direction?this.drawLineTo(this.next,"",this.next_direction):this.drawLineTo(this.next))},g.prototype.drawLineTo=function(a,b,c){this.connectedTo.indexOf(a)<0&&this.connectedTo.push(a);var f,g=this.getCenter().x,h=this.getCenter().y,i=(this.getTop(),this.getRight()),j=this.getBottom(),k=this.getLeft(),l=a.getCenter().x,m=a.getCenter().y,n=a.getTop(),o=a.getRight(),p=(a.getBottom(),a.getLeft()),q=g===l,r=h===m,s=m>h,t=h>m,u=g>l,v=l>g,w=0,x=this.getAttr("line-length"),y=this.getAttr("line-width");if(c&&"bottom"!==c||!q||!s)if(c&&"right"!==c||!r||!v)if(c&&"left"!==c||!r||!u)if(c&&"right"!==c||!q||!t)if(c&&"right"!==c||!q||!s)if(c&&"bottom"!==c||!u)if(c&&"bottom"!==c||!v)if(c&&"right"===c&&u)f=d(this.chart,i,[{x:i.x+x/2,y:i.y},{x:i.x+x/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.rightStart=!0,a.topEnd=!0,w=i.x+x/2;else if(c&&"right"===c&&v)f=d(this.chart,i,[{x:n.x,y:i.y},{x:n.x,y:n.y}],b),this.rightStart=!0,a.topEnd=!0,w=i.x+x/2;else if(c&&"bottom"===c&&q&&t)f=d(this.chart,j,[{x:j.x,y:j.y+x/2},{x:i.x+x/2,y:j.y+x/2},{x:i.x+x/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.bottomStart=!0,a.topEnd=!0,w=j.x+x/2;else if("left"===c&&q&&t){var z=k.x-x/2;p.x<k.x&&(z=p.x-x/2),f=d(this.chart,k,[{x:z,y:k.y},{x:z,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.leftStart=!0,a.topEnd=!0,w=k.x}else"left"===c&&(f=d(this.chart,k,[{x:n.x+(k.x-n.x)/2,y:k.y},{x:n.x+(k.x-n.x)/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.leftStart=!0,a.topEnd=!0,w=k.x);else f=d(this.chart,j,[{x:j.x,y:j.y+x/2},{x:j.x+(j.x-n.x)/2,y:j.y+x/2},{x:j.x+(j.x-n.x)/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.bottomStart=!0,a.topEnd=!0,w=j.x+(j.x-n.x)/2;else f=this.leftEnd&&t?d(this.chart,j,[{x:j.x,y:j.y+x/2},{x:j.x+(j.x-n.x)/2,y:j.y+x/2},{x:j.x+(j.x-n.x)/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b):d(this.chart,j,[{x:j.x,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.bottomStart=!0,a.topEnd=!0,w=j.x+(j.x-n.x)/2;else f=d(this.chart,i,[{x:i.x+x/2,y:i.y},{x:i.x+x/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.rightStart=!0,a.topEnd=!0,w=i.x+x/2;else f=d(this.chart,i,[{x:i.x+x/2,y:i.y},{x:i.x+x/2,y:n.y-x/2},{x:n.x,y:n.y-x/2},{x:n.x,y:n.y}],b),this.rightStart=!0,a.topEnd=!0,w=i.x+x/2;else f=d(this.chart,k,o,b),this.leftStart=!0,a.rightEnd=!0,w=o.x;else f=d(this.chart,i,p,b),this.rightStart=!0,a.leftEnd=!0,w=p.x;else f=d(this.chart,j,n,b),this.bottomStart=!0,a.topEnd=!0,w=j.x;if(f){for(var A=0,B=this.chart.lines.length;B>A;A++)for(var C,D=this.chart.lines[A],E=D.attr("path"),F=f.attr("path"),G=0,H=E.length-1;H>G;G++){var I=[];I.push(["M",E[G][1],E[G][2]]),I.push(["L",E[G+1][1],E[G+1][2]]);for(var J=I[0][1],K=I[0][2],L=I[1][1],M=I[1][2],N=0,O=F.length-1;O>N;N++){var P=[];P.push(["M",F[N][1],F[N][2]]),P.push(["L",F[N+1][1],F[N+1][2]]);var Q=P[0][1],R=P[0][2],S=P[1][1],T=P[1][2],U=e(J,K,L,M,Q,R,S,T);if(U.onLine1&&U.onLine2){var V;R===T?Q>S?(V=["L",U.x+2*y,R],F.splice(N+1,0,V),V=["C",U.x+2*y,R,U.x,R-4*y,U.x-2*y,R],F.splice(N+2,0,V),f.attr("path",F)):(V=["L",U.x-2*y,R],F.splice(N+1,0,V),V=["C",U.x-2*y,R,U.x,R-4*y,U.x+2*y,R],F.splice(N+2,0,V),f.attr("path",F)):R>T?(V=["L",Q,U.y+2*y],F.splice(N+1,0,V),V=["C",Q,U.y+2*y,Q+4*y,U.y,Q,U.y-2*y],F.splice(N+2,0,V),f.attr("path",F)):(V=["L",Q,U.y-2*y],F.splice(N+1,0,V),V=["C",Q,U.y-2*y,Q+4*y,U.y,Q,U.y+2*y],F.splice(N+2,0,V),f.attr("path",F)),N+=2,C+=2}}}this.chart.lines.push(f)}(!this.chart.maxXFromLine||this.chart.maxXFromLine&&w>this.chart.maxXFromLine)&&(this.chart.maxXFromLine=w)},r.inherits(h,g),r.inherits(i,g),r.inherits(j,g),r.inherits(k,g),r.inherits(l,g),l.prototype.getLeft=function(){var a=this.getY()+this.group.getBBox().height/2,b=this.getX()+this.textMargin;return{x:b,y:a}},l.prototype.getRight=function(){var a=this.getY()+this.group.getBBox().height/2,b=this.getX()+this.group.getBBox().width-this.textMargin;return{x:b,y:a}},r.inherits(m,g),m.prototype.render=function(){this.yes_direction&&(this[this.yes_direction+"_symbol"]=this.yes_symbol),this.no_direction&&(this[this.no_direction+"_symbol"]=this.no_symbol);var a=this.getAttr("line-length");if(this.bottom_symbol){var b=this.getBottom();this.bottom_symbol.getTop(),this.bottom_symbol.isPositioned||(this.bottom_symbol.shiftY(this.getY()+this.height+a),this.bottom_symbol.setX(b.x-this.bottom_symbol.width/2),this.bottom_symbol.isPositioned=!0,this.bottom_symbol.render())}if(this.right_symbol){var c=this.getRight();if(this.right_symbol.getLeft(),!this.right_symbol.isPositioned){this.right_symbol.setY(c.y-this.right_symbol.height/2),this.right_symbol.shiftX(this.group.getBBox().x+this.width+a);var d=this;!function e(){for(var b,c=!1,f=0,g=d.chart.symbols.length;g>f;f++){b=d.chart.symbols[f];var h=Math.abs(b.getCenter().x-d.right_symbol.getCenter().x);if(b.getCenter().y>d.right_symbol.getCenter().y&&h<=d.right_symbol.width/2){c=!0;break}}c&&(d.right_symbol.setX(b.getX()+b.width+a),e())}(),this.right_symbol.isPositioned=!0,this.right_symbol.render()}}},m.prototype.renderLines=function(){this.yes_symbol&&this.drawLineTo(this.yes_symbol,this.getAttr("yes-text"),this.yes_direction),this.no_symbol&&this.drawLineTo(this.no_symbol,this.getAttr("no-text"),this.no_direction)},p.parse=n}();
-</script>
-<script type="text/javascript">
-(function (win, doc) {
-  function onReady(fn) {
-    if (doc.addEventListener) {
-      doc.addEventListener('DOMContentLoaded', fn);
-    } else {
-      doc.attachEvent('onreadystatechange', function() {
-        if (doc.readyState === 'interactive')
-          fn();
-      });
-    }
-  }
-
-  win.convertUML = function(className, converter, settings) {
-    var charts = doc.querySelectorAll("pre." + className),
-        arr = [],
-        i, j, maxItem, diagaram, text, curNode;
-
-    // Is there a settings object?
-    if (settings === void 0) {
-        settings = {};
-    }
-
-    // Make sure we are dealing with an array
-    for(i = 0, maxItem = charts.length; i < maxItem; i++) arr.push(charts[i])
-
-    // Find the UML source element and get the text
-    for (i = 0, maxItem = arr.length; i < maxItem; i++) {
-        childEl = arr[i].firstChild;
-        parentEl = childEl.parentNode;
-        text = "";
-        for (j = 0; j < childEl.childNodes.length; j++) {
-            curNode = childEl.childNodes[j];
-            whitespace = /^\s*$/;
-            if (curNode.nodeName === "#text" && !(whitespace.test(curNode.nodeValue))) {
-                text = curNode.nodeValue;
-                break;
-            }
-        }
-
-        // Do UML conversion and replace source
-        el = doc.createElement('div');
-        el.className = className;
-        parentEl.parentNode.insertBefore(el, parentEl);
-        parentEl.parentNode.removeChild(parentEl);
-        diagram = converter.parse(text);
-        diagram.drawSVG(el, settings);
-    }
-  }
-
-  onReady(function(){convertUML('uml-flowchart', flowchart);});
-  onReady(function(){convertUML('uml-sequence-diagram', Diagram, {theme: 'simple'});});
-})(window, document)
-</script>
-<title>JVM对象探秘</title></head><body><article class="markdown-body"><hr>
-<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象的创建</h2>
-<h3 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象创建过程</h3>
-<p>在语言层面上，创建对象（例如克隆，反序列化）通常仅仅是一个new关键字而已，而在虚拟机中，对象（本文讨论仅限普通java对象，不包括数组和Class对象等）的创建是一个怎样的过程呢？<br>
-1. 虚拟机遇到new指令时，首先检查指令的参数是否在常量池中定位到一个类的符号引用，并检查该符号引用代表的类是否已被加载、解析和初始化过。若有则进入下一步，否则必须执行相应的类加载过程。<br>
-2. 在类加载检查通过后，为对象分配内存，内存所需大小在类加载完成后便可确定。<br>
-3. 将分配到的内存空间初始化为零值（不包括对象头）。<br>
-4. 对对象进行必要的都设置（如对象头信息）————对JVM来说对象创建完成。<br>
-5. 执行对象的init方法对字段进行初始化————产生一个真正可以的对象。</p>
-<h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>内存分配原则</h3>
-<ul>
-<li>内存分配方法<ol>
-<li>指针碰撞: 若Java堆中内存是绝对规整的，所有用过的内存放在一遍，空闲的内存放在另一边，中间放着一个指针作为分界点的指示器，那所分配内存就仅仅是把那个指针指向空闲空间那边挪动一段与对象大小相等的距离。</li>
-<li>空闲列表: 若Java堆中的内存并不是规整的，已使用的内存和空闲的内存相互交错，那就没办法简单地进行指针碰撞了，虚拟机就必须维护一个列表，记录上哪些内存块是可用的，在分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的记录。</li>
-</ol>
-</li>
-<li>分配原则：选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定。Serial、ParNew等带Compact过程的收集器采用指针碰撞；CMS这种基于Mark-Sweep算法的收集器采用空闲列表。</li>
-</ul>
-<h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>保证内存分配线程安全</h3>
-<p>对象的创建非常频繁，所以分配内存时改变指针的位置不是线程安全的。<br>
-- 解决方案一: 对分配内存的动作进行同步&mdash;实际上虚拟机采用的CAS算法保证原子性<br>
-- 解决方案二: 把内存分配的动作划分到不同的空间进行，即每个线程在java堆预先分配一小块内存，称为本地线程分配缓冲(Thread Local Allocation Buffer ,TLAB)。每个线程在自己的TLAB上分配内存，当TLAB用完并分配新的TLAB时，才需要同步锁定。是否使用TLAB，通过-XX:+/-UseTLAB参数来设定。</p>
-<h2 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象的内存布局</h2>
-<p>对象内存布局分为3快区域: 对象头、实例数据、对齐填充。</p>
-<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象头(主要包括两部分)</h3>
-<ul>
-<li>运行时数据(哈希码、GC分代年龄、所状态标志、线程持有的锁、偏向线程ID、偏向时间戳)</li>
-<li>类型指针&mdash;即对象指向它的类元数据的指针</li>
-<li>若是数组，还有一块内存记录数组的长度</li>
-</ul>
-<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>实例数据</h3>
-<p>存储代码中所定义的各种类型的字段内容(包括继承父类的)。存储顺序受到虚拟机分配策略参数(FieldsAllocationStyle)和代码中定义顺序的影响。默认策略为：longs/doubles、ints、shorts/chars、bytes/booleans、oops。</p>
-<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对齐填充</h3>
-<p>并不是必然存在的，仅仅起占位符的作用，HotSpotVM要求对象起始地址必须是8字节的整数倍，所以当实例数据部分没有对齐时，需要通过对齐填充来补全。</p>
-<h2 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象的的访问定位</h2>
-<h3 id="_10"><a name="user-content-_10" href="#_10" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>句柄访问</h3>
-<p>Java堆将会划出一块内存作为句柄池,reference中存储的就是对象的句柄地址,而句柄中包含了对象实例数据与类型数据各自的地址信息，如图: <img alt="句柄访问" src="http://oqwn6kueb.bkt.clouddn.com/blog/171030/BagCA3i8m5.jpg?imageslim"><br>
-<strong>优势: </strong>存储的是稳定的句柄地址,在对象被移动时只会改变句柄中的实例数据指针,reference本身不需要修改。</p>
-<h3 id="hotspot"><a name="user-content-hotspot" href="#hotspot" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>直接指针访问(HotSpot使用次方式)</h3>
-<p>reference中存储的直接就是对象地址，如图：<img alt="直接指针访问" src="http://oqwn6kueb.bkt.clouddn.com/blog/171030/C3EfJaLh3l.jpg?imageslim"><br>
-<strong>优势: </strong>访问速度快,节省了一次指针定位的时间开销。</p></article></body></html>]]></content>
-    
-    <summary type="html">
-    
-      &lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;date&quot; content=&quot;2017-09-16&quot;&gt;
-&lt;meta name=&quot;comments&quot; content=&quot;false&quot;&gt;
-&lt;meta name=&quot;
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>MySQL高级知识点总结</title>
@@ -1643,6 +438,72 @@ body .markdown-body
   </entry>
   
   <entry>
+    <title>类加载机制</title>
+    <link href="http://www.joahcy.com/JVM/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"/>
+    <id>http://www.joahcy.com/JVM/类的加载机制/</id>
+    <published>2017-09-19T16:00:00.000Z</published>
+    <updated>2017-10-31T08:21:43.341Z</updated>
+    
+    <content type="html"><![CDATA[<p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转化解析和初始化，最终形成可以被虚拟机直接使用的java类型，这就是虚拟机的类加载机制。</p>
+<h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>类从加载到卸载整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载等7个阶段，其中验证、准备、解析统称为连接。如图:<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171031/1fjBh3cDib.jpg?imageslim" alt="类的生命周期"><br>什么情况下需要开始类加载过程的第一个阶段:”加载”。虚拟机规范中并没强行约束，这点可以交给虚拟机的的具体实现自由把握，但是对于初始化阶段虚拟机规范是严格规定了如下几种情况，如果类未初始化会对类进行初始化。 </p>
+<ul>
+<li>创建类的实例  </li>
+<li>访问类的静态变量  </li>
+<li>访问类的静态方法  </li>
+<li>反射调用  </li>
+<li>当初始化一个类时，发现其父类还未初始化，则先触发父类的初始化  </li>
+<li>虚拟机启动时，定义了main()方法的那个类先初始化<br>以上情况称为称对一个类进行“主动引用”，除此种之外，均不会触发类的初始化，称为“被动引用”<br>接口的加载过程与类的加载过程稍有不同。接口中不能使用static{}块。当一个接口在初始化时，并不要求其父接口全部都完成了初始化，只有真正在使用到父接口时（例如引用接口中定义的常量）才会初始化。</li>
+</ul>
+<h2 id="被动引用例子"><a href="#被动引用例子" class="headerlink" title="被动引用例子"></a>被动引用例子</h2><ul>
+<li>子类调用父类的静态变量，子类不会被初始化。只有父类被初始化。对于静态字段，只有直接定义这个字段的类才会被初始化.</li>
+<li>通过数组定义来引用类，不会触发类的初始化<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SuperClass</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.out.println(<span class="string">"superclass init"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">123</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SubClass</span> <span class="keyword">extends</span> <span class="title">SuperClass</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.out.println(<span class="string">"subclass init"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		System.out.println(SubClass.value);<span class="comment">// 被动应用1,子类调用父类的静态变量</span></div><div class="line">		SubClass[] sca = <span class="keyword">new</span> SubClass[<span class="number">10</span>];<span class="comment">// 被动引用2,数组定义来引用类</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>程序运行输出    superclass init<br>                            123<br>从上面的输入结果证明了被动引用1与被动引用2</p>
+<ul>
+<li>访问类的常量，不会初始化类<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConstClass</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.out.println(<span class="string">"ConstClass init"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String HELLOWORLD = <span class="string">"hello world"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		System.out.println(ConstClass.HELLOWORLD);<span class="comment">// 被动引用3,调用类常量</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>程序输出结果 <code>hello world</code><br>从上面的输出结果证明了被动引用3</p>
+<h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><p>详解加载、验证、准备、解析和初始化这5个阶段所执行的具体动作。</p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p> “加载”(Loading)阶段是“类加载”(Class Loading)过程的第一个阶段，在此阶段，虚拟机需要完成以下三件事情：<br>1、通过一个类的全限定名来获取定义此类的二进制字节流。<br>2、将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<br>3、在Java堆中生成一个代表这个类的java.lang.Class对象，作为方法区这些数据的访问入口。</p>
+<p>加载阶段即可以使用系统提供的类加载器在完成,也可以由用户自定义的类加载器来完成。加载阶段与连接阶段的部分内容(如一部分字节码文件格式验证动作)是交叉进行的，加载阶段尚未完成，连接阶段可能已经开始。</p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>验证是连接阶段的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。不同的虚拟机，对类验证的实现可能有所不同，但大致都会完成下面四个阶段的验证：文件格式验证、元数据验证、字节码验证和符号引用验证。  </p>
+<ul>
+<li>文件格式验证: 是要验证字节流是否符合Class文件格式的规范，并且能被当前版本的虚拟机处理。如验证魔数是否0xCAFEBABE；主、次版本号是否正在当前虚拟机处理范围之内；常量池的常量中是否有不被支持的常量类型；指向常量的索引值是否指向不存在的常量或不符合类型的常量等等…该验证阶段的主要目的是保证输入的字节流能正确地解析并存储于方法区中，经过这个阶段的验证后，字节流才会进入内存的方法区中存储，所以后面的三个验证阶段都是基于方法区的存储结构进行的。</li>
+<li>元数据验证: 是对字节码描述的信息进行语义分析，以保证其描述的信息符合Java语言规范的要求。可能包括的验证如：这个类是否有父类；这个类的父类是否继承了不允许被继承的类；如果这个类不是抽象类，是否实现了其父类或接口中要求实现的所有方法…</li>
+<li>字节码验证: 主要工作是进行数据流和控制流分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的行为。如果一个类方法体的<br>字节码没有通过字节码验证，那肯定是有问题的；但如果一个方法体通过了字节码验证，也不能说明其一定就是安全的。应为因为存在“停机<br>问题”，通俗来讲，就是通过程序去校验程序逻辑是无法做到绝对准确的。由于数据校验的高复杂性，在JDK1.6之后给方法体的Code属性加入<br>了名为“StackMapTable”的属性，可以将字节码的推导准变为类型检查从而节省时间。jdk1.6可以通过设置参数关闭优化或在类型校验失败时退回到类型推导，而jdk1.7不允许退回。</li>
+<li>符号引用验证: 发生在虚拟机将符号引用转化为直接引用的时候，这个转化动作将在“解析阶段”中发生。验证符号引用中通过字符串描述的权限定名是否能找到对应的类；在指定类中是否存在符合方法字段的描述符及简单名称所描述的方法和字段；符号引用中的类、字段和方法的访问性(private、protected、public、default)是否可被当前类访问等等…<br>验证阶段对于虚拟机的类加载机制来说，不一定是必要的阶段。如果所运行的全部代码确认是安全的，可以使用-Xverify：none参数来关闭<br>大部分的类验证措施，以缩短虚拟机类加载时间。</li>
+</ul>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段是为类的静态变量分配内存并将其初始化为默认值，这些内存都将在方法区中进行分配。准备阶段不分配类中的实例变量的内存，实例变量将会在对象实例化时随着对象一起分配在Java堆中。<br>public static int value=123;//在准备阶段value初始值为0 。在初始化阶段才会变为123。<br>public static final int value=123; //编译时将会为value生成ConstantValue属性，准备阶段进行初始化为123。</p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程。<br>符号引用（Symbolic Reference）：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位<br>到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到内存中。</p>
+<p>直接引用（Direct Reference）：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟<br>机实现的内存布局相关的，如果有了直接引用，那么引用的目标必定已经在内存中存在。</p>
+<p>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>类初始化是类加载过程的最后一步，前面的类加载过程，除了在加载阶段用户应用程序可以通过自定义类加载器参与之外，其余动作完全由虚拟机主导和控制。到了初始化阶段，才真正开始执行类中定义的Java程序代码。</p>
+<ul>
+<li>初始化阶段是执行类构造器<code>&lt;clinit&gt;()</code>方法的过程。<code>&lt;clinit&gt;()</code>方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块(static{}块)中的语句合并产生的.收集顺序有源文件的程序顺序决定,静态语句块只能访问到它之前的变量,之后的变量只能赋值不能访问.</li>
+<li><code>&lt;clinti&gt;()</code>不需要显示调用父类构造器，虚拟机会保证在子类的<code>&lt;clinit&gt;()</code>执行之前，父类的<code>&lt;clinit&gt;()</code>已执行完毕，也就意味着父类的静态语句块优先于子类的执行。</li>
+<li><code>&lt;clinti&gt;()</code>对于类或接口不是必须的，如果类中没有静态块或赋值语句，就不会产生<code>&lt;clinti&gt;()</code>。</li>
+<li>接口也会产生<code>&lt;clinti&gt;()</code>方法。只有当使用父接口的变量时才会初始化父接口，另外接口的实现类初始化时也不会执行接口的<code>&lt;clinti&gt;()</code>方法。</li>
+<li><code>&lt;clinti&gt;()</code>是虚拟机保证线程安全的。</li>
+</ul>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><h3 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转化解析和初始化，最终形成可以被虚拟机直接使用的java类型，这就是虚拟机的类加载机制。&lt;/p&gt;
+&lt;h2 id=&quot;类加载的时机&quot;&gt;&lt;a href=&quot;#类加载的时机&quot; class=&quot;headerlink&quot; ti
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://www.joahcy.com/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://www.joahcy.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>JVM--运行时数据区域</title>
     <link href="http://www.joahcy.com/JVM/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/"/>
     <id>http://www.joahcy.com/JVM/JVM运行时数据区/</id>
@@ -1991,9 +852,9 @@ body .markdown-body
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
-    
       <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
+      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
     
   </entry>
   
@@ -2142,11 +1003,11 @@ body .markdown-body
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="hadoop" scheme="http://www.joahcy.com/tags/hadoop/"/>
     
       <category term="cluster" scheme="http://www.joahcy.com/tags/cluster/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -2549,6 +1410,126 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>nginx反向代理配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:01.262Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
+<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>linux配置多IP</title>
+    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
+    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:08.069Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
+<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
+<li>3.重启虚拟机</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
+&lt;li&gt;3.重启虚拟机&lt;/li&gt;
+&lt;/u
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux下的Nginx安装</title>
+    <link href="http://www.joahcy.com/Nginx/nginx_install_on_linux/"/>
+    <id>http://www.joahcy.com/Nginx/nginx_install_on_linux/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:13.213Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
+<li><p>PCRE<br>  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。<br>  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>  <code>yum install -y pcre pcre-devel</code><br>  <strong><em>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</em></strong></p>
+</li>
+<li><p>zlib<br>  zlib库提供了很多种压缩和解压缩的方式,nginx使用zlib对http包的内容进行gzip,所以需要在linux上安装zlib库。<br>  <code>yum install -y zlib zlib-devel</code></p>
+</li>
+<li>openssl<br>  OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>  nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>  <code>yum install -y openssl openssl-devel</code></li>
+</ul>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>将nginx-1.8.0.tar.gz拷贝至linux服务器。<br>解压：<br><code>tar -zxvf nginx-1.8.0.tar.gz
+cd nginx-1.8.0</code></p>
+<ul>
+<li>configure配置<br>  ./configure –help查询详细参数（参考本教程附录部分：nginx编译参数）<br>  参数设置如下：<br>  <code>./configure \
+  --prefix=/usr/local/nginx \
+  --pid-path=/var/run/nginx/nginx.pid \
+  --lock-path=/var/lock/nginx.lock \
+  --error-log-path=/var/log/nginx/error.log \
+  --http-log-path=/var/log/nginx/access.log \
+  --with-http_gzip_static_module \
+  --http-client-body-temp-path=/var/temp/nginx/client \
+  --http-proxy-temp-path=/var/temp/nginx/proxy \
+  --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+  --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+  --http-scgi-temp-path=/var/temp/nginx/scgi</code><br>  <strong><em>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录</em></strong></li>
+<li>编译安装<br>  <code>make</code><br>  <code>make  install</code></li>
+</ul>
+<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><p><code>cd /usr/local/nginx/sbin/
+./nginx</code></p>
+<ul>
+<li>查询nginx进程：<br> <code>ps -ef |grep nginx</code><br>  <strong><em>注意：执行./nginx启动nginx，这里可以-c指定加载的nginx配置文件，如下：<br>  ./nginx -c /usr/local/nginx/conf/nginx.conf<br>  如果不指定-c，nginx在启动时默认加载conf/nginx.conf文件，此文件的地址也可以在编译安装nginx时指定./configure的参数（–conf-path= 指向配置文件（nginx.conf））</em></strong></li>
+</ul>
+<h2 id="停止nginx"><a href="#停止nginx" class="headerlink" title="停止nginx"></a>停止nginx</h2><ul>
+<li>方式1，快速停止：<br>  <code>cd /usr/local/nginx/sbin
+  ./nginx -s stop</code><br>  此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。</li>
+<li>方式2，完整停止(建议使用)：<br>  <code>cd /usr/local/nginx/sbin
+  ./nginx -s quit</code><br>  此方式停止步骤是待nginx进程处理任务完毕进行停止。</li>
+</ul>
+<h2 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h2><ul>
+<li>方式1，先停止再启动（建议使用）：<br>  对nginx进行重启相当于先停止nginx再启动nginx，即先执行停止命令再执行启动命令。<br>  如下：<br>  <code>./nginx -s quit
+  ./nginx</code></li>
+<li>方式2，重新加载配置文件：<br>  当nginx的配置文件nginx.conf修改后，要想让配置生效需要重启nginx，使用-s reload不用先停止nginx再启动nginx即可将配置信息在nginx中生效，如下：<br>  <code>./nginx -s reload</code></li>
+</ul>
+<h2 id="安装测试"><a href="#安装测试" class="headerlink" title="安装测试"></a>安装测试</h2><p>nginx安装成功，启动nginx，即可访问虚拟机上的nginx。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;安装依赖&quot;&gt;&lt;a href=&quot;#安装依赖&quot; class=&quot;headerlink&quot; title=&quot;安装依赖&quot;&gt;&lt;/a&gt;安装依赖&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;PCRE&lt;br&gt;  PCRE(Perl Compatible Regular Expressions)是一
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
     <title>nginx配置虚拟主机</title>
     <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
     <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
@@ -2595,31 +1576,6 @@ The key fingerprint is:
       <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
     
       <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx反向代理配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:01.262Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
-<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
@@ -3208,101 +2164,6 @@ db.fs.files.find()`
     
     
       <category term="MongoDB" scheme="http://www.joahcy.com/tags/MongoDB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux配置多IP</title>
-    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
-    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:08.069Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
-<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
-<li>3.重启虚拟机</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;ul&gt;
-&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
-&lt;li&gt;3.重启虚拟机&lt;/li&gt;
-&lt;/u
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux下的Nginx安装</title>
-    <link href="http://www.joahcy.com/Nginx/nginx_install_on_linux/"/>
-    <id>http://www.joahcy.com/Nginx/nginx_install_on_linux/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:13.213Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
-<li><p>PCRE<br>  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。<br>  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>  <code>yum install -y pcre pcre-devel</code><br>  <strong><em>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</em></strong></p>
-</li>
-<li><p>zlib<br>  zlib库提供了很多种压缩和解压缩的方式,nginx使用zlib对http包的内容进行gzip,所以需要在linux上安装zlib库。<br>  <code>yum install -y zlib zlib-devel</code></p>
-</li>
-<li>openssl<br>  OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>  nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>  <code>yum install -y openssl openssl-devel</code></li>
-</ul>
-<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>将nginx-1.8.0.tar.gz拷贝至linux服务器。<br>解压：<br><code>tar -zxvf nginx-1.8.0.tar.gz
-cd nginx-1.8.0</code></p>
-<ul>
-<li>configure配置<br>  ./configure –help查询详细参数（参考本教程附录部分：nginx编译参数）<br>  参数设置如下：<br>  <code>./configure \
-  --prefix=/usr/local/nginx \
-  --pid-path=/var/run/nginx/nginx.pid \
-  --lock-path=/var/lock/nginx.lock \
-  --error-log-path=/var/log/nginx/error.log \
-  --http-log-path=/var/log/nginx/access.log \
-  --with-http_gzip_static_module \
-  --http-client-body-temp-path=/var/temp/nginx/client \
-  --http-proxy-temp-path=/var/temp/nginx/proxy \
-  --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
-  --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
-  --http-scgi-temp-path=/var/temp/nginx/scgi</code><br>  <strong><em>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录</em></strong></li>
-<li>编译安装<br>  <code>make</code><br>  <code>make  install</code></li>
-</ul>
-<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><p><code>cd /usr/local/nginx/sbin/
-./nginx</code></p>
-<ul>
-<li>查询nginx进程：<br> <code>ps -ef |grep nginx</code><br>  <strong><em>注意：执行./nginx启动nginx，这里可以-c指定加载的nginx配置文件，如下：<br>  ./nginx -c /usr/local/nginx/conf/nginx.conf<br>  如果不指定-c，nginx在启动时默认加载conf/nginx.conf文件，此文件的地址也可以在编译安装nginx时指定./configure的参数（–conf-path= 指向配置文件（nginx.conf））</em></strong></li>
-</ul>
-<h2 id="停止nginx"><a href="#停止nginx" class="headerlink" title="停止nginx"></a>停止nginx</h2><ul>
-<li>方式1，快速停止：<br>  <code>cd /usr/local/nginx/sbin
-  ./nginx -s stop</code><br>  此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。</li>
-<li>方式2，完整停止(建议使用)：<br>  <code>cd /usr/local/nginx/sbin
-  ./nginx -s quit</code><br>  此方式停止步骤是待nginx进程处理任务完毕进行停止。</li>
-</ul>
-<h2 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h2><ul>
-<li>方式1，先停止再启动（建议使用）：<br>  对nginx进行重启相当于先停止nginx再启动nginx，即先执行停止命令再执行启动命令。<br>  如下：<br>  <code>./nginx -s quit
-  ./nginx</code></li>
-<li>方式2，重新加载配置文件：<br>  当nginx的配置文件nginx.conf修改后，要想让配置生效需要重启nginx，使用-s reload不用先停止nginx再启动nginx即可将配置信息在nginx中生效，如下：<br>  <code>./nginx -s reload</code></li>
-</ul>
-<h2 id="安装测试"><a href="#安装测试" class="headerlink" title="安装测试"></a>安装测试</h2><p>nginx安装成功，启动nginx，即可访问虚拟机上的nginx。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;安装依赖&quot;&gt;&lt;a href=&quot;#安装依赖&quot; class=&quot;headerlink&quot; title=&quot;安装依赖&quot;&gt;&lt;/a&gt;安装依赖&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;PCRE&lt;br&gt;  PCRE(Perl Compatible Regular Expressions)是一
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
     
   </entry>
   
