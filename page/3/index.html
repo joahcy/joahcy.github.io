@@ -306,7 +306,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx_install_on_linux/">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx-load-balancing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Joahcy">
@@ -325,7 +325,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Nginx/nginx_install_on_linux/" itemprop="url">Linux下的Nginx安装</a></h2>
+                <a class="post-title-link" href="/Nginx/nginx-load-balancing/" itemprop="url">nginx负载均衡配置</a></h2>
         
 
         <div class="post-meta">
@@ -394,12 +394,12 @@
       
         
           
-          安装依赖
-PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。  yum install -y pcre p
+          1、修改host文件(来实现域名访问)192.168.170.128 8083.zyx.com192.168.170.128 8084.zyx.com
+2、安装两个tomcat实例并修改端口3、修改nginx配置文件1234567891011121314upstream tomcatserver &
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/Nginx/nginx_install_on_linux/" rel="contents">
+            <a class="btn" href="/Nginx/nginx-load-balancing/" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
