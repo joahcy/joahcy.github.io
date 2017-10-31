@@ -1182,6 +1182,40 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>CentOS桌面切换及配置</title>
+    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
+    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:32.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
+<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
+<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
+<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
+<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
+</ul>
+<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
+<li>字符界面：sudo systemctl set-default multi-user.target    </li>
+<li>图形界面：sudo systemctl set-default graphical.target</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>SpringMVC发送DELETE和PUT请求</title>
     <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
     <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
@@ -1230,40 +1264,6 @@ The key fingerprint is:
     
     
       <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS桌面切换及配置</title>
-    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
-    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:32.837Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
-<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
-<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
-<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
-<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
-</ul>
-<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
-<li>字符界面：sudo systemctl set-default multi-user.target    </li>
-<li>图形界面：sudo systemctl set-default graphical.target</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
     
   </entry>
   
@@ -1406,104 +1406,6 @@ The key fingerprint is:
       <category term="JDK" scheme="http://www.joahcy.com/tags/JDK/"/>
     
       <category term="Java" scheme="http://www.joahcy.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux配置多IP</title>
-    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
-    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:08.069Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
-<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
-<li>3.重启虚拟机</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;ul&gt;
-&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
-&lt;li&gt;3.重启虚拟机&lt;/li&gt;
-&lt;/u
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx负载均衡配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:57.816Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
-<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
-<li><p>在http节点里添加:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
-</li>
-<li><p>每个设备的状态:</p>
-<ul>
-<li>down: 表示单前的server暂时不参与负载.  </li>
-<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
-<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
-<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
-<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
-</ul>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx反向代理配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:01.262Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
-<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
@@ -2096,6 +1998,79 @@ db.fs.files.find()`
   </entry>
   
   <entry>
+    <title>linux配置多IP</title>
+    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
+    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:08.069Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
+<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
+<li>3.重启虚拟机</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
+&lt;li&gt;3.重启虚拟机&lt;/li&gt;
+&lt;/u
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx负载均衡配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-load-balancing/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-load-balancing/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:57.816Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1、修改host文件-来实现域名访问"><a href="#1、修改host文件-来实现域名访问" class="headerlink" title="1、修改host文件(来实现域名访问)"></a>1、修改host文件(来实现域名访问)</h2><p><code>192.168.170.128 8083.zyx.com</code><br><code>192.168.170.128 8084.zyx.com</code></p>
+<h2 id="2、安装两个tomcat实例并修改端口"><a href="#2、安装两个tomcat实例并修改端口" class="headerlink" title="2、安装两个tomcat实例并修改端口"></a>2、安装两个tomcat实例并修改端口</h2><h2 id="3、修改nginx配置文件"><a href="#3、修改nginx配置文件" class="headerlink" title="3、修改nginx配置文件"></a>3、修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver &#123;</div><div class="line">	server 192.168.170.128:8083  weight=2;</div><div class="line">	server 192.168.170.128:8084  weight=1; \#weight默认为1</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  www.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="配置权重"><a href="#配置权重" class="headerlink" title="配置权重"></a>配置权重</h2><ul>
+<li><p>在http节点里添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">\#定义负载均衡设备的 Ip及设备状态 </div><div class="line">upstream myServer &#123;   </div><div class="line">    server 127.0.0.1:9090 down; </div><div class="line">    server 127.0.0.1:8080 weight=2; </div><div class="line">    server 127.0.0.1:6060; </div><div class="line">    server 127.0.0.1:7070 backup; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在需要使用负载的Server节点下添加<br><code>proxy_pass http://myServer;</code>  </p>
+</li>
+<li><p>每个设备的状态:</p>
+<ul>
+<li>down: 表示单前的server暂时不参与负载.  </li>
+<li>weight: 默认为1.weight越大，负载的权重就越大.  </li>
+<li>max_fails: 允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream 模块定义的错误.  </li>
+<li>fail_timeout: max_fails 次失败后，暂停的时间.  </li>
+<li>backup: 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻.  </li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1、修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#1、修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;1、修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;1、修改host文件(来实现域名访问)&lt;/h2&gt;&lt;p&gt;&lt;cod
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="负载均衡" scheme="http://www.joahcy.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下的Nginx安装</title>
     <link href="http://www.joahcy.com/Nginx/nginx_install_on_linux/"/>
     <id>http://www.joahcy.com/Nginx/nginx_install_on_linux/</id>
@@ -2206,6 +2181,31 @@ cd nginx-1.8.0</code></p>
       <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
     
       <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx反向代理配置</title>
+    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
+    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-08-05T03:48:01.262Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
+<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
+    
+      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
