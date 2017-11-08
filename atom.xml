@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.joahcy.com/"/>
-  <updated>2017-11-03T08:37:38.176Z</updated>
+  <updated>2017-11-08T07:36:34.840Z</updated>
   <id>http://www.joahcy.com/</id>
   
   <author>
@@ -14,6 +14,136 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ServletLifeCycle</title>
+    <link href="http://www.joahcy.com/ServletLifeCycle/"/>
+    <id>http://www.joahcy.com/ServletLifeCycle/</id>
+    <published>2017-11-08T07:36:34.000Z</published>
+    <updated>2017-11-08T07:36:34.840Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>数据库事务的四大特性和隔离级别</title>
+    <link href="http://www.joahcy.com/MySQL/ACID_TX-Isolation/"/>
+    <id>http://www.joahcy.com/MySQL/ACID_TX-Isolation/</id>
+    <published>2017-10-13T16:00:00.000Z</published>
+    <updated>2017-11-08T09:37:33.066Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="事务的四大特性-ACID"><a href="#事务的四大特性-ACID" class="headerlink" title="事务的四大特性(ACID)"></a>事务的四大特性(ACID)</h3><p>事务是由一组SQL语句组成的逻辑处理单元，事务具有以下四个属性，通常简称为事务的ACID属性。  </p>
+<ul>
+<li>原子性(Atomicity): 事务是一个原子操作单元，其堆数据的修改，要么全都执行，要么全都不执行。</li>
+<li>一致性(Consistency): 一致性是指事务必须使数据库从一个一致性状态变换到另一个一致性状态，也就是说一个事务执行之前和执行之后都必须处于一致性状态。</li>
+<li>隔离性(Isolation): 隔离性是当多个用户并发访问数据库时，比如操作同一张表时，数据库为每一个用户开启的事务，不能被其他事务的操作所干扰，多个并发事务之间要相互隔离。<br>即要达到这么一种效果：对于任意两个并发的事务T1和T2，在事务T1看来，T2要么在T1开始之前就已经结束，要么在T1结束之后才开始，这样每个事务都感觉不到有其他事务在并发地执行。</li>
+<li>持久性(Durability): 事务一旦被提交，它对于数据的修改是永久性的，即时出现系统故障也能够保持。</li>
+</ul>
+<h3 id="并发带来的问题"><a href="#并发带来的问题" class="headerlink" title="并发带来的问题"></a>并发带来的问题</h3><p>当多个线程都开启事务操作数据库时，数据库系统要能进行隔离操作，以保证各个线程获取数据的准确性，如果不考虑事务的隔离性，会发生以下几种问题:</p>
+<ul>
+<li>丢失更新：当多个事务选择同一行，然后基于最初选定的值更新该行时，由于每个事务都不知道其他十五的存在，就会发生丢失更新问题—最后的更新覆盖了有其他事务所做的更新。</li>
+<li>脏读: 事务A读取到了事务B已修改但尚未提交的数据。</li>
+<li>不可重复读: 事务A读取到了事务B已经提交的修改数据,不符合隔离性。</li>
+<li>幻读: 事务A读取到了事务B提交的新增数据，不符合隔离性。<br><strong>脏读和幻读区别: 脏读是事务B里面修改了数据，幻读是事务B新增了数据</strong></li>
+</ul>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><p>“脏读”、”不可重复读”,”幻读”其实都是数据库读一致性问题，必须由数据库提供一定的事务隔离机制来解决。<br>读数据一致性及允许的并发副作用：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">隔离级别</th>
+<th style="text-align:center">读数据一致性</th>
+<th style="text-align:center">脏读</th>
+<th style="text-align:center">不可重复读</th>
+<th style="text-align:center">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">读未提交(Read uncommitted)</td>
+<td style="text-align:center">最低级别，只能保证不读取物理上损坏的数据</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">读已提交(Read committed)</td>
+<td style="text-align:center">语句级别</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">可重复读(Repeatable read)</td>
+<td style="text-align:center">事务级别</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">串行化(Serializable)</td>
+<td style="text-align:center">最高级别</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+</tbody>
+</table>
+<p>数据库事务级别越高，并发副作用越小，但付出的代价也就越大。像Serializable这样的级别，就是以锁表的方式(类似于Java多线程中的锁)使得其他的线程只能在锁外等待，所以平时选用何种隔离级别应该根据实际情况。在MySQL数据库中默认的隔离级别为Repeatable read (可重复读)。</p>
+<h3 id="隔离级别的查看与设置"><a href="#隔离级别的查看与设置" class="headerlink" title="隔离级别的查看与设置"></a>隔离级别的查看与设置</h3><p>查看: <code>select @@tx_isolation;</code><br>设置: <code>set  [glogal | session]  transaction isolation level 隔离级别名称;</code>或者<code>set tx_isolation=’隔离级别名称;’</code><br><strong>设置数据库的隔离级别一定要是在开启事务之前！</strong>隔离级别的设置只对当前链接有效。对于使用MySQL命令窗口而言，一个窗口就相当于一个链接，当前窗口设置的隔离级别只对当前窗口中的事务有效；对于JDBC操作数据库来说，一个Connection对象相当于一个链接，而对于Connection对象设置的隔离级别只对该Connection对象有效，与其他链接Connection对象无关。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;事务的四大特性-ACID&quot;&gt;&lt;a href=&quot;#事务的四大特性-ACID&quot; class=&quot;headerlink&quot; title=&quot;事务的四大特性(ACID)&quot;&gt;&lt;/a&gt;事务的四大特性(ACID)&lt;/h3&gt;&lt;p&gt;事务是由一组SQL语句组成的逻辑处理单元，事务具有以下四
+    
+    </summary>
+    
+      <category term="ACID" scheme="http://www.joahcy.com/categories/ACID/"/>
+    
+      <category term="事务" scheme="http://www.joahcy.com/categories/ACID/%E4%BA%8B%E5%8A%A1/"/>
+    
+    
+      <category term="ACID" scheme="http://www.joahcy.com/tags/ACID/"/>
+    
+      <category term="事务" scheme="http://www.joahcy.com/tags/%E4%BA%8B%E5%8A%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Servlet的生命周期</title>
+    <link href="http://www.joahcy.com/Java/ServletLifeCycle/"/>
+    <id>http://www.joahcy.com/Java/ServletLifeCycle/</id>
+    <published>2017-10-07T16:00:00.000Z</published>
+    <updated>2017-11-08T08:14:28.348Z</updated>
+    
+    <content type="html"><![CDATA[<p>Servlet的生命周期分为三个阶段：初始化、响应请求、终止。</p>
+<h3 id="初始化阶段"><a href="#初始化阶段" class="headerlink" title="初始化阶段"></a>初始化阶段</h3><p>初始化阶段调用init()方法。init()调用的时机有以下3个：</p>
+<ol>
+<li>Servlet容器启动时，会自动装载配置了<code>&lt;loadon-startup&gt;1&lt;/loadon-startup&gt;</code>节点的servlet，调用其init()方法，并且值越小越先启动。</li>
+<li>客户端首次请求Servlet时，调用其init()方法。</li>
+<li>Servlet类文件被更新后，重新装载Servlet，调用其init()方法。<br><strong>Servlet被装载后，Servlet容器创建一个Servlet实例并且调用Servlet的init()方法进行初始化。在Servlet的整个生命周期内，init()方法只被调用一次</strong> </li>
+</ol>
+<h3 id="响应请求阶段"><a href="#响应请求阶段" class="headerlink" title="响应请求阶段"></a>响应请求阶段</h3><p>客户端每请求一次servlet就会调用一次service()方法</p>
+<h3 id="终止阶段"><a href="#终止阶段" class="headerlink" title="终止阶段"></a>终止阶段</h3><p>当WEB应用被终止，或Servlet容器终止运行，或Servlet容器重新装载Servlet新实例时，Servlet容器会先调用已经装载过的Servlet的destroy()方法，在destroy()方法中可以释放掉Servlet所占用的资源。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Servlet的生命周期分为三个阶段：初始化、响应请求、终止。&lt;/p&gt;
+&lt;h3 id=&quot;初始化阶段&quot;&gt;&lt;a href=&quot;#初始化阶段&quot; class=&quot;headerlink&quot; title=&quot;初始化阶段&quot;&gt;&lt;/a&gt;初始化阶段&lt;/h3&gt;&lt;p&gt;初始化阶段调用init()方法。ini
+    
+    </summary>
+    
+      <category term="servlet" scheme="http://www.joahcy.com/categories/servlet/"/>
+    
+    
+      <category term="servlet" scheme="http://www.joahcy.com/tags/servlet/"/>
+    
+  </entry>
   
   <entry>
     <title>MySQL锁</title>
@@ -961,9 +1091,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1112,11 +1242,11 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
       <category term="hadoop" scheme="http://www.joahcy.com/tags/hadoop/"/>
     
       <category term="cluster" scheme="http://www.joahcy.com/tags/cluster/"/>
-    
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1291,92 +1421,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>SpringMVC发送DELETE和PUT请求</title>
-    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
-    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:52:42.803Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
-<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
-</blockquote>
-<p>Rest 风格的 URL.</p>
-<ul>
-<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
-<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
-<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
-<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
-</ul>
-<p>以 CRUD Order为例:</p>
-<ul>
-<li>新增: /order POST </li>
-<li>修改: /order/1 PUT update?id=1 </li>
-<li>获取: /order/1 GET get?id=1 </li>
-<li>删除: /order/1 DELETE delete?id=1</li>
-</ul>
-<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
-<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-<p>  发送DELETE请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
-    
-    </summary>
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS桌面切换及配置</title>
-    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
-    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:32.837Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
-<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
-<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
-<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
-<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
-</ul>
-<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
-<li>字符界面：sudo systemctl set-default multi-user.target    </li>
-<li>图形界面：sudo systemctl set-default graphical.target</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
-    
-      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
-    
-  </entry>
-  
-  <entry>
     <title>单例模式与多线程</title>
     <link href="http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/"/>
     <id>http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/</id>
@@ -1486,6 +1530,92 @@ The key fingerprint is:
       <category term="设计模式" scheme="http://www.joahcy.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
       <category term="多线程" scheme="http://www.joahcy.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS桌面切换及配置</title>
+    <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
+    <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:47:32.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="设置GNOME或者KDE为默认的启动桌面环境"><a href="#设置GNOME或者KDE为默认的启动桌面环境" class="headerlink" title="设置GNOME或者KDE为默认的启动桌面环境"></a>设置GNOME或者KDE为默认的启动桌面环境</h2><ul>
+<li>方法1: 修改/etc/sysconfig/desktop，根据需要将“DESKTOP”后面的内容改为KDE或GNOME。</li>
+<li>方法2: 在当前用户目录下建立“.xinitrc”这个文件（注意文件名前有一个点号，代表建立的是一个隐藏文件）,<br>文件的内容就一行startkde或gnome-session，根据自己的需要选择KDE或GNOME。<h2 id="GNOME和KDE的切换"><a href="#GNOME和KDE的切换" class="headerlink" title="GNOME和KDE的切换"></a>GNOME和KDE的切换</h2></li>
+<li>1、如果需要切换到GNOME:<br><code>switchdesk gnome</code></li>
+<li>2、如果需要切换到KDE:<br><code>switchdesk kde</code></li>
+</ul>
+<h2 id="CentOS7设置默认启动为字符界面"><a href="#CentOS7设置默认启动为字符界面" class="headerlink" title="CentOS7设置默认启动为字符界面"></a>CentOS7设置默认启动为字符界面</h2><ul>
+<li>字符界面：sudo systemctl set-default multi-user.target    </li>
+<li>图形界面：sudo systemctl set-default graphical.target</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;a href=&quot;#设置GNOME或者KDE为默认的启动桌面环境&quot; class=&quot;headerlink&quot; title=&quot;设置GNOME或者KDE为默认的启动桌面环境&quot;&gt;&lt;/a&gt;设置GNOME或者KDE为默认的启动桌面
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
+    
+      <category term="CentOS" scheme="http://www.joahcy.com/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC发送DELETE和PUT请求</title>
+    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
+    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:52:42.803Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
+<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
+</blockquote>
+<p>Rest 风格的 URL.</p>
+<ul>
+<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
+<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
+<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
+<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
+</ul>
+<p>以 CRUD Order为例:</p>
+<ul>
+<li>新增: /order POST </li>
+<li>修改: /order/1 PUT update?id=1 </li>
+<li>获取: /order/1 GET get?id=1 </li>
+<li>删除: /order/1 DELETE delete?id=1</li>
+</ul>
+<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
+<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<p>  发送DELETE请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
+    
+    </summary>
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
+    
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
     
   </entry>
   
@@ -2103,112 +2233,6 @@ db.fs.files.find()`
     
     
       <category term="MongoDB" scheme="http://www.joahcy.com/tags/MongoDB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx配置虚拟主机</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-virtual-server/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-virtual-server/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:04.861Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><ul>
-<li>1.配置多IP</li>
-<li>2.nginx的配置文件在http节点下加一个server节点,如: </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.128; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-128;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  192.168.170.100; \# 配置IP</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-100;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>3.复制html页面</li>
-<li>4.访问测试</li>
-</ul>
-<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><ul>
-<li>1.添加server节点,如:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       81; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-81;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       82; \# 配置端口</div><div class="line">    server_name  192.168.170.128;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-82;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>2.复制html页面</li>
-<li>3.访问测试</li>
-</ul>
-<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><p><strong>使用最多的虚拟主机配置方式,一个域名只能绑定一个IP，一个IP可以被多个域名绑定</strong></p>
-<ul>
-<li>1.修改host文件实现域名访问<br>  如：<pre><code>192.168.170.128  www.zyx.com
-192.168.170.128  blog.zyx.com
-</code></pre></li>
-<li>2.修改nginx的配置文件</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80;</div><div class="line">	server_name  www.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-www;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  blog.zyx.com;</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    root   html-blog;</div><div class="line">    index  index.html index.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;基于IP的虚拟主机&quot;&gt;&lt;a href=&quot;#基于IP的虚拟主机&quot; class=&quot;headerlink&quot; title=&quot;基于IP的虚拟主机&quot;&gt;&lt;/a&gt;基于IP的虚拟主机&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;1.配置多IP&lt;/li&gt;
-&lt;li&gt;2.nginx的配置文件在http节点
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="虚拟主机" scheme="http://www.joahcy.com/tags/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx反向代理配置</title>
-    <link href="http://www.joahcy.com/Nginx/nginx-reverse-proxy/"/>
-    <id>http://www.joahcy.com/Nginx/nginx-reverse-proxy/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:01.262Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="修改host文件-来实现域名访问"><a href="#修改host文件-来实现域名访问" class="headerlink" title="修改host文件(来实现域名访问)"></a>修改host文件(来实现域名访问)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">192.168.170.128 8081.zyx.com</div><div class="line">192.168.170.128 8082.zyx.com</div></pre></td></tr></table></figure>
-<h2 id="安装两个tomcat实例并修改端口"><a href="#安装两个tomcat实例并修改端口" class="headerlink" title="安装两个tomcat实例并修改端口"></a>安装两个tomcat实例并修改端口</h2><h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">upstream tomcatserver1 &#123;</div><div class="line">	server 192.168.170.128:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">upstream tomcatserver2 &#123;</div><div class="line">	server 192.168.170.128:8081;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8081.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver1;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  8082.zyx.com;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass   http://tomcatserver2;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;修改host文件-来实现域名访问&quot;&gt;&lt;a href=&quot;#修改host文件-来实现域名访问&quot; class=&quot;headerlink&quot; title=&quot;修改host文件(来实现域名访问)&quot;&gt;&lt;/a&gt;修改host文件(来实现域名访问)&lt;/h2&gt;&lt;figure class=&quot;
-    
-    </summary>
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/categories/Nginx/"/>
-    
-    
-      <category term="Nginx" scheme="http://www.joahcy.com/tags/Nginx/"/>
-    
-      <category term="反向代理" scheme="http://www.joahcy.com/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux配置多IP</title>
-    <link href="http://www.joahcy.com/Nginx/linux-multi-IP/"/>
-    <id>http://www.joahcy.com/Nginx/linux-multi-IP/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:48:08.069Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>1.复制第一块网卡的配置文件,例:<br><code>cp  ifcfg-eth0  ifcfg-eth0:1</code></li>
-<li>2.修改ifcfg-eth0:1的DEVICE 和 IPADDR </li>
-<li>3.重启虚拟机</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;ul&gt;
-&lt;li&gt;1.复制第一块网卡的配置文件,例:&lt;br&gt;&lt;code&gt;cp  ifcfg-eth0  ifcfg-eth0:1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;2.修改ifcfg-eth0:1的DEVICE 和 IPADDR &lt;/li&gt;
-&lt;li&gt;3.重启虚拟机&lt;/li&gt;
-&lt;/u
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://www.joahcy.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://www.joahcy.com/tags/Linux/"/>
     
   </entry>
   
