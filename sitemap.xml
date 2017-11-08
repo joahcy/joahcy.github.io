@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.joahcy.com/SpringMVC/Spring-Transaction-Propagation/</loc>
+    
+    <lastmod>2017-11-08T09:58:25.417Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</loc>
+    
+    <lastmod>2017-11-08T09:53:00.914Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.joahcy.com/Java/ServletLifeCycle/</loc>
     
     <lastmod>2017-11-08T09:47:14.473Z</lastmod>
@@ -89,13 +103,6 @@
     <loc>http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/</loc>
     
     <lastmod>2017-08-12T06:38:29.440Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</loc>
-    
-    <lastmod>2017-08-05T03:52:42.803Z</lastmod>
     
   </url>
   
