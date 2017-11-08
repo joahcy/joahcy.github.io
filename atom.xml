@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.joahcy.com/"/>
-  <updated>2017-11-08T09:37:33.066Z</updated>
+  <updated>2017-11-08T09:45:27.021Z</updated>
   <id>http://www.joahcy.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.joahcy.com/MySQL/ACID_TX-Isolation/"/>
     <id>http://www.joahcy.com/MySQL/ACID_TX-Isolation/</id>
     <published>2017-10-13T16:00:00.000Z</published>
-    <updated>2017-11-08T09:37:33.066Z</updated>
+    <updated>2017-11-08T09:45:27.021Z</updated>
     
     <content type="html"><![CDATA[<h3 id="事务的四大特性-ACID"><a href="#事务的四大特性-ACID" class="headerlink" title="事务的四大特性(ACID)"></a>事务的四大特性(ACID)</h3><p>事务是由一组SQL语句组成的逻辑处理单元，事务具有以下四个属性，通常简称为事务的ACID属性。  </p>
 <ul>
@@ -88,14 +88,12 @@
     
     </summary>
     
-      <category term="ACID" scheme="http://www.joahcy.com/categories/ACID/"/>
-    
-      <category term="事务" scheme="http://www.joahcy.com/categories/ACID/%E4%BA%8B%E5%8A%A1/"/>
+      <category term="MySQL" scheme="http://www.joahcy.com/categories/MySQL/"/>
     
     
       <category term="ACID" scheme="http://www.joahcy.com/tags/ACID/"/>
     
-      <category term="事务" scheme="http://www.joahcy.com/tags/%E4%BA%8B%E5%8A%A1/"/>
+      <category term="tx" scheme="http://www.joahcy.com/tags/tx/"/>
     
   </entry>
   
@@ -104,7 +102,7 @@
     <link href="http://www.joahcy.com/Java/ServletLifeCycle/"/>
     <id>http://www.joahcy.com/Java/ServletLifeCycle/</id>
     <published>2017-10-07T16:00:00.000Z</published>
-    <updated>2017-11-08T08:14:28.348Z</updated>
+    <updated>2017-11-08T09:43:04.847Z</updated>
     
     <content type="html"><![CDATA[<p>Servlet的生命周期分为三个阶段：初始化、响应请求、终止。</p>
 <h3 id="初始化阶段"><a href="#初始化阶段" class="headerlink" title="初始化阶段"></a>初始化阶段</h3><p>初始化阶段调用init()方法。init()调用的时机有以下3个：</p>
@@ -124,7 +122,7 @@
     
     </summary>
     
-      <category term="servlet" scheme="http://www.joahcy.com/categories/servlet/"/>
+      <category term="java" scheme="http://www.joahcy.com/categories/java/"/>
     
     
       <category term="servlet" scheme="http://www.joahcy.com/tags/servlet/"/>
@@ -172,7 +170,7 @@
     <link href="http://www.joahcy.com/Multithreading/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
     <id>http://www.joahcy.com/Multithreading/线程池源码分析/</id>
     <published>2017-09-24T16:00:00.000Z</published>
-    <updated>2017-10-31T14:24:22.956Z</updated>
+    <updated>2017-11-08T09:45:16.852Z</updated>
     
     <content type="html"><![CDATA[<p>Java面试中，线程池也算是一个高频的问题，其实就JDK源码来看线程池这一块的实现代码应该算是写的清晰易懂的，通过这篇文章，我们就来盘点一下线程池的知识点。<br><strong>本文基于JDK1.8源码进行分析</strong></p>
 <p>首先看下线程池构造函数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></div><div class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></div><div class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></div><div class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></div><div class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></div><div class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>&#123;</div><div class="line">        <span class="comment">//忽略赋值与校验逻辑</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -218,7 +216,7 @@
     
     </summary>
     
-      <category term="ThreadPool" scheme="http://www.joahcy.com/categories/ThreadPool/"/>
+      <category term="Java" scheme="http://www.joahcy.com/categories/Java/"/>
     
     
       <category term="ThreadPool" scheme="http://www.joahcy.com/tags/ThreadPool/"/>
@@ -1441,58 +1439,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>SpringMVC发送DELETE和PUT请求</title>
-    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
-    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-08-05T03:52:42.803Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
-<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
-</blockquote>
-<p>Rest 风格的 URL.</p>
-<ul>
-<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
-<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
-<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
-<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
-</ul>
-<p>以 CRUD Order为例:</p>
-<ul>
-<li>新增: /order POST </li>
-<li>修改: /order/1 PUT update?id=1 </li>
-<li>获取: /order/1 GET get?id=1 </li>
-<li>删除: /order/1 DELETE delete?id=1</li>
-</ul>
-<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
-<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-<p>  发送DELETE请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
-    
-    </summary>
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
     <title>单例模式与多线程</title>
     <link href="http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/"/>
     <id>http://www.joahcy.com/DesignPatterns/singletonPattern-and-multithreading/</id>
@@ -1602,6 +1548,58 @@ The key fingerprint is:
       <category term="设计模式" scheme="http://www.joahcy.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
       <category term="多线程" scheme="http://www.joahcy.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC发送DELETE和PUT请求</title>
+    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
+    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-08-05T03:52:42.803Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
+<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
+</blockquote>
+<p>Rest 风格的 URL.</p>
+<ul>
+<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
+<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
+<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
+<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
+</ul>
+<p>以 CRUD Order为例:</p>
+<ul>
+<li>新增: /order POST </li>
+<li>修改: /order/1 PUT update?id=1 </li>
+<li>获取: /order/1 GET get?id=1 </li>
+<li>删除: /order/1 DELETE delete?id=1</li>
+</ul>
+<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
+<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<p>  发送DELETE请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
+    
+    </summary>
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/categories/SpringMVC/"/>
+    
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
     
   </entry>
   
