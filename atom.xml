@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.joahcy.com/"/>
-  <updated>2017-11-08T09:58:25.417Z</updated>
+  <updated>2017-11-12T11:06:08.549Z</updated>
   <id>http://www.joahcy.com/</id>
   
   <author>
@@ -14,6 +14,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ConcurrentHashMap1.7实现</title>
+    <link href="http://www.joahcy.com/Java/ConcurrentHahsMap1.7/"/>
+    <id>http://www.joahcy.com/Java/ConcurrentHahsMap1.7/</id>
+    <published>2017-10-24T16:00:00.000Z</published>
+    <updated>2017-11-12T11:06:08.549Z</updated>
+    
+    <content type="html"><![CDATA[<p>今天我们将深入剖析一个比HashTable性能更优的线程安全的Map类，它就是ConcurrentHashMap，<strong>本文基于Java1.7的源码做剖析。</strong></p>
+<h2 id="为什么要使用ConcurrentHashMap？"><a href="#为什么要使用ConcurrentHashMap？" class="headerlink" title="为什么要使用ConcurrentHashMap？ 　　"></a>为什么要使用ConcurrentHashMap？ 　　</h2><ol>
+<li>多线程环境下，HashMap会处于不安全状态。例如put操作可能会引起程序死循环，Cpu占有率达百分百，原因是多线程会导致HashMap的Entry链表形成环形数据结构，如此一来，他的next结点将永不为空，就会产生死循环获取Entry。既然不能使用HashMap，在多线程环境下就给并发容器有了登场机会。具体请参考<a href="http://www.importnew.com/22011.html" target="_blank" rel="external">谈谈HashMap线程不安全的体现</a> .　　</li>
+<li>Hashtable效率低下。Hashtable相信很多人都知道，相比HashMap就增加了线程安全机制，在过去Hashtable就会被使用，但由于它的实现是利用synchronized来保证线程安全的，在线程竞争激烈的情况下，效率就非常低下了。原因在于当有线程访问Hashtable的同步方法时，其他线程也来访问就会进行阻塞或者轮询状态。因此效率低下，如今开发中已经鲜有人使用Hashtable了。 </li>
+<li>ConcurrentHashMap采用锁分段技术可有效提高并发访问率。下面来做深入剖析。</li>
+</ol>
+<h2 id="实现原理及结构图"><a href="#实现原理及结构图" class="headerlink" title="实现原理及结构图"></a>实现原理及结构图</h2><p>ConcurrentHashMap使用分段锁技术，将数据分成一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问，能够实现真正的并发访问。如下图是ConcurrentHashMap的内部结构图：<br><img src="http://oqwn6kueb.bkt.clouddn.com/blog/171112/2cajDiFlbF.png?imageslim" alt="mark"><br>从图中可以看到，ConcurrentHashMap内部分为很多个Segment，然后每个Segment（继承ReentrantLock，这样就自带了锁的功能）下面包含一个HashEntry数组，数组元素是一个节点为HashEntry链表。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化函数参数有三个: int initialCapacity,float loadFactor, int concurrencyLevel。</p>
+<ul>
+<li>initialCapacity:表示新创建的这个ConcurrentHashMap的初始容量，也就是上面的结构图中的所有HashEntry节点的总数量。默认值为<code>static final int DEFAULT_INITIAL_CAPACITY = 16;</code></li>
+<li>loadFactor:表示负载因子，就是当ConcurrentHashMap中的元素个数大于loadFactor * 最大容量时就需要rehash，进行扩容操作。默认值为<code>static final float DEFAULT_LOAD_FACTOR = 0.75f;</code></li>
+<li>concurrencyLevel:表示并发级别，这个值用来确定Segment的个数，Segment的个数是大于等于concurrencyLevel的第一个2的n次方的数。比如，如果concurrencyLevel为12，13，14，15，16这些数，则Segment的数目为16(2的4次方)。默认值为<code>static final int DEFAULT_CONCURRENCY_LEVEL = 16;</code>。理想情况下ConcurrentHashMap的真正的并发访问量能够达到concurrencyLevel，因为有concurrencyLevel个Segment，假如有concurrencyLevel个线程需要访问Map，并且需要访问的数据都恰好分别落在不同的Segment中，则这些线程能够无竞争地自由访问（因为他们不需要竞争同一把锁），达到同时访问的效果。这也是为什么这个参数起名为“并发级别”的原因。</li>
+</ul>
+<p>源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ConcurrentHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity,</span></span></div><div class="line"><span class="function"><span class="params">                         <span class="keyword">float</span> loadFactor, <span class="keyword">int</span> concurrencyLevel)</span> </span>&#123;</div><div class="line">    <span class="comment">//1.若参数不正确，抛出异常</span></div><div class="line">    <span class="keyword">if</span> (!(loadFactor &gt; <span class="number">0</span>) || initialCapacity &lt; <span class="number">0</span> || concurrencyLevel &lt;= <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</div><div class="line"></div><div class="line">    <span class="comment">//MAX_SEGMENTS=1 &lt;&lt; 30</span></div><div class="line">    <span class="comment">//2.判断并发级别是否大于MAX_SEGMENTS，若大于，把并发级别置为MAX_SEGMENTS</span></div><div class="line">    <span class="keyword">if</span> (concurrencyLevel &gt; MAX_SEGMENTS)</div><div class="line">        concurrencyLevel = MAX_SEGMENTS;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> sshift = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">//3.根据并发级别得出最终segments数组的大小</span></div><div class="line">    <span class="keyword">int</span> ssize = <span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span> (ssize &lt; concurrencyLevel) &#123;</div><div class="line">        ++sshift;</div><div class="line">        ssize &lt;&lt;= <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//4.segmentShift和segmentMask分别表示段偏移量和段掩码，这两个和segment的定位比较相关。</span></div><div class="line">    <span class="keyword">this</span>.segmentShift = <span class="number">32</span> - sshift;</div><div class="line">    <span class="keyword">this</span>.segmentMask = ssize - <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="comment">//5.根据initialCapacity计算每个HashEntry数组的大小，是2的幂次方，最小值为2，</span></div><div class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</div><div class="line">        initialCapacity = MAXIMUM_CAPACITY;</div><div class="line">    <span class="keyword">int</span> c = initialCapacity / ssize;</div><div class="line">    <span class="keyword">if</span> (c * ssize &lt; initialCapacity)</div><div class="line">        ++c;</div><div class="line">    <span class="keyword">int</span> cap = MIN_SEGMENT_TABLE_CAPACITY;</div><div class="line">    <span class="keyword">while</span> (cap &lt; c)</div><div class="line">        cap &lt;&lt;= <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="comment">//6.最后创建一个Segment实例，将其当做Segment数组的第一个元素</span></div><div class="line">    Segment&lt;K,V&gt; s0 =</div><div class="line">        <span class="keyword">new</span> Segment&lt;K,V&gt;(loadFactor, (<span class="keyword">int</span>)(cap * loadFactor),</div><div class="line">                         (HashEntry&lt;K,V&gt;[])<span class="keyword">new</span> HashEntry[cap]);</div><div class="line">    Segment&lt;K,V&gt;[] ss = (Segment&lt;K,V&gt;[])<span class="keyword">new</span> Segment[ssize];</div><div class="line">    UNSAFE.putOrderedObject(ss, SBASE, s0);</div><div class="line">    <span class="keyword">this</span>.segments = ss;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="put操作"><a href="#put操作" class="headerlink" title="put操作"></a>put操作</h3><p>源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">    Segment&lt;K,V&gt; s;</div><div class="line">    <span class="comment">//1.value为null，则直接抛出空指针异常</span></div><div class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line"></div><div class="line">   	<span class="comment">//2.对key进行hash，文末详解这个hash方法</span></div><div class="line">    <span class="keyword">int</span> hash = hash(key);</div><div class="line"></div><div class="line">    <span class="comment">//segmentShift：段偏移量 ，segmentMask：段掩码.</span></div><div class="line">    <span class="comment">//3.将hash右移segmentShift，然后与segmentMask做位与运算得到segment的索引。</span></div><div class="line">    <span class="keyword">int</span> j = (hash &gt;&gt;&gt; segmentShift) &amp; segmentMask;</div><div class="line">    </div><div class="line">    <span class="comment">//4.使用Unsafe方式得到segment，若segment未初始化，则调用ensureSegment方法，通过CAS进行赋值</span></div><div class="line">    <span class="keyword">if</span> ((s = (Segment&lt;K,V&gt;)UNSAFE.getObject(segments, (j &lt;&lt; SSHIFT) + SBASE)) == <span class="keyword">null</span>) </div><div class="line">        s = ensureSegment(j);</div><div class="line"></div><div class="line">    <span class="comment">//5.执行Segment的put方法通过加锁机制插入数据</span></div><div class="line">    <span class="keyword">return</span> s.put(key, hash, value, <span class="keyword">false</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//Segment的put方法</span></div><div class="line"><span class="function"><span class="keyword">final</span> V <span class="title">put</span><span class="params">(K key, <span class="keyword">int</span> hash, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</div><div class="line">	<span class="comment">//使用tryLock()方法得到锁，没有得到锁的执行scanAndLockForPut方法,通过重复执行tryLock()方法尝试获取锁</span></div><div class="line">    HashEntry&lt;K,V&gt; node = tryLock() ? <span class="keyword">null</span> : scanAndLockForPut(key, hash, value);</div><div class="line">    V oldValue;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">//插入数据的具体逻辑.....</span></div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">    	<span class="comment">//执行完插入操作时，会通过unlock()方法释放锁，接着唤醒阻塞线程继续执行</span></div><div class="line">        unlock();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> oldValue;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> HashEntry&lt;K,V&gt; <span class="title">scanAndLockForPut</span><span class="params">(K key, <span class="keyword">int</span> hash, V value)</span> </span>&#123;</div><div class="line">    HashEntry&lt;K,V&gt; first = entryForHash(<span class="keyword">this</span>, hash);</div><div class="line">    HashEntry&lt;K,V&gt; e = first;</div><div class="line">    HashEntry&lt;K,V&gt; node = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">int</span> retries = -<span class="number">1</span>; <span class="comment">// negative while locating node</span></div><div class="line">    <span class="comment">//重复执行尝试获得锁</span></div><div class="line">    <span class="keyword">while</span> (!tryLock()) &#123;</div><div class="line">       	<span class="comment">//获得锁的具体逻辑</span></div><div class="line">       	<span class="comment">//....</span></div><div class="line">       	<span class="comment">//当执行tryLock()方法的次数超过上限时，则执行lock()方法挂起线程B；</span></div><div class="line">       	<span class="comment">//在多处理器环境下，重复次数为64，单处理器重复次数为1</span></div><div class="line">       	<span class="comment">//static final int MAX_SCAN_RETRIES = Runtime.getRuntime().availableProcessors() &gt; 1 ? 64 : 1;</span></div><div class="line">       	<span class="keyword">if</span> (++retries &gt; MAX_SCAN_RETRIES) &#123;</div><div class="line">            lock();</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//....</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> node;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="get操作"><a href="#get操作" class="headerlink" title="get操作"></a>get操作</h3><p>源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">    Segment&lt;K,V&gt; s;</div><div class="line">    HashEntry&lt;K,V&gt;[] tab;</div><div class="line"></div><div class="line">    <span class="comment">//1.通过对key进行hash，然后得到所在segment索引</span></div><div class="line">    <span class="keyword">int</span> h = hash(key);</div><div class="line">    <span class="keyword">long</span> u = (((h &gt;&gt;&gt; segmentShift) &amp; segmentMask) &lt;&lt; SSHIFT) + SBASE;</div><div class="line">    <span class="comment">//2.通过Unsafe得到segment</span></div><div class="line">    <span class="keyword">if</span> ((s = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(segments, u)) != <span class="keyword">null</span> &amp;&amp;</div><div class="line">        (tab = s.table) != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">//3.然后得到HashEntry链表的索引，进行遍历得到</span></div><div class="line">        <span class="keyword">for</span> (HashEntry&lt;K,V&gt; e = (HashEntry&lt;K,V&gt;) UNSAFE.getObjectVolatile</div><div class="line">                 (tab, ((<span class="keyword">long</span>)(((tab.length - <span class="number">1</span>) &amp; h)) &lt;&lt; TSHIFT) + TBASE);</div><div class="line">             e != <span class="keyword">null</span>; e = e.next) &#123;</div><div class="line">            K k;</div><div class="line">            <span class="keyword">if</span> ((k = e.key) == key || (e.hash == h &amp;&amp; key.equals(k)))</div><div class="line">                <span class="keyword">return</span> e.value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="size操作"><a href="#size操作" class="headerlink" title="size操作"></a>size操作</h3><p>先给3次机会，不lock所有的Segment，遍历所有Segment，累加各个Segment的大小得到整个Map的大小，如果某相邻的两次计算获取的所有Segment的更新的次数（每个Segment都有一个modCount变量，这个变量在Segment中的Entry被修改时会加一，通过这个值可以得到每个Segment的更新操作的次数）是一样的，说明计算过程中没有更新操作，则直接返回这个值。如果这三次不加锁的计算过程中Map的更新次数有变化，则之后的计算先对所有的Segment加锁，再遍历所有Segment计算Map大小，最后再解锁所有Segment。<br>源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> Segment&lt;K,V&gt;[] segments = <span class="keyword">this</span>.segments;</div><div class="line">    <span class="keyword">int</span> size;</div><div class="line">    <span class="keyword">boolean</span> overflow; <span class="comment">// true if size overflows 32 bits</span></div><div class="line">    <span class="keyword">long</span> sum;         <span class="comment">// sum of modCounts</span></div><div class="line">    <span class="keyword">long</span> last = <span class="number">0L</span>;   <span class="comment">// previous sum</span></div><div class="line">    <span class="keyword">int</span> retries = -<span class="number">1</span>; <span class="comment">// first iteration isn't retry</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">for</span> (;;) &#123;</div><div class="line">            <span class="keyword">if</span> (retries++ == RETRIES_BEFORE_LOCK) &#123;</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</div><div class="line">                    ensureSegment(j).lock(); <span class="comment">// force creation</span></div><div class="line">            &#125;</div><div class="line">            sum = <span class="number">0L</span>;</div><div class="line">            size = <span class="number">0</span>;</div><div class="line">            overflow = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j) &#123;</div><div class="line">                Segment&lt;K,V&gt; seg = segmentAt(segments, j);</div><div class="line">                <span class="keyword">if</span> (seg != <span class="keyword">null</span>) &#123;</div><div class="line">                    sum += seg.modCount;</div><div class="line">                    <span class="keyword">int</span> c = seg.count;</div><div class="line">                    <span class="keyword">if</span> (c &lt; <span class="number">0</span> || (size += c) &lt; <span class="number">0</span>)</div><div class="line">                        overflow = <span class="keyword">true</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (sum == last)</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            last = sum;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">if</span> (retries &gt; RETRIES_BEFORE_LOCK) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</div><div class="line">                segmentAt(segments, j).unlock();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> overflow ? Integer.MAX_VALUE : size;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="关于hash"><a href="#关于hash" class="headerlink" title="关于hash"></a>关于hash</h3><p>使用key定位Segment之前进要行一次hash操作，这次hash的作用是什么呢？看看hash的源代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object k)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> h = hashSeed;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((<span class="number">0</span> != h) &amp;&amp; (k <span class="keyword">instanceof</span> String)) &#123;</div><div class="line">        <span class="keyword">return</span> sun.misc.Hashing.stringHash32((String) k);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    h ^= k.hashCode();</div><div class="line"></div><div class="line">    <span class="comment">// Spread bits to regularize both segment and index locations,</span></div><div class="line">    <span class="comment">// using variant of single-word Wang/Jenkins hash.</span></div><div class="line">    h += (h &lt;&lt;  <span class="number">15</span>) ^ <span class="number">0xffffcd7d</span>;</div><div class="line">    h ^= (h &gt;&gt;&gt; <span class="number">10</span>);</div><div class="line">    h += (h &lt;&lt;   <span class="number">3</span>);</div><div class="line">    h ^= (h &gt;&gt;&gt;  <span class="number">6</span>);</div><div class="line">    h += (h &lt;&lt;   <span class="number">2</span>) + (h &lt;&lt; <span class="number">14</span>);</div><div class="line">    <span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">16</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里用到了Wang/Jenkins hash算法的变种，主要的目的是为了减少哈希冲突，使元素能够均匀的分布在不同的Segment上，从而提高容器的存取效率。假如哈希的质量差到极点，那么所有的元素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义。<br>举个简单的例子:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">System.out.println(Integer.parseInt(&quot;0001111&quot;, 2) &amp; 15);</div><div class="line">System.out.println(Integer.parseInt(&quot;0011111&quot;, 2) &amp; 15);</div><div class="line">System.out.println(Integer.parseInt(&quot;0111111&quot;, 2) &amp; 15);</div><div class="line">System.out.println(Integer.parseInt(&quot;1111111&quot;, 2) &amp; 15);</div></pre></td></tr></table></figure></p>
+<p>这些数字得到的hash值都是一样的，全是15，所以如果不进行第一次预hash，发生冲突的几率还是很大的，但是如果我们先把上例中的二进制数字使用hash()函数先进行一次预hash，得到的结果是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">0100｜0111｜0110｜0111｜1101｜1010｜0100｜1110</div><div class="line">1111｜0111｜0100｜0011｜0000｜0001｜1011｜1000</div><div class="line">0111｜0111｜0110｜1001｜0100｜0110｜0011｜1110</div><div class="line">1000｜0011｜0000｜0000｜1100｜1000｜0001｜1010</div></pre></td></tr></table></figure></p>
+<p>可以看到每一位的数据都散开了，并且ConcurrentHashMap中是使用预hash值的高位参与运算的。比如put方法，<code>int segmentIndex = (hash &gt;&gt;&gt; segmentShift) &amp; segmentMask;</code>，先将hash值向右移segmentShift，然后与segmentMask做位与运算。以默认值28和15为例得到的结果都别为：4，15，7，8，没有冲突！</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h3><p><a href="http://www.infoq.com/cn/articles/ConcurrentHashMap/" target="_blank" rel="external">http://www.infoq.com/cn/articles/ConcurrentHashMap/</a><br><a href="http://www.jianshu.com/p/e694f1e868ec" target="_blank" rel="external">http://www.jianshu.com/p/e694f1e868ec</a> </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天我们将深入剖析一个比HashTable性能更优的线程安全的Map类，它就是ConcurrentHashMap，&lt;strong&gt;本文基于Java1.7的源码做剖析。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;为什么要使用ConcurrentHashMap？&quot;&gt;&lt;a hre
+    
+    </summary>
+    
+      <category term="Java" scheme="http://www.joahcy.com/categories/Java/"/>
+    
+    
+      <category term="ConcurrentHashMap" scheme="http://www.joahcy.com/tags/ConcurrentHashMap/"/>
+    
+  </entry>
   
   <entry>
     <title>Spring的事务传播行为</title>
@@ -1144,9 +1189,9 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
-    
       <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
+    
+      <category term="hive" scheme="http://www.joahcy.com/tags/hive/"/>
     
   </entry>
   
@@ -1295,11 +1340,11 @@
       <category term="Bigdata" scheme="http://www.joahcy.com/categories/Bigdata/"/>
     
     
-      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
-    
       <category term="hadoop" scheme="http://www.joahcy.com/tags/hadoop/"/>
     
       <category term="cluster" scheme="http://www.joahcy.com/tags/cluster/"/>
+    
+      <category term="bigdata" scheme="http://www.joahcy.com/tags/bigdata/"/>
     
   </entry>
   
@@ -1474,6 +1519,58 @@ The key fingerprint is:
   </entry>
   
   <entry>
+    <title>SpringMVC发送DELETE和PUT请求</title>
+    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
+    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
+    <published>2017-06-04T16:00:00.000Z</published>
+    <updated>2017-11-08T09:53:00.914Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
+<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
+</blockquote>
+<p>Rest 风格的 URL.</p>
+<ul>
+<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
+<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
+<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
+<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
+</ul>
+<p>以 CRUD Order为例:</p>
+<ul>
+<li>新增: /order POST </li>
+<li>修改: /order/1 PUT update?id=1 </li>
+<li>获取: /order/1 GET get?id=1 </li>
+<li>删除: /order/1 DELETE delete?id=1</li>
+</ul>
+<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
+<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<p>  发送DELETE请求</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
+    
+    </summary>
+    
+      <category term="Spring" scheme="http://www.joahcy.com/categories/Spring/"/>
+    
+    
+      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
+    
+  </entry>
+  
+  <entry>
     <title>CentOS桌面切换及配置</title>
     <link href="http://www.joahcy.com/Linux/CentOS-desktop-config/"/>
     <id>http://www.joahcy.com/Linux/CentOS-desktop-config/</id>
@@ -1621,58 +1718,6 @@ The key fingerprint is:
   </entry>
   
   <entry>
-    <title>SpringMVC发送DELETE和PUT请求</title>
-    <link href="http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/"/>
-    <id>http://www.joahcy.com/SpringMVC/SpringMVC-HiddenHttpFilter/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-11-08T09:53:00.914Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="了解Restful"><a href="#了解Restful" class="headerlink" title="了解Restful"></a>了解Restful</h2><blockquote>
-<p>Restful一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。  </p>
-</blockquote>
-<p>Rest 风格的 URL.</p>
-<ul>
-<li>GET（SELECT）：从服务器查询，可以在服务器通过请求的参数区分查询的方式。  </li>
-<li>POST（CREATE）：在服务器新建一个资源，调用insert操作。  </li>
-<li>PUT（UPDATE）：在服务器更新资源，调用update操作。  </li>
-<li>DELETE（DELETE）：从服务器删除资源，调用delete语句</li>
-</ul>
-<p>以 CRUD Order为例:</p>
-<ul>
-<li>新增: /order POST </li>
-<li>修改: /order/1 PUT update?id=1 </li>
-<li>获取: /order/1 GET get?id=1 </li>
-<li>删除: /order/1 DELETE delete?id=1</li>
-</ul>
-<h2 id="如何发送-PUT-请求和-DELETE-请求呢"><a href="#如何发送-PUT-请求和-DELETE-请求呢" class="headerlink" title="如何发送 PUT 请求和 DELETE 请求呢 ?"></a>如何发送 PUT 请求和 DELETE 请求呢 ?</h2><ul>
-<li><p>1.web.xml需要配置 HiddenHttpMethodFilter  </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 把POST 转为DELETE和PUT请求 --&gt;</div><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>2.需要发送 POST 请求并携带一个 name=”_method” 的隐藏域, 值为 DELETE 或 PUT<br>  发送PUT请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestPut/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest PUT&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-<p>  发送DELETE请求</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;springmvc/testRestDelete/2&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Test Rest DELETE&quot;/&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在Controller中添加方法-响应PUT和DELETE请求"><a href="#在Controller中添加方法-响应PUT和DELETE请求" class="headerlink" title="在Controller中添加方法,响应PUT和DELETE请求"></a>在Controller中添加方法,响应PUT和DELETE请求</h2><p>注:用 @PathVariable 注解得到请求URL中的id.<br>响应PUT请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestPut/&#123;id&#125;&quot;,method=RequestMethod.PUT)</div><div class="line">public String testRestPut(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest PUT:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>响应DELETE请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/springmvc/testRestDelete/&#123;id&#125;&quot;,method=RequestMethod.DELETE)</div><div class="line">public String testRestDelete(@PathVariable Integer id)&#123;</div><div class="line">	System.out.println(&quot;test rest DELETE:&quot;+id);</div><div class="line">	return SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="启动测试项目进行请求测试"><a href="#启动测试项目进行请求测试" class="headerlink" title="启动测试项目进行请求测试"></a>启动测试项目进行请求测试</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;了解Restful&quot;&gt;&lt;a href=&quot;#了解Restful&quot; class=&quot;headerlink&quot; title=&quot;了解Restful&quot;&gt;&lt;/a&gt;了解Restful&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Restful一种软件架构风格，设计风格而不是标准，只是提
-    
-    </summary>
-    
-      <category term="Spring" scheme="http://www.joahcy.com/categories/Spring/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://www.joahcy.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Linux下安装JDK</title>
     <link href="http://www.joahcy.com/Java/install-JDK-on-linux/"/>
     <id>http://www.joahcy.com/Java/install-JDK-on-linux/</id>
@@ -1698,594 +1743,6 @@ The key fingerprint is:
       <category term="JDK" scheme="http://www.joahcy.com/tags/JDK/"/>
     
       <category term="Java" scheme="http://www.joahcy.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MongoDB总结</title>
-    <link href="http://www.joahcy.com/MongoDB/MongoDB-Summary/"/>
-    <id>http://www.joahcy.com/MongoDB/MongoDB-Summary/</id>
-    <published>2017-05-31T16:00:00.000Z</published>
-    <updated>2017-08-05T03:47:42.444Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、操作数据库"><a href="#一、操作数据库" class="headerlink" title="一、操作数据库"></a>一、操作数据库</h2><ol>
-<li>创建和切换数据库 ：<code>use dbName</code></li>
-<li>查看数据库 ：<code>show dbs</code></li>
-<li>删除数据库 ：<code>db.dropDatabase()</code></li>
-</ol>
-<h2 id="二、操作集合"><a href="#二、操作集合" class="headerlink" title="二、操作集合"></a>二、操作集合</h2><ol>
-<li>查看集合 ：<code>show collections</code></li>
-<li>删除集合 ：<code>db.集合名称.drop()</code></li>
-<li>插入数据 ：<code>db.集合名称.insert({&quot;k1&quot;:&quot;v1&quot;,&quot;k2&quot;:&quot;v2&quot;})</code></li>
-<li><p>插入多条数据 ：</p>
-<ul>
-<li><p>插入数组：<br>  <code>db.集合名称.insert([{&quot;url&quot;:&quot;www.sina.com&quot;,&quot;name&quot;:&quot;新浪&quot;},{&quot;url&quot;:&quot;www.baidu.com&quot;}]);</code></p>
-</li>
-<li><p>循环插入<br>  <code>for(var i=0;i&lt;10;i++){db.集合名称.insert({&quot;url&quot;:&quot;zyx-&quot;+i};}</code></p>
-</li>
-</ul>
-</li>
-<li><p>查询数据：<code>db.集合名称.find({查询条件}[,{设置显示的字段}])</code></p>
-<ul>
-<li><p>查询所有数据 ：<code>db.集合名称.find()</code></p>
-</li>
-<li><p>查询一条数据 ：<code>db.集合名称.findOne()</code></p>
-</li>
-<li><p>带条件查询：<br>  例：查询name为zyx 的记录 — <code>db.infos.find({&quot;name&quot;:&quot;zyx&quot;})</code></p>
-</li>
-<li><p>设置查询的字段(投影操作) ：要查的设为1，不查设为0  (不建议这么查)</p>
-<p>  例：查询所有url的记录不带_id — <code>db.infos.find({查询条件},{&quot;_id&quot;:0,&quot;url&quot;:1})</code></p>
-</li>
-<li><p>关系查询：大于($gt)，大于等于($gte)，小于($lt)，小于等于($lte)，不等于($ne)，等于(k:v,$eq)</p>
-<p>  例1：查询分数大于等于60的</p>
-<pre><code>`db.students.find({&quot;score&quot;:{&quot;$gte&quot;:60}},{&quot;_id&quot;:0})`
-</code></pre><p>  例2：查询性别是男的</p>
-<pre><code>`db.students.find({&quot;sex&quot;:&quot;男&quot;},{&quot;_id&quot;:0})`
-</code></pre><p>  例3：查询年龄小于20的</p>
-<pre><code>`db.students.find({&quot;age&quot;:{&quot;$lt&quot;:20}},{&quot;_id&quot;:0})`
-</code></pre><p>  例4：查询姓名不是王五的</p>
-<pre><code>`db.students.find({&quot;name&quot;:{&quot;$ne&quot;:&quot;王五&quot;}},{&quot;_id&quot;:0})`
-</code></pre></li>
-<li><p>逻辑查询：与($and),或($or),非($not,$nor)</p>
-<p>  例1：查询分数大于60且小于80的记录</p>
-<pre><code>`db.students.find({&quot;score&quot;:{&quot;$gt&quot;:60,&quot;$lt&quot;:80}},{&quot;_id&quot;:0}).pretty()`
-</code></pre><p>  例2：查询年龄大于19且分数大于80的记录</p>
-<pre><code>`db.students.find({&quot;$or&quot;:[
-    {&quot;age&quot;:{&quot;$gt&quot;:19}},
-    {&quot;score&quot;:{&quot;$gt&quot;:80}}
-]}).pertyy()`
-</code></pre><p>  例3：查询年龄小于等于19且分数小于等于80的记录(即是对例2取非)</p>
-<pre><code>`db.students.find({&quot;$nor&quot;:[
-    {&quot;age&quot;:{&quot;$gt&quot;:19}},
-    {&quot;score&quot;:{&quot;$gt&quot;:80}}
-]}).pertyy()`
-</code></pre><p>  例4：查询年龄在10岁到20岁和30到40岁之间的记录</p>
-<pre><code>`db.person.find({&quot;$or&quot;:[{&quot;age&quot;:{&quot;$gt&quot;:10,&quot;$lt&quot;:20}},
-{&quot;age&quot;:{&quot;$gt&quot;:30,&quot;$lt&quot;:40}}]},{&quot;_id&quot;:0}).pretty()`
-</code></pre></li>
-<li><p>求模：<code>$mod</code>：语法  <code>{$mod:[数字,余数]}</code></p>
-<p>  例：查询年龄为21的记录</p>
-<pre><code>`db.students.find({&quot;age&quot;:{&quot;$mod&quot;:[21,1]}}).pretty()`
-</code></pre></li>
-<li><p>范围查询：</p>
-<p>  在范围内：<code>$in</code> 语法：<code>{$in:[&quot;str1&quot;,&quot;str2&quot;,&quot;str3&quot;]}</code></p>
-<p>  例：查询姓名是“张三”，“李四”，“王五”的信息<br>  <code>db.students.find({&quot;name&quot;:{&quot;$in&quot;:[&quot;张三&quot;,&quot;李四&quot;,&quot;王五&quot;]}}).pretty()</code></p>
-<p>  不在范围内：<code>$nin</code> 语法：<code>{$nin:[&quot;str1&quot;,&quot;str2&quot;,&quot;str3&quot;]}</code></p>
-<p>  例：查询姓名是“张三”，“李四”，“王五”的信息<br>  <code>db.students.find({&quot;name&quot;:{&quot;$nin&quot;:[&quot;张三&quot;,&quot;李四&quot;,&quot;王五&quot;]}}).pretty()</code></p>
-</li>
-<li><p>数组： 几个运算符：<code>$all,$size,$slice,$elemMatch</code></p>
-<p>  <em>*</em>注：①$all不仅可以用于数组上，也可以用于一个数据上</p>
-<pre><code>②可以用索引进行操作：key.index(index下标从0开始)
-③$slice可以对数组信息进行切片
-    n:表示返回前n个
-    -n:表示返回后n个
-</code></pre></li>
-</ul>
-</li>
-</ol>
-<pre><code>        [3,4]:表示跳过1个，返回4个***
-
-例1：查询报了课程语文、数学的学生信息
-    `db.students.find({&quot;course&quot;:{&quot;$all&quot;:[&quot;语文&quot;,&quot;数学&quot;]}}).pretty()`
-
-例2：查询地址在临潼区的学生(用$all)
-    `db.students.find({&quot;loc&quot;:{&quot;$all&quot;:[&quot;临潼区&quot;]}}).pretty()`
-
-例3：查询报了3门课程的学生信息
-    `db.students.find({&quot;course&quot;:{&quot;$size&quot;:3}}).pretty()`
-
-例4：查询第一门课是语文的学生
-    `db.students.find({&quot;course.1&quot;:&quot;数学&quot;}).pretty()`
-
-例5：查询年龄是19岁且只要求显示两门课程
-
-(1)显示前两门
-    `db.students.find({&quot;age&quot;:19},{&quot;course&quot;:{&quot;$slice&quot;:2}}).pretty()`
-
-(2)显示后两门
-    `db.students.find({&quot;age&quot;:19},{&quot;course&quot;:{&quot;$slice&quot;:2}}).pretty()`
-
-(3)跳过2门,显示3门
-    `db.students.find({&quot;age&quot;:19},{&quot;course&quot;:{&quot;$slice&quot;:[2,3]}}).pretty()`
-
-嵌套查询：
-
-例：查询年龄大于等于19岁且父母有是工人的学生信息
-        `db.students.find({&quot;$and&quot;:[{&quot;age&quot;:{&quot;$gte&quot;:19}},{&quot;parents&quot;:{&quot;$elemMatch&quot;:{&quot;job&quot;:&quot;工人&quot;}}}]}).pretty()`
-判断某个字段是否存在：$exists
-
-例1：查询有字段parents的学生信息
-    `db.students.find({&quot;parents&quot;:{&quot;$exists&quot;:true}}).pretty()`
-例2：查询不具有字段course的学生信息
-    `db.students.find({&quot;course&quot;:{&quot;$exists&quot;:false}}).pretty()`
-where查询
-例：查询年龄大于20的
-`db.students.find({&quot;$where&quot;:&quot;this.age&gt;20&quot;}).pretty()
-db.students.find(&quot;this.age&gt;20&quot;).pretty()
-db.students.find(function(){
-    return this.age&gt;20;
-}).pretty()
-db.students.find({&quot;$where&quot;:function(){
-    return this.age&gt;20;
-}}).pretty()`
-
-正则表达式:
-    基础语法：`{key:正则标记}`
-    完整语法：`{&quot;$regex&quot;:正则标记,&quot;$options&quot;:选项}`
-    例1：查询名字已张开头的学生信息
-        `db.students.find({&quot;name&quot;:/^张/}).pretty()`
-    例2：查询名字中含有a的学生信息
-        `db.students.find({&quot;name&quot;:/a/i}).pretty()`//  i:区分大小写
-        `db.students.find({&quot;name&quot;:{$regex:/a/i}}).pretty()`
-        `db.students.find({&quot;name&quot;:{&quot;$regex&quot;:/a/,&quot;$options&quot;:&quot;$i&quot;}}).pretty()`
-    例3：查询coures带有“语”的学生信息
-        `db.students.find({&quot;course&quot;:/语/}).pretty()`
-排序：sort() 函数   1:升序   -1:降序   `$natural`：自然顺序(记录插入顺序)  
-    例1：根据成绩降序排序 
-        `db.students.find().sort({&quot;score&quot;:-1}).pretty()`
-        `db.students.find().sort({&quot;$natural&quot;:-1}).pretty()`
-分页：
-    `skip(n)`：表示跨过多少数据行
-    `limit(n)`：取出的数据行的个数显示
-    例1：分页显示(第一页：skip(0),limit(5)),并且score降序显示
-        `db.students.find().skip(0).limit(5).sort({&quot;score&quot;:-1}).pretty()`
-    例1：分页显示(第二页：skip(0),limit(5)),并且score降序显示
-        `db.students.find().skip(5).limit(5).sort({&quot;score&quot;:-1}).pretty()`
-</code></pre><ol>
-<li><p>数据更新<br><code>update()</code>函数</p>
-<pre><code>语法：`db.集合.update(更新条件，新的对象数据，upsert，mutil);`
-    |- upsert：如果要更新的数据不存在，则增加一条新的内容(true:增加，false:不增加)
-    |- mutil：表示是否只更新满足条件的第一行数据(true:全更新，false：只更新第一条)
-例1：（更新存在的数据）将年龄为19岁的学生成绩更新为100
-    `db.students.update({&quot;age&quot;:19},{&quot;$set&quot;:{&quot;score&quot;:100}},false,false)`
-例2：（更新不存在的数据）将年龄为30岁的学生成绩更新为71
-    `db.students.update({&quot;age&quot;:30},{&quot;$set&quot;:{&quot;score&quot;:100}},false,false)`
-</code></pre><p><code>save()</code>函数：根据_id更新，_id存在就更新，不存在就插入一条数据</p>
-<pre><code>例：更新_id为58664e79749d012a9fb04022的学生年龄为50
-    `db.students.save({&quot;_id&quot; : ObjectId(&quot;fff64e79749d012a9fb04022&quot;),&quot;age&quot;:90})`
-</code></pre><p>修改器：10种修改器</p>
-<pre><code>(1) `$inc`：语法  `{&quot;$inc&quot;:{&quot;字段&quot;:内容}}`    (increase)
-    例：将年龄为19岁的学生的score减30且age加1岁
-        `db.students.update({&quot;age&quot;:19},{&quot;$inc&quot;:{&quot;score&quot;:-30,&quot;age&quot;:1}},false,true)`
- (2) `$set`：语法  `{&quot;$set&quot;:{&quot;字段&quot;:&quot;新内容&quot;}}`
-     例：将年龄为20岁的score设为68分
-         `db.students.update({&quot;age&quot;:20},{&quot;$set&quot;:{&quot;score&quot;:68}})`
- (3) `$unset`: 删除某个字段   语法  `{&quot;$set&quot;:{&quot;字段&quot;:1}}`
-     例：将name为张三的age和score删除
-         `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$unset&quot;:{&quot;age&quot;:1,&quot;score&quot;:1}})`
- (4) `$push`: 追加内容到指定的成员之中(基本是数组)
-         语法：`{&quot;$push&quot;:{&quot;成员&quot;:&quot;内容&quot;}}`
-         例：给张三添加一门课程“语文”
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$push&quot;:{&quot;course&quot;:&quot;语文&quot;}})`
- (5) `$pushAll`:与`$push`是类似的，但可以追加多个内容到字段中
-         语法：`{&quot;$pushAll&quot;:{&quot;成员&quot;:数组内容}}`
-         例：给张三添加课程政治，美术，体育
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$pushAll&quot;:{&quot;course&quot;:[&quot;政治&quot;,&quot;美术&quot;,&quot;体育&quot;]}})`
- (6) `$addToSet`:向数组里添加一个新的内容，只有当内容不存在时，才会添加
-         语法：`{&quot;$addToSet&quot;:{&quot;成员&quot;:内容}}`
-         例：给张三添加一门英语
-             `db.students.update({&quot;nmae&quot;:&quot;张三&quot;},{&quot;$addToSet&quot;:{&quot;course&quot;:&quot;英语&quot;}})`
- (7) `$pop`:删除数组内的数据
-         语法：`{&quot;$pop&quot;:{&quot;成员&quot;:内容}}` 内容为-1表示删除第一个，为1删除最后一个
-         例：删除张三第一门课程
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$pop&quot;:{&quot;coures&quot;:-1}})`
- (8) `$pull`:从数组内删除以一个指定内容的数据
-         语法：`{&quot;$pull&quot;:{&quot;成员&quot;:&quot;数据&quot;}}`，此数据为要删除的数据
-         例：删除张三 的英语课程
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$pull&quot;:{&quot;course&quot;:&quot;英语&quot;}})`
- (9) `$pullAll`:一次删除多个内容
-         语法：`{&quot;$pullAll&quot;:{&quot;成员&quot;:数组内容}}`
-         例：删除张三的政治体育课程
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$pullAll&quot;:{&quot;course&quot;:[&quot;音乐&quot;,&quot;体育&quot;]}})`
- (10)`$rename`: 修改字段的名称
-         语法：`{&quot;$rename&quot;:{&quot;旧的成员名称&quot;:&quot;新的成员名称&quot;}}`
-         例：讲张三的“name”字段改名为“姓名”
-             `db.students.update({&quot;name&quot;:&quot;张三&quot;},{&quot;$rename&quot;:{&quot;name&quot;:&quot;姓名&quot;}})`
-</code></pre></li>
-<li><p>数据删除<br><code>remove()</code>函数：有两个可选项</p>
-<pre><code>删除条件：满足条件的数据被删除
-是否只删除第一个数据(默认删除全部满足条件的)：如果设为true或1,则删除第一条满足条件 的
-例1：删除集合的全部信息
-    `db.infos.remove({})`    3.x
-例2：删除name有“张”的学生信息
-    `db.students.remove({&quot;name&quot;:/张/})`
-例2：删除name有“张”的学生信息
-    `db.students.remove({&quot;name&quot;:/王/},true)`
-</code></pre></li>
-<li><p>游标：类似于ResultSet<br>是否有下一个：<code>hasNext()</code><br>下一个：<code>next()</code><br>例：逐行打印students的姓名</p>
-<pre><code>`var cursor=db.students.find();
-while(cursor.hasNext()){
-    var doc=cursor.next();
-    print(doc.name);
-}`
-</code></pre><p>注：游标取出来的内容是Object类型的,如果需要将数据以json的形式打印，可以用<code>printjson()</code>函数。<br>例：`var cursor=db.students.find();</p>
-<pre><code>while(cursor.hasNext()){
-    var doc=cursor.next();
-    printjson(doc);
-}`
-</code></pre></li>
-<li><p>索引：提升数据检索性能<br>查看集合默认索引状态：</p>
-<pre><code>`db.集合.getIndexes()`
-`db.students.getIndexes()`
-</code></pre><ul>
-<li>创建索引：<br>  <code>db.集合.ensureIndex({字段:1})</code> 1表示索引按照升序排列，-1为降序<br>  注：索引的名称是自动命名的。命名规范：字段名称_索引排序模式<br>  例：<code>db.students.ensureIndex({&quot;age&quot;:-1})</code><br>针对当前的age字段上的索引做一个分析<br>  <code>db.students.find({&quot;age&quot;:19}).explain();</code>    扫描方式：IXSCAN<br>针对score字段查询<br>  <code>db.students.find({&quot;score&quot;:{&quot;$gt&quot;:60}}).explain();</code> 扫描方式：COLLSCAN</li>
-<li>创建复合索引：<br>  <code>db.students.ensureIndex({&quot;age&quot;:-1,&quot;score&quot;:-1},{&quot;name&quot;:&quot;age_-1_score_-1_index&quot;})</code></li>
-<li><p>强制使用索引<br>  <code>hint({&quot;age&quot;:-1,&quot;score&quot;:-1})</code></p>
-</li>
-<li><p>删除索引<br>  删除一个索引：<code>db.students.dropIndex({&quot;age&quot;:-1,&quot;score&quot;:-1})</code><br>  删除全部索引(除“_id”的索引)：<code>db.students.dropIndexes()</code></p>
-</li>
-<li><p>唯一索引：用在某个字段上，使该字段的内容不重复,如果有某个文档没有该字段，则会创建不成功<br>  创建：<code>db.students.ensureIndex({&quot;name&quot;:1},{&quot;unique&quot;:true})</code><br>  <code>db.stduents.insert({&quot;name&quot;:&quot;张三&quot;})</code><br>  如果插入的文档的内容在该字段上相同则会报错：</p>
-<pre><code>`E11000 duplicate key error collection: zyx.students index: name_1 dup key`
-</code></pre></li>
-<li>过期索引：要实现过期索引，需要保存一个时间字段,但是这个时间往往不怎么准确<br>  创建：<br>  <code>db.集合.ensureIndex({&quot;time&quot;:1},{expireAfterSeconds:10})</code><br>  例：<pre><code>创建一个手机验证码集合，并设置10秒过期
-`db.phones.ensureIndex({&quot;time&quot;:1},{expireAfterSeconds:10})
-db.phones.insert({&quot;tel&quot;:110,&quot;code&quot;:000,&quot;time&quot;:new Date()})
-db.phones.insert({&quot;tel&quot;:111,&quot;code&quot;:001,&quot;time&quot;:new Date()})
-db.phones.insert({&quot;tel&quot;:112,&quot;code&quot;:002,&quot;time&quot;:new Date()})
-db.phones.insert({&quot;tel&quot;:113,&quot;code&quot;:003,&quot;time&quot;:new Date()})
-db.phones.insert({&quot;tel&quot;:114,&quot;code&quot;:004,&quot;time&quot;:new Date()})
-db.phones.insert({&quot;tel&quot;:115,&quot;code&quot;:005,&quot;time&quot;:new Date()})`
-</code></pre></li>
-<li>全文索引：<br>  为某几个字段设置全文索引：<pre><code>创建：`{&quot;字段1&quot;:&quot;text&quot;,&quot;字段2&quot;:&quot;text&quot;}`   
-模糊查询：
-    要实现全文检索，则使用`&quot;$text&quot;`判断符，而要想进行数据的查询则使用`&quot;$search&quot;`
-    |- 查询指定关键字：`{&quot;$search&quot;:&quot;查询关键字&quot;}`
-    |- 查询多个关键字(或关系)：`{&quot;$search&quot;:&quot;查询关键字1 查询关键字2 ...&quot;}`
-    |- 查询多个关键字(与关系)：`{&quot;$search&quot;:&quot;\&quot;查询关键字1\&quot; \&quot;查询关键字2\&quot;         ...&quot;}`
-    |-查询多个关键字(排除某一个)：`{&quot;$search&quot;:&quot;查询关键字1 查询关键字2 ... -    排除关键字&quot;}`
-    例：`db.students.find({&quot;$text&quot;:{&quot;$search&quot;:&quot;关键字&quot;})`
-使用相似度的打分来判断检索结果：默认升序，分数越高越准确
-    `db.students.find({&quot;$text&quot;:{&quot;$search&quot;:&quot;关键字&quot;}},{&quot;score&quot;:{&quot;$meta&quot;:&quot;textScore&quot;}})`
-    排序操作：
-        `db.students.find({&quot;$text&quot;:{&quot;$search&quot;:&quot;关键字&quot;}},{&quot;score&quot;:{&quot;$meta&quot;:&quot;textScore&quot;}}).sort({&quot;score&quot;:{&quot;$meta&quot;:&quot;textScore&quot;}})`
-</code></pre>  为所有字段设置全文索引：<br>  <code>db.集合.ensureIndex({&quot;$**&quot;:&quot;text&quot;})</code><pre><code>注：尽可能别用。。。因为慢
-</code></pre></li>
-<li>地理信息索引：分为两类 ①2D平面索引②2DShere球面索引<br>  为集合定义2D索引：<br>  <code>db.集合.ensureIndex({&quot;字段&quot;:&quot;2d&quot;})</code><br>  例：<pre><code>创建2d索引：
-    `db.shop.ensureIndex({&quot;loc&quot;:&quot;2d&quot;})`
-创建集合：
-    `db.shop.insert({&quot;loc&quot;:[10,10]})
-    db.shop.insert({&quot;loc&quot;:[11,10]})
-    db.shop.insert({&quot;loc&quot;:[11,11]})
-    db.shop.insert({&quot;loc&quot;:[13,12]})
-    db.shop.insert({&quot;loc&quot;:[50,60]})
-    db.shop.insert({&quot;loc&quot;:[90,95]})`
-</code></pre>  实现位置查询：<pre><code>两种：(1) `&quot;$near&quot;`:查询距离某个点最近的坐标点
-       (2) `&quot;$geoWithin&quot;`：查询某个形状内的点,可以设置范围:
-            ① 矩形范围`（$box）`: `{&quot;$box&quot;:[[x1,y1],[x2,y2]]}`
-            ② 圆形范围`（$center）`: `{&quot;$center&quot;:[[x,y],r]}`
-            ③ 多边形范围`（$polygon）`: `{&quot;$poltgon&quot;:[[x1,y1],[x2,y2],[x3,y3]....]}`
-       (3) 使用`runCommand()`实现信息查询
- 例1：假设现在坐标:[11,11]   
-     `db.shop.find({&quot;loc&quot;:{&quot;$near&quot;:[11,11]}})`
-     注：实际上返回集合内的前100个点
- 例2：设置查询距离范围
-     `db.shop.find({&quot;loc&quot;:{&quot;$near&quot;:[11,11],&quot;$maxDistance&quot;:5}})`
- 例3：查询矩形范围
-     `db.shop.find({&quot;loc&quot;:{&quot;$geoWithin&quot;:{&quot;$box&quot;:[[9,9],[12,12]]}}})`
- 例4：查询圆形范围
-     `db.shop.find({&quot;loc&quot;:{&quot;$geoWithin&quot;:{&quot;$center&quot;:[[11,11],2]}}})`
- 例5：查询多边形范围
-     `db.shop.find({&quot;loc&quot;:{&quot;$geoWithin&quot;:{&quot;$polygon&quot;:[[4,6],[6,8],[8,9],[5,8]]}}})`
- 例6：使用`runCommand()`
-     `db.runCommand({&quot;geoNear&quot;:&quot;shop&quot;,&quot;near&quot;:[11,11],&quot;maxDistance&quot;:3,&quot;num&quot;:2})`
-</code></pre></li>
-</ul>
-</li>
-<li><p>聚合：统计操作，称为聚合<br>取得集合个数：<code>db.集合.count()</code><br>   注：也可以加条件进行模糊查询，如：<code>db.students.count({&quot;name&quot;:/王/})</code><br>   例：<code>db.shop.count()</code><br>消除重复数据：没有直接的函数支持，只能使用runCommand()函数<br>   语法：<code>db.runCommand({&quot;distinct&quot;:&quot;集合&quot;,&quot;key&quot;:&quot;字段&quot;})</code><br>   例：<code>db.runCommand({&quot;distinct&quot;:&quot;students&quot;,&quot;key&quot;:&quot;name&quot;})</code></p>
-<ul>
-<li><p>Group操作：使用group操作可以实现数据的分组操作，在MongoDB里面会将集合依据指定的key的不             同进行分组操作，并且每一个组都会产生一个处理的文档结果<br> 例：</p>
-<pre><code>`db.runCommand({&quot;group&quot;:{
-    &quot;ns&quot; : &quot;students&quot;,
-    &quot;key&quot; : {&quot;age&quot;:true},
-    &quot;initial&quot; : {&quot;count&quot;:0},
-    &quot;condition&quot; : {&quot;age&quot;:{&quot;$gte&quot;:18}},
-    &quot;$reduce&quot; : function(doc,prev){
-        prev.count++;
-        print(&quot;doc=&quot;+doc+&quot; prev=&quot;+prev);
-    }
-}})`
-</code></pre></li>
-<li><p>MapReduce：</p>
-<p> MapReduce是大数据的精髓所在，实际分为两步处理数据：</p>
-<pre><code>Map：将数据分别取出
-Reduce：负责数据的最后处理
-</code></pre><p> 建立一组雇员数据<br> <code>db.emps.insert({&quot;name&quot;:&quot;张三&quot;,&quot;age&quot;:30,&quot;sex&quot;:&quot;男&quot;,&quot;job&quot;:&quot;CLERK&quot;,&quot;salary&quot;:1000})
- db.emps.insert({&quot;name&quot;:&quot;李四&quot;,&quot;age&quot;:28,&quot;sex&quot;:&quot;女&quot;,&quot;job&quot;:&quot;MANAGER&quot;,&quot;salary&quot;:4000})
- db.emps.insert({&quot;name&quot;:&quot;王五&quot;,&quot;age&quot;:31,&quot;sex&quot;:&quot;男&quot;,&quot;job&quot;:&quot;CLERK&quot;,&quot;salary&quot;:1500})
- db.emps.insert({&quot;name&quot;:&quot;赵六&quot;,&quot;age&quot;:33,&quot;sex&quot;:&quot;女&quot;,&quot;job&quot;:&quot;MANAGER&quot;,&quot;salary&quot;:5000})
- db.emps.insert({&quot;name&quot;:&quot;孙七&quot;,&quot;age&quot;:27,&quot;sex&quot;:&quot;男&quot;,&quot;job&quot;:&quot;CLERK&quot;,&quot;salary&quot;:1000})
- db.emps.insert({&quot;name&quot;:&quot;王八&quot;,&quot;age&quot;:35,&quot;sex&quot;:&quot;男&quot;,&quot;job&quot;:&quot;PRESIDENT&quot;,&quot;salary&quot;:7000})</code></p>
-<p> 使用MapReduce操作最终会将处理结果保存在一个单独的集合里，最终处理效果如下：<br> 例1：按照值为分组，取得每个职位的人名</p>
-<pre><code>● 编写分组的定义
-    `var jobMapFun = function(){
-        emit(this.job,this.name); //按照job分组，取出name
-    };`
-    经过上述函数操作后结果如下：
-        第一组：`{&quot;key&quot;:&quot;CLERK&quot;,&quot;values&quot;:[姓名1,姓名2...]}`
-● 编写Reduce操作
-    `var jobReduceFun = function(key,values){
-        return {&quot;job&quot;:key,&quot;names&quot;:values};
-    };`
-● 针对MapReduce处理完成的数据进行处理
-    `var jobFinalizeFun = function(key,values){
-        if(key==&quot;PRESIDENT&quot;){
-            return {&quot;job&quot;:key,&quot;names&quot;:values,&quot;info&quot;:&quot;公司老大&quot;}
-        }
-        return {&quot;job&quot;:key,&quot;names&quot;:values};
-    }`
-● 进行操作的整合
-    第一种
-        `db.runCommand({
-            &quot;mapreduce&quot;:&quot;emps&quot;,
-            &quot;map&quot;:jobMapFun,
-            &quot;reduce&quot;:jobReduceFun,
-            &quot;out&quot;:&quot;t_job_emp&quot;
-        })`
-    第二种
-        `db.runCommand({
-            &quot;mapreduce&quot;:&quot;emps&quot;,
-            &quot;map&quot;:jobMapFun,
-            &quot;reduce&quot;:jobReduceFun,
-            &quot;out&quot;:&quot;t_job_emp&quot;,
-            &quot;finalize&quot;: jobFinalizeFun
-        })`
-</code></pre><p> 例2：统计出各性别的人数，总工资，平均工资，最高工资，最低工资，雇员姓名</p>
-<pre><code>●  编写Map
-    `var sexMapFun = function(){
-        //定义好分组条件，以及取出每个集合要取出的内容
-        emit(this.sex,{&quot;ccount&quot;:1,&quot;csal&quot;:this.salary,&quot;cmax&quot;:this.salary,&quot;cmin&quot;:this.salary,&quot;cname&quot;:this.name})
-    };`
-● 编写Reduce操作
-    `var sexReduceFun = function(key,values){
-        var total = 0;//统计人数
-        var sum = 0;//统计宗工资
-        var max = values[0].cmax;
-        var min = values[0].cmin;
-        var name = new Array()
-        for(var x in values){//循环取出values中的内容
-            total += values[x].ccount;// 人数增加
-            sum += values[x].csal;
-            if(max &lt; values[x].cmax){
-                max = values[x].cmax;
-            }    
-            if(min &gt; values[x].cmin){
-                min = values[x].cmin;
-            }
-            name[x] = values[x].cname;
-        }
-        var avg = (sum/total).toFixed(2);//平均工资，保留两位小数
-        //返回数据的处理结果
-        return {&quot;count&quot;:total,&quot;avg&quot;:avg,&quot;sum&quot;:sum,&quot;max&quot;:max,&quot;min&quot;:min,&quot;name&quot;:name}
-    };`
-● 进行操作的整合
-    `db.runCommand({
-        &quot;mapreduce&quot;:&quot;emps&quot;,
-        &quot;map&quot;:sexMapFun,
-        &quot;reduce&quot;:sexReduceFun,
-        &quot;out&quot;:&quot;t_sex_emp&quot;
-    })`
-</code></pre><p>聚合框架：虽然MapReduce功能强大，但是复杂度也大，所以MongoDB从2.x开始引入了聚合函数:aggregate</p>
-<pre><code>注：在聚合框架里面使用每行的数据引用：&quot;$字段名称&quot;
-</code></pre><p> <code>$group</code> : 分组操作，是无序操作，并且在内存中完成的，所以不肯能支持大数据量<br> 例1：实现聚合查询功能—-求出每个职位的雇员人数</p>
-<pre><code>`db.emps.aggregate({&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;job_count&quot;:{&quot;$sum&quot;:1}}})`
-</code></pre><p> 例2：求出每个职位的总工资</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;job_count&quot;:{&quot;$sum&quot;:&quot;$salary&quot;}}}])`
-</code></pre><p> 例3：计算每个职位的平均工资</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;job_count&quot;:{&quot;$sum&quot;:1},&quot;job_avg&quot;:{&quot;$avg&quot;:&quot;$salary&quot;}}}])`
-</code></pre><p> 例3：计算每个职位的最高、最低工资</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;max_sal&quot;:{&quot;$max&quot;:&quot;$salary&quot;},&quot;min_sal&quot;:{&quot;$min&quot;:&quot;$salary&quot;}}}])`
-</code></pre><p> 例4：求出每个职位的工资数据(数组显示)</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;sal_data&quot;:{&quot;$push&quot;:&quot;$salary&quot;}}}])`
-</code></pre><p> 例5：求出每个职位的人员</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;sal_data&quot;:{&quot;$push&quot;:&quot;$name&quot;}}}])`
-</code></pre><p> 例5：求出每个职位的人员(去除重复数据)</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;sal_data&quot;:{&quot;$addToSet&quot;:&quot;$name&quot;}}}])`
-</code></pre><p> 例6：取出第一个雇员</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;sal_data&quot;:{&quot;$first&quot;:&quot;$name&quot;}}}])`
-</code></pre><p> 例7：取出最后一个雇员</p>
-<pre><code>`db.emps.aggregate([{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;sal_data&quot;:{&quot;$last&quot;:&quot;$name&quot;}}}])`
-</code></pre><p> <code>$project</code>:来控制数据列的显示规则，可执行的规则为如下：</p>
-<pre><code>● 普通列 `（{成员 : 1|true}）`: 表示要显示的内容
-● `_id列` `（{&quot;_id&quot;:0|false}）`: 表示`“_id”`列是否显示
-● 条件过滤列`（{成员 : 表达式}）`：满足表达式后的数据可以进行显示
-注：①只有设置的列才可以进行显示，其他列则不显示，实际上这就是数据库的投影机制
-    ②四则运算：加法`（“$and”）`、减法`（“$subtract”）`、乘法`（“$mutilply”`）、除法`（“$divide”）`
-    ③关系运算：大小比较`（“$cmp”）`，等于`（“$eq”）`，大于`（“$gt”）`，大于等于`（“$gte”）`，
-               小于`（“$lt”）`，小于等于`（“$lte”）`，不等于`（“$ne”）`，判断NULL`（“$ifNull”）`
-    ④逻辑运算：与（`$and`），或`（“$or）`，非`（“$not”）`
-    ⑤字符串操作：连接`（“$concat”）`，截取`（“$substr”）`，转小写`（“$toLower”）`，转大写`（“$toUpper”）`
-                 大小写比较`（“$strcasecmp”）`
-例1：只显示name、job列，不显示_id、salary列
-`db.emps.aggregate({&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1}})  `
-例2：计算雇员年薪
-`db.emps.aggregate([{&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;job&quot;:1,&quot;salary&quot;:{&quot;年薪&quot;:{&quot;$multiply&quot;:[&quot;$salary&quot;,12]}}}}])`
-例3：找出所有工资大于等于2000的雇员姓名、年龄、工资
-`db.emps.aggregate([{&quot;$project&quot;:{
-    &quot;_id&quot;:0,
-    &quot;name&quot;:1,
-    &quot;age&quot;:1,
-    &quot;工资&quot;:&quot;$salary&quot;,
-    &quot;salary&quot;:{&quot;$gte&quot;:[&quot;$salary&quot;,2000]}
-}}])`
-</code></pre><p> 例4：查找职位是MANAGER的雇员信息<br> `db.emps.aggregate([{“$project”:{</p>
-<pre><code>&quot;_id&quot;:0,
-&quot;name&quot;:1,
-&quot;age&quot;:1,
-&quot;职位&quot;:&quot;$job&quot;,
-&quot;job&quot;:{&quot;$eq&quot;:[&quot;$job&quot;,&quot;MANAGER&quot;]}
-</code></pre><p> }}])<br> db.emps.aggregate([{“$project”:{</p>
-<pre><code>&quot;_id&quot;:0,
-&quot;name&quot;:1,
-&quot;age&quot;:1,
-&quot;职位&quot;:&quot;$job&quot;,
-&quot;job&quot;:{&quot;$eq&quot;:[&quot;$job&quot;,{&quot;$toUpper&quot;:&quot;manager&quot;}]}
-</code></pre><p> }}])<br> db.emps.aggregate([{“$project”:{</p>
-<pre><code>&quot;_id&quot;:0,
-&quot;name&quot;:1,
-&quot;age&quot;:1,
-&quot;职位&quot;:&quot;$job&quot;,
-&quot;job&quot;:{&quot;$strcasecmp&quot;:[&quot;$job&quot;,&quot;manager&quot;]}
-</code></pre><p> }}])`</p>
-<p> 例5：查询职位信息的前三位</p>
-<p> `db.emps.aggregate([{“$project”:{</p>
-<pre><code>&quot;_id&quot;:0,
-&quot;name&quot;:1,
-&quot;age&quot;:1,
-&quot;职位&quot;:&quot;$job&quot;,
-&quot;job&quot;:{&quot;$substr&quot;:[&quot;$job&quot;,0,3]}
-</code></pre><p> }}])`</p>
-<p> <code>$match</code>：用于过滤数据，只输出符合条件的文档。</p>
-<pre><code>例：查询工资大于的2000小于8000 的雇员信息
-    `db.emps.aggregate([{&quot;$match&quot;:{&quot;salary&quot;:{&quot;$gte&quot;:2000,&quot;$lte&quot;:8000}}}])`
-</code></pre><p> 例2：进行管道操作，将$match得到的文档送入$group操作</p>
-<pre><code>`db.emps.aggregate([{&quot;$match&quot;:{&quot;salary&quot;:{&quot;$gte&quot;:2000,&quot;$lte&quot;:8000}}},{&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;age&quot;:1,&quot;salary&quot;:1}}])`
-</code></pre><p> 总结：<code>$project</code>相当于SELECT字句</p>
-<pre><code>`$match`相当于WHERE字句
-`$group`相当于GROUP BY操作
-</code></pre><p> <code>$sort</code>：实现排序操作，1表示升序，-1表示降序</p>
-<pre><code>例1：按照工资进行升序排序查询
-    `db.emps.aggregate([{&quot;$sort&quot;:{&quot;salary&quot;:1}}])`
-例2：将所有操作一起使用
-    `db.emps.aggregate([{&quot;$match&quot;:{&quot;salary&quot;:{&quot;$gte&quot;:1000,&quot;$lte&quot;:10000}}},{&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;salary&quot;:1,&quot;job&quot;:1}},{&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;count&quot;:{&quot;$sum&quot;:1},&quot;avg&quot;:{&quot;$avg&quot;:&quot;$salary&quot;}}},{&quot;$sort&quot;:{&quot;count&quot;:-1}}])`
-</code></pre><p> 分页处理：<code>$limit</code>:负责数据的取出个数</p>
-<pre><code>      `$skip`:数据的跨过个数
-例1：查询3条
-`    db.emps.aggregate([{&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;age&quot;:1,&quot;salary&quot;:1}},{&quot;$limit&quot;:3}])`
-例2：跨过3条，取出4条
-`    db.emps.aggregate([{&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;age&quot;:1,&quot;salary&quot;:1}},{&quot;$skip&quot;:3},{&quot;$limit&quot;:4}])`
-例3：综合运用
-    `db.emps.aggregate([
-        {&quot;$match&quot;:
-            {&quot;salary&quot;:{&quot;$gte&quot;:1000,&quot;$lte&quot;:10000}}},
-        {&quot;$project&quot;:{&quot;_id&quot;:0,&quot;name&quot;:1,&quot;salary&quot;:1,&quot;job&quot;:1}},
-        {&quot;$group&quot;:{&quot;_id&quot;:&quot;$job&quot;,&quot;count&quot;:{&quot;$sum&quot;:1},&quot;avg&quot;:{&quot;$avg&quot;:&quot;$salary&quot;}}},
-        {&quot;$sort&quot;:{&quot;count&quot;:-1}},
-        {&quot;$skip&quot;:1},
-        {&quot;$limit&quot;:1}
-    ])`
-</code></pre><p> <code>$unwind</code>：在查询数据的时候经常会返回数组信息，但是数组不方便信息的浏览，所以提供不<code>“$unwind”</code>的方式可           以将数组变为独立的字符串</p>
-<pre><code>注：将数据的数据变为了单行的数据
-创建depts集合
-`db.depts.insert({&quot;dep&quot;:&quot;技术部&quot;,&quot;bus&quot;:[&quot;研发&quot;,&quot;生产&quot;,&quot;培训&quot;]})`
-`db.depts.insert({&quot;dep&quot;:&quot;财务部&quot;,&quot;bus&quot;:[&quot;工资&quot;,&quot;税收&quot;]})`
-例：将信息进行转化
-    `db.depts.aggregate([
-    {&quot;$project&quot;:{&quot;_id&quot;:0,&quot;dep&quot;:true,&quot;bus&quot;:true}},
-    {&quot;$unwind&quot;:&quot;$bus&quot;}])`
-</code></pre></li>
-</ul>
-</li>
-</ol>
-<pre><code>`$geoNear`：可以得到附近的坐标点
-    准备测试数据：
-        `db.shop.drop()
-        db.shop.insert({&quot;loc&quot;:[10,10]})
-        db.shop.insert({&quot;loc&quot;:[11,10]})
-        db.shop.insert({&quot;loc&quot;:[11,11]})
-        db.shop.insert({&quot;loc&quot;:[13,12]})
-        db.shop.insert({&quot;loc&quot;:[50,60]})
-        db.shop.insert({&quot;loc&quot;:[90,95]})`
-    例：查找点[11,12]附近的两个点
-        `db.shop.aggregate([
-            {&quot;$geoNear&quot;:{
-                &quot;near&quot;:[11,11],
-                &quot;distanceField&quot;:&quot;loc&quot;,
-                &quot;maxDistance&quot;:1,
-                &quot;num&quot;:2,
-                &quot;spherical&quot;:true
-            }}
-        ])`
-
-`$out`：利用此操作可以将查询结果输出到到指定的集合里面
-例：将投影信息输出到集合emp_out
-`db.emps.aggregate([
-    {&quot;$project&quot;:{
-        &quot;_id&quot;:0,
-        &quot;name&quot;:1,
-        &quot;age&quot;:1}},
-    {&quot;$out&quot;:&quot;emp_out&quot;}
-])`
-</code></pre><ol>
-<li><p>深入操作</p>
-<ul>
-<li>固定集合：规定集合大小，如果要保存的内容长度超过了集合的长度，那么会采用LRU算法（最近最少使用原则）<pre><code>将最早的的数据移除，从而保存新的数据
-</code></pre> 创建固定集合：<pre><code>`db.createCollection(&quot;collName&quot;,{&quot;capped&quot;:true,&quot;size&quot;:1024,&quot;max&quot;:5}) `            
-    &quot;capped&quot;：表示一个固定集合
-    &quot;size&quot;：表示集合所占的空间大小
-    &quot;max&quot;：表示最多能有几条记录
-</code></pre> 例：`db.createCollection(“users”,{“capped”:true,”size”:1024,”max”:5}) <pre><code>db.users.insert({&quot;name&quot;:&quot;A&quot;,&quot;age&quot;:12})
-db.users.insert({&quot;name&quot;:&quot;B&quot;,&quot;age&quot;:34})
-db.users.insert({&quot;name&quot;:&quot;C&quot;,&quot;age&quot;:64})
-db.users.insert({&quot;name&quot;:&quot;D&quot;,&quot;age&quot;:43})
-db.users.insert({&quot;name&quot;:&quot;E&quot;,&quot;age&quot;:53})`
-此时已经达到了集合的上限，那么会继续保存新的内容
-`db.users.insert({&quot;name&quot;:&quot;F&quot;,&quot;age&quot;:24})
-db.users.insert({&quot;name&quot;:&quot;G&quot;,&quot;age&quot;:66})`
-最近最少使用的数据会消失，新数据则会保存，这种操作和缓存机制是非常相似度的
-</code></pre></li>
-<li><p>GridFS：在MongoDB里面支持大数据的存储（如图片、视频、音乐等二进制数据文件），在CMD使用“mongofiles”命令          来完成<br> （1）利用命令进入文件所在的路径下<br> （2）将文件保存到数据库里</p>
-<pre><code>`    mongofiles --port=27017 put 文件名   //保存数据到fs.files集合中`
-</code></pre><p> 注：在MongoDB里面有一个fs.files系统集合，这个集合默认保存在test数据库里面，</p>
-<p> （3）查看保存的文件</p>
-<pre><code>`mongofiles --port=27017 list`
-</code></pre><p> （4）查看保存的信息</p>
-<pre><code>`use test
-db.fs.files.find()`
-</code></pre><p> （5）删除文件</p>
-<pre><code>mongofiles --port=27017 delete 文件名 
-</code></pre></li>
-</ul>
-</li>
-</ol>
-<h2 id="三、用户管理-：（针对数据库）"><a href="#三、用户管理-：（针对数据库）" class="headerlink" title="三、用户管理 ：（针对数据库）"></a>三、用户管理 ：（针对数据库）</h2><ul>
-<li><p>创建用户 ：<br><code>db.createUser({
-  &quot;user&quot;:&quot;root&quot;,
-  &quot;pwd&quot;:&quot;123456&quot;,
-  &quot;roles&quot;:[{&quot;role&quot;:&quot;readWrite&quot;,&quot;db&quot;:&quot;zyx&quot;}]
-})</code></p>
-</li>
-<li><p>修改密码 ：<br>  db.changeUserPassword(“用户名”,”新密码”)<br>  注：要在不需要授权验证的情况下修改(noauth=true)</p>
-</li>
-</ul>
-<h2 id="四、使用Java操作MongoDB"><a href="#四、使用Java操作MongoDB" class="headerlink" title="四、使用Java操作MongoDB"></a>四、使用Java操作MongoDB</h2><p>（1）基于Mongo-Java-2.x<br>    连接数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line"> * 连接数据库</div><div class="line"> */</div><div class="line">public class MongoDemo_conn &#123;</div><div class="line">	</div><div class="line">	public static void main(String[] args) throws Exception &#123;</div><div class="line">		MongoClient client=new MongoClient(&quot;localhost&quot;,27017);</div><div class="line">		DB db = client.getDB(&quot;zyx&quot;);//连接数据库</div><div class="line">		//进行数据库的用户名和密码的验证</div><div class="line">		boolean authenticate = db.authenticate(&quot;root&quot;, &quot;123456&quot;.toCharArray());</div><div class="line">		if(authenticate)&#123;</div><div class="line">			Set&lt;String&gt; names = db.getCollectionNames();</div><div class="line">			for (String name : names) &#123;</div><div class="line">				System.out.println(&quot;集合名称:&quot;+name);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		client.close();//关闭数据库连接</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>测试代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 基于Mongo-Java-2.x</div><div class="line"> */</div><div class="line">public class TestMongoDB &#123;</div><div class="line"></div><div class="line">	private MongoClient client=null;</div><div class="line">	private DB db=null; </div><div class="line">	private boolean authenticate=false;</div><div class="line">	</div><div class="line">	@Test</div><div class="line">	public void testDelete()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			BasicDBObject cond=new  BasicDBObject();//准备删除 的过滤条件</div><div class="line">			cond.put(&quot;deptno&quot;, new BasicDBObject(&quot;$gte&quot;,1020).append(&quot;$lte&quot;, 1050));</div><div class="line">			WriteResult remove = dept.remove(cond);</div><div class="line">			System.out.println(remove);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 更新多条</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testUdpateMore()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			</div><div class="line">			BasicDBObject condA=new BasicDBObject();//准备要设置的过滤条件</div><div class="line">			condA.put(&quot;deptno&quot;, new BasicDBObject(&quot;$gte&quot;,1020).append(&quot;$lte&quot;, 1050));</div><div class="line">			</div><div class="line">			BasicDBObject condB=new BasicDBObject();//修改器的设置</div><div class="line">			condB.put(&quot;$set&quot;, new BasicDBObject(&quot;dname&quot;,&quot;修改后的&quot;));</div><div class="line">			</div><div class="line">			WriteResult result = dept.updateMulti(condA, condB);</div><div class="line">			System.out.println(result.getN());</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 更新一条</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testUdpateOne()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			</div><div class="line">			BasicDBObject condA=new BasicDBObject();//准备要设置的过滤条件</div><div class="line">			condA.put(&quot;deptno&quot;, 1000);</div><div class="line">			</div><div class="line">			BasicDBObject condB=new BasicDBObject();//修改器的设置</div><div class="line">			condB.put(&quot;$set&quot;, new BasicDBObject(&quot;dname&quot;,&quot;修改后的&quot;));</div><div class="line">			</div><div class="line">			WriteResult result = dept.update(condA, condB);</div><div class="line">			System.out.println(result);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 模糊查询</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testFuzzyQuery()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			BasicDBObject cond=new BasicDBObject();//准备设置查询过滤条件</div><div class="line">			Pattern pattern=Pattern.compile(&quot;5&quot;); </div><div class="line">			cond.put(&quot;dname&quot;, new BasicDBObject(&quot;$regex&quot;,pattern));</div><div class="line">			</div><div class="line">			DBCursor cursor=dept.find(cond);//得到全部数据</div><div class="line">			while(cursor.hasNext())&#123;</div><div class="line">				DBObject doc = cursor.next();//得到每一行数据</div><div class="line">				System.out.println(&quot;部门编号:&quot;+doc.get(&quot;deptno&quot;)+&quot; , 部门名称:&quot;+doc.get(&quot;dname&quot;)+&quot; , 部门地点:&quot;+doc.get(&quot;loc&quot;));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 设置范围查询---in</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testRangeQuery()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			BasicDBObject cond=new BasicDBObject();//准备设置查询过滤条件</div><div class="line">			</div><div class="line">			cond.put(&quot;deptno&quot;, new BasicDBObject(&quot;$in&quot;,new int[]&#123;1021,1053,1029&#125;));</div><div class="line">			</div><div class="line">			DBCursor cursor=dept.find(cond);//得到全部数据</div><div class="line">			while(cursor.hasNext())&#123;</div><div class="line">				DBObject doc = cursor.next();//得到每一行数据</div><div class="line">				System.out.println(&quot;部门编号:&quot;+doc.get(&quot;deptno&quot;)+&quot; , 部门名称:&quot;+doc.get(&quot;dname&quot;)+&quot; , 部门地点:&quot;+doc.get(&quot;loc&quot;));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 带条件查询</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testQueryWithCond()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			BasicDBObject cond=new BasicDBObject();//准备设置查询过滤条件</div><div class="line">			//设置查询条件  deptno在1020到1050范围内</div><div class="line">			cond.put(&quot;deptno&quot;, new BasicDBObject(&quot;$gte&quot;,1020).append(&quot;$lte&quot;, 1050));</div><div class="line">			</div><div class="line">			DBCursor cursor=dept.find(cond);//得到全部数据</div><div class="line">			while(cursor.hasNext())&#123;</div><div class="line">				DBObject doc = cursor.next();//得到每一行数据</div><div class="line">				System.out.println(&quot;部门编号:&quot;+doc.get(&quot;deptno&quot;)+&quot; , 部门名称:&quot;+doc.get(&quot;dname&quot;)+&quot; , 部门地点:&quot;+doc.get(&quot;loc&quot;));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 分页查询</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testPage()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			DBCursor cursor=dept.find().skip(0).limit(20);//分页处理</div><div class="line">			while(cursor.hasNext())&#123;</div><div class="line">				DBObject doc = cursor.next();//得到每一行数据</div><div class="line">				System.out.println(&quot;部门编号:&quot;+doc.get(&quot;deptno&quot;)+&quot; , 部门名称:&quot;+doc.get(&quot;dname&quot;)+&quot; , 部门地点:&quot;+doc.get(&quot;loc&quot;));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 读取数据</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testRead()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			DBCursor cursor=dept.find();//得到全部数据</div><div class="line">			while(cursor.hasNext())&#123;</div><div class="line">				DBObject doc = cursor.next();//得到每一行数据</div><div class="line">				System.out.println(&quot;部门编号:&quot;+doc.get(&quot;deptno&quot;)+&quot; , 部门名称:&quot;+doc.get(&quot;dname&quot;)+&quot; , 部门地点:&quot;+doc.get(&quot;loc&quot;));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 插入数据</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testInsert()&#123;</div><div class="line">		if(authenticate)&#123;</div><div class="line">			DBCollection dept = db.getCollection(&quot;deptcol&quot;);</div><div class="line">			for(int x=0;x&lt;1000;x++)&#123;</div><div class="line">				BasicDBObject doc=new BasicDBObject();</div><div class="line">				doc.append(&quot;deptno&quot;, 1000+x);</div><div class="line">				doc.append(&quot;dname&quot;, &quot;技术部-&quot;+x);</div><div class="line">				doc.append(&quot;loc&quot;, &quot;临潼-&quot;+x);</div><div class="line">				dept.insert(doc);//保存数据</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Before</div><div class="line">	public void connection() throws Exception&#123;</div><div class="line">		client=new MongoClient(&quot;localhost&quot;,27017);</div><div class="line">		db = client.getDB(&quot;zyx&quot;);//连接数据库</div><div class="line">		//进行数据库的用户名和密码的验证</div><div class="line">		authenticate = db.authenticate(&quot;root&quot;, &quot;123456&quot;.toCharArray());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@After</div><div class="line">	public void close()&#123;</div><div class="line">		client.close();//关闭数据库连接</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>（2）基于Mongo-Java-3.x<br>    连接数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class MongoDB_conn &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		MongoClientURI uri=new MongoClientURI(&quot;mongodb://root:123456@localhost:27017/zyx&quot;);</div><div class="line">		MongoClient client=new MongoClient(uri);</div><div class="line">		MongoDatabase database = client.getDatabase(&quot;zyx&quot;);</div><div class="line">		client.close();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<pre><code>（3）测试代码
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div></pre></td><td class="code"><pre><div class="line">public class TestMongoDB &#123;</div><div class="line"></div><div class="line">	private MongoClientURI uri=null;</div><div class="line">	private MongoClient client=null;</div><div class="line">	private MongoDatabase database =null;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *统计查询,根据job分组，统计平均工资</div><div class="line">	 *</div><div class="line">	 *	db.emps.aggregate([</div><div class="line">	 *		&#123;&quot;$group&quot;:&#123;</div><div class="line">	 *					&quot;_id&quot;:&quot;$job&quot;,</div><div class="line">	 *					&quot;job_count&quot;:&#123;&quot;$sum&quot;:1&#125;,</div><div class="line">	 *					&quot;job_avg&quot;:&#123;&quot;$avg&quot;:&quot;$salary&quot;&#125;</div><div class="line">	 *				&#125;</div><div class="line">	 *		&#125;</div><div class="line">	 *	])</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testAggregate()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; emps = database.getCollection(&quot;emps&quot;);</div><div class="line">		List&lt;BasicDBObject&gt; list=new ArrayList&lt;BasicDBObject&gt;();</div><div class="line">		BasicDBObject cond=new BasicDBObject(&quot;$group&quot;,new BasicDBObject(&quot;_id&quot;,&quot;$job&quot;).append(&quot;job_count&quot;, new BasicDBObject(&quot;$sum&quot;,1)).append(&quot;job_avg&quot;, new BasicDBObject(&quot;$avg&quot;,&quot;$salary&quot;)));</div><div class="line">		list.add(cond);</div><div class="line">		MongoCursor&lt;Document&gt; cursor = emps.aggregate(list).iterator();</div><div class="line">		while (cursor.hasNext()) &#123;</div><div class="line">			Document doc = (Document) cursor.next();</div><div class="line">			System.out.println(&quot;职位:&quot;+doc.getString(&quot;_id&quot;)+&quot;,人数:&quot;+doc.getInteger(&quot;job_count&quot;)+&quot;,平均工资:&quot;+doc.getDouble(&quot;job_avg&quot;));</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *删除数据</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testDelete()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		BasicDBObject cond=new BasicDBObject(&quot;sid&quot;,0);//删除条件</div><div class="line">		DeleteResult result = student.deleteOne(cond);</div><div class="line">		System.out.println(result);</div><div class="line">	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *更新操作</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testUpdate()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		BasicDBObject condA=new BasicDBObject(&quot;sid&quot;,0);//查询条件</div><div class="line">		BasicDBObject condB=new BasicDBObject(&quot;$set&quot;,new BasicDBObject(&quot;sname&quot;,&quot;zyx&quot;));</div><div class="line">		UpdateResult result = student.updateOne(condA, condB);</div><div class="line">		System.out.println(result);</div><div class="line">	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *分页查询 </div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testQueryPage()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		BasicDBObject cond=new BasicDBObject();</div><div class="line">		Pattern pattern=Pattern.compile(&quot;5&quot;);</div><div class="line">		cond.put(&quot;sname&quot;, new BasicDBObject(&quot;$regex&quot;,pattern).append(&quot;$options&quot;, &quot;i&quot;));</div><div class="line">		</div><div class="line">		MongoCursor&lt;Document&gt; cursor = student.find(cond).skip(5).limit(5).iterator();</div><div class="line">		while (cursor.hasNext()) &#123;</div><div class="line">			Document doc = (Document) cursor.next();</div><div class="line">			System.out.println(&quot;学号:&quot;+doc.get(&quot;sid&quot;)+&quot;,姓名:&quot;+doc.get(&quot;sname&quot;)+&quot;,性别:&quot;+doc.get(&quot;sex&quot;));</div><div class="line">			//System.out.println(doc);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *模糊查询 </div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testFuzzyQuery()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		BasicDBObject cond=new BasicDBObject();</div><div class="line">		Pattern pattern=Pattern.compile(&quot;5&quot;);</div><div class="line">		cond.put(&quot;sname&quot;, new BasicDBObject(&quot;$regex&quot;,pattern).append(&quot;$options&quot;, &quot;i&quot;));</div><div class="line">		</div><div class="line">		MongoCursor&lt;Document&gt; cursor = student.find(cond).iterator();</div><div class="line">		while (cursor.hasNext()) &#123;</div><div class="line">			Document doc = (Document) cursor.next();</div><div class="line">			System.out.println(&quot;学号:&quot;+doc.get(&quot;sid&quot;)+&quot;,姓名:&quot;+doc.get(&quot;sname&quot;)+&quot;,性别:&quot;+doc.get(&quot;sex&quot;));</div><div class="line">			//System.out.println(doc);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *范围查询 </div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testRangeQuery()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		BasicDBObject cond=new BasicDBObject();</div><div class="line">		cond.put(&quot;sid&quot;, new BasicDBObject(&quot;$gt&quot;,10).append(&quot;$lt&quot;, 30));</div><div class="line">		</div><div class="line">		MongoCursor&lt;Document&gt; cursor = student.find(cond).iterator();</div><div class="line">		while (cursor.hasNext()) &#123;</div><div class="line">			Document doc = (Document) cursor.next();</div><div class="line">			System.out.println(&quot;学号:&quot;+doc.get(&quot;sid&quot;)+&quot;,姓名:&quot;+doc.get(&quot;sname&quot;)+&quot;,性别:&quot;+doc.get(&quot;sex&quot;));</div><div class="line">			//System.out.println(doc);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 *数据查询 </div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testQuery()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		MongoCursor&lt;Document&gt; cursor = student.find().iterator();</div><div class="line">		while (cursor.hasNext()) &#123;</div><div class="line">			Document doc = (Document) cursor.next();</div><div class="line">			System.out.println(&quot;学号:&quot;+doc.get(&quot;sid&quot;)+&quot;,姓名:&quot;+doc.get(&quot;sname&quot;)+&quot;,性别:&quot;+doc.get(&quot;sex&quot;));</div><div class="line">			//System.out.println(doc);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/*</div><div class="line">	 * 数据插入</div><div class="line">	 */</div><div class="line">	@Test</div><div class="line">	public void testInsert()&#123;</div><div class="line">		MongoCollection&lt;Document&gt; student = database.getCollection(&quot;student&quot;);</div><div class="line">		</div><div class="line">		List&lt;Document&gt; documents=new ArrayList&lt;Document&gt;(); </div><div class="line">		for(int x=0;x&lt;100;x++)&#123;</div><div class="line">			Document doc=new Document();</div><div class="line">			doc.put(&quot;sid&quot;, x);</div><div class="line">			doc.put(&quot;sname&quot;, &quot;姓名-&quot;+x);</div><div class="line">			doc.put(&quot;sex&quot;, x%2==0?&quot;男&quot;:&quot;女&quot;);</div><div class="line">			documents.add(doc);</div><div class="line">		&#125;</div><div class="line">		student.insertMany(documents);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Before</div><div class="line">	public void connection() throws Exception&#123;</div><div class="line">		uri=new MongoClientURI(&quot;mongodb://root:123456@localhost:27017/zyx&quot;);</div><div class="line">		client=new MongoClient(uri);</div><div class="line">		database = client.getDatabase(&quot;zyx&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@After</div><div class="line">	public void close()&#123;</div><div class="line">		client.close();//关闭数据库连接</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;一、操作数据库&quot;&gt;&lt;a href=&quot;#一、操作数据库&quot; class=&quot;headerlink&quot; title=&quot;一、操作数据库&quot;&gt;&lt;/a&gt;一、操作数据库&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;创建和切换数据库 ：&lt;code&gt;use dbName&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;查
-    
-    </summary>
-    
-      <category term="MongoDB" scheme="http://www.joahcy.com/categories/MongoDB/"/>
-    
-    
-      <category term="MongoDB" scheme="http://www.joahcy.com/tags/MongoDB/"/>
     
   </entry>
   
