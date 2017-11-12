@@ -306,7 +306,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx_install_on_linux/">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Java/install-JDK-on-linux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Joahcy">
@@ -325,7 +325,298 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Nginx/nginx_install_on_linux/" itemprop="url">Linux下的Nginx安装</a></h2>
+                <a class="post-title-link" href="/Java/install-JDK-on-linux/" itemprop="url">Linux下安装JDK</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-02T00:00:00+08:00">
+                2017-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          去官网下载自己需要的linux的JDK版本解压jdk到当前目录tar -zxvf jdk-8u60-linux-x64.tar.gz得到文件夹 jdk1.8.0_60
+安装完毕为它建立一个链接以节省目录长度(我没用这一步)ln -s /usr/java/jdk1.8.0_60/ /usr/jdk
+编
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Java/install-JDK-on-linux/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/linux-multi-IP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Joahcy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oqwn6kueb.bkt.clouddn.com/kobe1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joahcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Nginx/linux-multi-IP/" itemprop="url">linux配置多IP</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T00:00:00+08:00">
+                2017-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+1.复制第一块网卡的配置文件,例:cp  ifcfg-eth0  ifcfg-eth0:1
+2.修改ifcfg-eth0:1的DEVICE 和 IPADDR 
+3.重启虚拟机
+
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Nginx/linux-multi-IP/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx-load-balancing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Joahcy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oqwn6kueb.bkt.clouddn.com/kobe1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joahcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Nginx/nginx-load-balancing/" itemprop="url">nginx负载均衡配置</a></h2>
         
 
         <div class="post-meta">
@@ -394,12 +685,12 @@
       
         
           
-          安装依赖
-PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。  yum install -y pcre p
+          1、修改host文件(来实现域名访问)192.168.170.128 8083.zyx.com192.168.170.128 8084.zyx.com
+2、安装两个tomcat实例并修改端口3、修改nginx配置文件1234567891011121314upstream tomcatserver &
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/Nginx/nginx_install_on_linux/" rel="contents">
+            <a class="btn" href="/Nginx/nginx-load-balancing/" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -550,149 +841,6 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/MongoDB/MongoDB-Summary/" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx-load-balancing/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Joahcy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://oqwn6kueb.bkt.clouddn.com/kobe1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joahcy">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Nginx/nginx-load-balancing/" itemprop="url">nginx负载均衡配置</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T00:00:00+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">Nginx</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          1、修改host文件(来实现域名访问)192.168.170.128 8083.zyx.com192.168.170.128 8084.zyx.com
-2、安装两个tomcat实例并修改端口3、修改nginx配置文件1234567891011121314upstream tomcatserver &
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Nginx/nginx-load-balancing/" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1031,7 +1179,7 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/linux-multi-IP/">
+    <link itemprop="mainEntityOfPage" href="http://www.joahcy.com/Nginx/nginx_install_on_linux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Joahcy">
@@ -1050,7 +1198,7 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Nginx/linux-multi-IP/" itemprop="url">linux配置多IP</a></h2>
+                <a class="post-title-link" href="/Nginx/nginx_install_on_linux/" itemprop="url">Linux下的Nginx安装</a></h2>
         
 
         <div class="post-meta">
@@ -1085,8 +1233,8 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/Nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">Nginx</span>
                   </a>
                 </span>
 
@@ -1119,16 +1267,12 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
       
         
           
-          
-1.复制第一块网卡的配置文件,例:cp  ifcfg-eth0  ifcfg-eth0:1
-2.修改ifcfg-eth0:1的DEVICE 和 IPADDR 
-3.重启虚拟机
-
-
-          
+          安装依赖
+PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。  nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。  yum install -y pcre p
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/Nginx/linux-multi-IP/" rel="contents">
+            <a class="btn" href="/Nginx/nginx_install_on_linux/" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1341,7 +1485,7 @@ PCRE  PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl �
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
